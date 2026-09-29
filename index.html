@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAH-N WIKI LEAKS — Official Reference Archive of the JAH-N System</title>
+<meta name="description" content="The official JAH-N reference archive: top-secret dossiers on the spec files, public patent records, and bizarre subjects — every file with its own personal AI, read-aloud, copy, and downloadable AI disc/thumbdrive copies.">
+<style>
+:root{
+  --bg:#04060c; --bg2:#070b16; --panel:#0a1020; --panel2:#0d1528;
+  --amber:#ffb000; --amber-d:#8a5c00; --green:#3dff78; --green-d:#0e5c2a;
+  --red:#ff2438; --red-d:#7a0e18; --ink:#c9d4ea; --dim:#71809f; --line:#1a2540;
+  --paper:#0b1222;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(53,255,120,.045), transparent 60%),
+    radial-gradient(1000px 500px at 10% 0%, rgba(255,176,0,.05), transparent 60%),
+    var(--bg);
+  color:var(--ink);
+  font-family:"Courier New",ui-monospace,Menlo,Consolas,monospace;
+  font-size:14px; line-height:1.55; min-height:100vh;
+  padding-bottom:120px;
+}
+/* scanlines + vignette */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9000;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);
+  mix-blend-mode:multiply;}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%);}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+.wrap{max-width:1180px;margin:0 auto;padding:0 14px;position:relative;z-index:2}
+/* ===== classification banner ===== */
+.classbar{background:repeating-linear-gradient(45deg,var(--red) 0 26px,#4a0208 26px 52px);
+  border-bottom:3px solid var(--red);text-align:center;padding:7px 8px;position:relative;z-index:3}
+.classbar span{background:#0a0002;color:#fff;font-weight:bold;letter-spacing:3px;font-size:13px;
+  padding:4px 18px;border:1px solid var(--red);display:inline-block}
+.blink{animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.35}}
+/* ===== masthead ===== */
+.mast{border:1px solid var(--line);background:linear-gradient(180deg,#0c1428,#070b16);
+  margin:18px 0 0;padding:26px 22px;position:relative;overflow:hidden}
+.mast::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(53,255,120,.05) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(53,255,120,.05) 1px,transparent 1px);
+  background-size:34px 34px;}
+.stamp{position:absolute;top:14px;right:16px;color:var(--red);border:3px double var(--red);
+  font-weight:bold;font-size:15px;letter-spacing:3px;padding:6px 14px;transform:rotate(8deg);
+  opacity:.85;background:rgba(20,0,2,.55);text-transform:uppercase}
+.mast h1{font-size:clamp(28px,5vw,52px);letter-spacing:6px;color:var(--amber);
+  text-shadow:0 0 22px rgba(255,176,0,.35);margin-bottom:6px;position:relative}
+.mast h1 .leak{color:var(--red);text-shadow:0 0 22px rgba(255,36,56,.5)}
+.mast .sub{color:var(--green);letter-spacing:2px;font-size:13px;position:relative}
+.mast .deets{color:var(--dim);font-size:12px;margin-top:10px;position:relative;max-width:760px}
+.sisters{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;position:relative}
+.sisters a{color:var(--green);border:1px solid var(--green-d);padding:5px 12px;font-size:12px;
+  text-decoration:none;letter-spacing:1px;background:rgba(14,92,42,.12)}
+.sisters a:hover{background:rgba(14,92,42,.3)}
+/* ===== stat chips ===== */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+.stat{border:1px solid var(--line);background:var(--panel);padding:12px;text-align:center;position:relative}
+.stat b{display:block;font-size:24px;color:var(--amber);letter-spacing:1px}
+.stat span{font-size:11px;color:var(--dim);letter-spacing:2px}
+.stat::before,.stat::after{content:"";position:absolute;width:10px;height:10px;border:2px solid var(--amber-d)}
+.stat::before{top:-2px;left:-2px;border-right:0;border-bottom:0}
+.stat::after{bottom:-2px;right:-2px;border-left:0;border-top:0}
+/* ===== controls ===== */
+.ctrl{border:1px solid var(--line);background:var(--panel);padding:14px;margin-bottom:6px}
+.searchrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+#q{flex:1;min-width:200px;background:#02040a;border:1px solid var(--amber-d);color:var(--amber);
+  padding:10px 12px;font-family:inherit;font-size:14px;letter-spacing:1px}
+#q:focus{outline:none;border-color:var(--amber);box-shadow:0 0 12px rgba(255,176,0,.25)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{background:#02040a;border:1px solid var(--line);color:var(--dim);padding:7px 14px;
+  font-family:inherit;font-size:12px;letter-spacing:2px;cursor:pointer}
+.pill.active{border-color:var(--green);color:var(--green);background:rgba(14,92,42,.15);
+  box-shadow:0 0 10px rgba(53,255,120,.15)}
+.az{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.az button{background:transparent;border:1px solid var(--line);color:var(--dim);width:30px;height:30px;
+  font-family:inherit;font-size:12px;cursor:pointer}
+.az button.active,.az button:hover{border-color:var(--amber);color:var(--amber)}
+#catchoice{background:#02040a;border:1px solid var(--line);color:var(--ink);padding:8px;
+  font-family:inherit;font-size:12px;max-width:100%}
+.hits{color:var(--dim);font-size:12px;letter-spacing:2px;margin:8px 2px}
+/* ===== file cards ===== */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.fcard{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel2),var(--panel));
+  padding:0;cursor:pointer;position:relative;transition:transform .12s,box-shadow .12s}
+.fcard:hover{transform:translateY(-2px);box-shadow:0 6px 26px rgba(255,176,0,.12);border-color:var(--amber-d)}
+.fcard .kind{font-size:10px;letter-spacing:3px;padding:6px 12px;border-bottom:1px solid var(--line)}
+.k-bizarre .kind{color:var(--red);background:rgba(122,14,24,.25)}
+.k-spec .kind{color:var(--amber);background:rgba(138,92,0,.18)}
+.k-patent .kind{color:var(--green);background:rgba(14,92,42,.18)}
+.fcard .body{padding:12px}
+.fcard h3{font-size:14px;color:var(--ink);letter-spacing:.5px;margin-bottom:6px;font-weight:bold}
+.fcard .fid{font-size:11px;color:var(--dim);letter-spacing:1px;margin-bottom:6px}
+.fcard .abs{font-size:12px;color:#9fb0cf;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fcard .foot{padding:8px 12px;border-top:1px solid var(--line);font-size:11px;color:var(--dim);
+  display:flex;justify-content:space-between;gap:6px}
+.fcard .foot b{color:var(--amber)}
+.redact{background:#000;color:transparent;border:1px solid #222;user-select:none}
+/* ===== dossier viewer ===== */
+#viewer{position:fixed;inset:0;z-index:9500;display:none;overflow-y:auto;background:rgba(2,4,10,.92);
+  padding:18px 10px 90px}
+#viewer.open{display:block}
+.dossier{max-width:900px;margin:0 auto;background:var(--paper);border:1px solid var(--amber-d);
+  box-shadow:0 0 60px rgba(255,176,0,.12), inset 0 0 120px rgba(0,0,0,.5);position:relative}
+.dossier .dhead{padding:22px 22px 14px;border-bottom:2px solid var(--red);position:relative;
+  background:linear-gradient(180deg,rgba(122,14,24,.18),transparent)}
+.dossier .dhead .cls{color:var(--red);font-weight:bold;letter-spacing:2px;font-size:12px;margin-bottom:8px}
+.dossier h2{color:var(--amber);letter-spacing:2px;font-size:clamp(18px,3vw,28px);margin-bottom:4px}
+.dossier .did{color:var(--dim);font-size:12px;letter-spacing:1px}
+.dclose{position:absolute;top:12px;right:12px;background:#1a0205;border:1px solid var(--red);
+  color:var(--red);font-family:inherit;font-size:14px;padding:6px 12px;cursor:pointer;letter-spacing:2px}
+.dclose:hover{background:var(--red);color:#fff}
+.dsec{padding:16px 22px;border-bottom:1px solid var(--line)}
+.dsec h4{color:var(--green);letter-spacing:3px;font-size:13px;margin-bottom:8px}
+.dsec h4 .n{color:var(--amber);margin-right:8px}
+.dsec p{color:#b9c6de;font-size:13.5px;margin-bottom:8px;white-space:pre-wrap}
+.dsec .sign{color:var(--amber);border:1px dashed var(--amber-d);padding:10px;margin-top:6px;font-size:12.5px}
+.dsec.corrob{background:rgba(14,92,42,.06)}
+.corroblink{display:inline-block;margin:3px 6px 3px 0;color:var(--green);font-size:12px;text-decoration:underline dotted;cursor:pointer}
+/* toolbar */
+.dtools{position:sticky;top:0;z-index:5;background:#05080f;border-bottom:1px solid var(--amber-d);
+  padding:10px 14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tbtn{background:#0a0f1c;border:1px solid var(--green-d);color:var(--green);font-family:inherit;
+  font-size:12px;letter-spacing:1px;padding:8px 12px;cursor:pointer}
+.tbtn:hover{background:rgba(14,92,42,.35)}
+.tbtn.amber{border-color:var(--amber-d);color:var(--amber)}
+.tbtn.amber:hover{background:rgba(138,92,0,.3)}
+.tbtn.red{border-color:var(--red-d);color:var(--red)}
+.tbtn.red:hover{background:rgba(122,14,24,.35)}
+/* AI chat */
+.aichat{margin:0;padding:16px 22px;border-bottom:1px solid var(--line);background:rgba(14,92,42,.05);display:none}
+.aichat.open{display:block}
+.aichat h5{color:var(--green);letter-spacing:2px;font-size:13px;margin-bottom:10px}
+.aimsgs{max-height:300px;overflow-y:auto;border:1px solid var(--line);background:#02040a;padding:10px;margin-bottom:10px}
+.aimsg{margin-bottom:8px;font-size:13px;color:#b9c6de}
+.aimsg.ai b{color:var(--green)}
+.aimsg.you{color:var(--amber)}
+.airow{display:flex;gap:8px}
+.aiinput{flex:1;background:#02040a;border:1px solid var(--green-d);color:var(--ink);
+  padding:9px 10px;font-family:inherit;font-size:13px}
+.aiinput:focus{outline:none;border-color:var(--green)}
+.aisend{background:var(--green-d);border:1px solid var(--green);color:#04140a;font-family:inherit;
+  font-weight:bold;padding:8px 18px;cursor:pointer;letter-spacing:2px}
+/* audio bar */
+#aubar{position:fixed;bottom:0;left:0;right:0;z-index:9600;display:none;align-items:center;gap:10px;
+  background:#05080f;border-top:2px solid var(--green);padding:10px 16px;font-size:12px}
+#aubar .tbtn{padding:6px 10px}
+#aulabel{color:var(--green);letter-spacing:1px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#aurate{background:#02040a;border:1px solid var(--line);color:var(--ink);font-family:inherit;padding:5px}
+/* footer */
+.honest{margin:26px 0 0;border:1px dashed var(--amber-d);padding:16px;color:var(--dim);font-size:12px}
+.honest b{color:var(--amber)}
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#04140a;
+  border:1px solid var(--green);color:var(--green);padding:10px 20px;z-index:9700;display:none;
+  letter-spacing:1px;font-size:13px}
+@media(max-width:640px){.stamp{display:none}.dossier .dhead{padding-right:70px}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="classbar"><span class="blink">TOP SECRET &#8212; JAH-N EYES ONLY &#8212; NOFORN</span></div>
+<div class="wrap">
+  <div class="mast">
+    <div class="stamp">Declassified<br>for JAH-N</div>
+    <h1>JAH-N WIKI <span class="leak">LEAKS</span></h1>
+    <div class="sub">&#9632; OFFICIAL REFERENCE ARCHIVE OF THE JAH-N SYSTEM &#9632;</div>
+    <div class="deets">Every file in this archive — every spec dossier, every patent record, every bizarre-subject file — is overseen by state-of-the-art AI review systems, from customized doctor-level specialists to domain experts, and is officially signed off by the Creator. Each file carries its own <b style="color:var(--green)">personal AI</b> that answers your questions, full <b style="color:var(--green)">audio read-aloud</b>, one-click <b style="color:var(--green)">copy</b>, and downloadable <b style="color:var(--green)">AI disc / thumbdrive copies</b> for offline use.</div>
+    <div class="sisters">
+      <a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/" target="_blank" rel="noopener">&#9654; SPEC ARCHIVE (SISTER SITE)</a>
+      <a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/" target="_blank" rel="noopener">&#9654; PATENT CATALOG (SISTER SITE)</a>
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="ctrl">
+    <div class="searchrow"><input id="q" type="text" placeholder="SEARCH ALL FILES — subjects, titles, specs, patents..." autocomplete="off"></div>
+    <div class="pills" id="pills">
+      <button class="pill active" data-f="all">ALL FILES</button>
+      <button class="pill" data-f="bizarre">BIZARRE FILES</button>
+      <button class="pill" data-f="spec">SPEC DOSSIERS</button>
+      <button class="pill" data-f="patent">PATENT DOSSIERS</button>
+    </div>
+    <div class="az" id="az"></div>
+    <div><select id="catchoice"><option value="">ALL BIZARRE CATEGORIES</option></select></div>
+    <div class="hits" id="hits"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="honest">
+    <b>OFFICIAL NOTICE.</b> JAH-N WIKI LEAKS is an official reference work of the JAH-N system and a creative simulation: dossiers are analytical reference files, not real classified government documents. Bizarre-subject files are speculative analyses grounded in real patent and spec records. All spec files are original draft works by <b>Justin Addam Higgins (JAH)</b> — drafts ready to file, never granted patents. Public patent records shown here are real public records, summarized from the public domain.
+  </div>
+</div>
+
+<div id="viewer"><div class="dossier" id="dossier"></div></div>
+
+<div id="aubar">
+  <span id="aulabel">Reading</span>
+  <button class="tbtn" id="aupause">&#10074;&#10074; Pause</button>
+  <button class="tbtn" id="austop">&#9632; Stop</button>
+  <select id="aurate">
+    <option value="0.8">0.8&times;</option><option value="1" selected>1&times;</option>
+    <option value="1.25">1.25&times;</option><option value="1.5">1.5&times;</option><option value="2">2&times;</option>
+  </select>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ================= config ================= */
+var SPEC_SITE = "https://justinahiggins614-cmyk.github.io/signature-one-archive/";
+var SHARDS = [
+  {base:"", index:"data/index/specs.idx.json.gz"},
+  {base:"https://justinahiggins614-cmyk.github.io/signature-one-archive-shard-2/", index:"data/index/specs.idx.json.gz"}
+];
+/* spec index row: 0=id 1=title 2=abstract 3=category 4=cpc 5=era 6=date 11=letter 12=line 19=mix_from 20=chunk */
+var BIZ=[], SPECS=[], PATENTS=[], specCount=0, patentCount=0;
+var state={f:"all", az:"", cat:"", q:""};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.style.display="block";
+  clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none"},2200)}
+/* starfield */
+(function(){var c=document.getElementById("stars"),x=c.getContext("2d"),S=[];
+function rs(){c.width=innerWidth;c.height=innerHeight}rs();addEventListener("resize",rs);
+for(var i=0;i<130;i++)S.push({x:Math.random(),y:Math.random(),r:Math.random()*1.4+.3,s:Math.random()*.25+.03});
+(function loop(){x.clearRect(0,0,c.width,c.height);
+ for(var i=0;i<S.length;i++){var p=S[i];p.y+=p.s/c.height;if(p.y>1)p.y=0;
+  x.fillStyle="rgba(150,190,255,"+(0.25+p.r*0.25)+")";x.fillRect(p.x*c.width,p.y*c.height,p.r,p.r)}
+ requestAnimationFrame(loop)})()})();
+/* ================= loaders ================= */
+function gunzip(ab){return new Promise(function(res,rej){
+  if(!window.DecompressionStream){rej(new Error("no ds"));return}
+  var ds=new DecompressionStream("gzip"),w=ds.writable.getWriter(),r=ds.readable.getReader();
+  w.write(ab);w.close();var ch=[];
+  (function pump(){r.read().then(function(o){if(o.done){res(ch.join(""))}else{ch.push(new TextDecoder().decode(o.value));pump()}})})()})}
+function loadJSONgz(url){return fetch(url).then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(gunzip)}
+function loadJSON(url){return fetch(url).then(function(r){if(!r.ok)throw 0;return r.json()})}
+function loadAll(){
+  var p=[loadJSON("data/bizarre.json").then(function(d){BIZ=d})];
+  p.push(loadJSONgz("data/patents.idx.json.gz").then(function(t){
+    PATENTS=t.trim().split("\n").map(function(l){try{return JSON.parse(l)}catch(e){return null}}).filter(Boolean);
+    patentCount=PATENTS.length}));
+  SHARDS.forEach(function(sh){
+    p.push(loadJSONgz(SHARDS.indexOf(sh)===0?SPEC_SITE+sh.index:sh.base+sh.index).then(function(t){
+      var rows=t.trim().split("\n");
+      for(var i=0;i<rows.length;i++){try{SPECS.push(JSON.parse(rows[i]))}catch(e){}}
+    }).catch(function(){}));
+  });
+  return Promise.all(p);
+}
+/* ================= AI review panels ================= */
+var PANELS={
+ generic:[["DR. ILIA VANCE","AI Propulsion Physicist"],["DR. MARA OKONKWO","AI Materials Scientist"],["DR. THEO LINDQVIST","AI Systems Engineer"]],
+ bio:[["DR. SELENE RUIZ","AI Biophysicist"],["DR. KOFI AMARI","AI Geneticist"],["DR. YUKI TANAKA","AI Neurobiologist"]],
+ soft:[["DR. ADA KOVAC","AI Software Architect"],["DR. RAY IBRAHIM","AI Machine-Learning Specialist"],["DR. NOVA PETROV","AI Cybersecurity Analyst"]],
+ hard:[["DR. VICTOR HALE","AI Mechanical Engineer"],["DR. INES DUARTE","AI Electrical Engineer"],["DR. OTTO WEISS","AI Manufacturing Specialist"]],
+ phys:[["DR. ILIA VANCE","AI Propulsion Physicist"],["DR. ELENA FROST","AI Quantum Theorist"],["DR. SAMIR KHAN","AI Field Theorist"]],
+ med:[["DR. SELENE RUIZ","AI Biophysicist"],["DR. AMARA DIALLO","AI Clinical Specialist"],["DR. HENRIK SOREN","AI Pharmacologist"]],
+ myth:[["DR. CALLIOPE REYES","AI Mythologist"],["DR. JONAH FIELD","AI Anthropologist"],["DR. THEO LINDQVIST","AI Systems Engineer"]]
+};
+function panelFor(kind,row){
+  if(kind==="spec"){var ln=String(row[12]||"").toLowerCase(),cat=String(row[3]||"").toLowerCase();
+    if(/medical|pharma|health|bio/.test(ln+cat))return PANELS.med;
+    if(/software|code|ai|gaming|app/.test(ln))return PANELS.soft;
+    if(/hardware|defense|transport|space/.test(ln+cat))return PANELS.hard;
+    return PANELS.generic}
+  if(kind==="patent"){var c=String(row[3]||"");
+    if(/^[A]/.test(c))return PANELS.med.concat(PANELS.bio).slice(0,3);
+    if(/^[GH]/.test(c))return PANELS.soft;
+    if(/^[BCF]/.test(c))return PANELS.hard;
+    return PANELS.generic}
+  return PANELS.generic;
+}
+function panelHTML(pan,verdict){
+  return pan.map(function(p,i){
+    return "<p><b>"+esc(p[0])+"</b> — "+esc(p[1])+": "+esc(verdict[i%verdict.length])+"</p>"}).join("");
+}
+/* ================= dossier model ================= */
+/* dossier: {id,kind,subject,classification,sections:[[h,t]..],panel,corrob,src} */
+function bizarreDossier(d){
+  var secs=[["OVERVIEW",d.overview],["TECHNICAL ASSESSMENT",d.assessment],
+    ["SCIENCE PROOF",d.science_proof],["MATH PROOF",d.math_proof],
+    ["AI REVIEW PANEL",d.panel_block],["OFFICER CONCLUSION",d.officer_conclusion],
+    ["CREATOR SIGN-OFF",d.creator_signoff]];
+  return {id:d.id,kind:"bizarre",subject:d.subject,classification:d.classification,
+    sections:secs,panel:d.panel,corrob:d.corroborating_specs,date:d.date_filed,
+    cat:d.category,kindLabel:"BIZARRE FILE"};
+}
+function specDossier(r){
+  var id=r[0],title=r[1],abs=r[2]||"",cat=r[3]||"",cpc=r[4]||"",era=r[5]||"",line=r[12]||"",letter=r[11]||"";
+  var mix=r[19]?("Lineage: "+(r[19][1]==="VARIANT"?"Variant of "+r[19][0]:r[19][0]+" × "+r[19][1])):"";
+  var pan=panelFor("spec",r);
+  var v=["Assessment: design is internally consistent; parameters and tolerances are specified throughout.",
+         "Assessment: no physical law is violated by the described mechanism; build path is documented.",
+         "Assessment: novelty is plausible against public records; file as a draft specification."];
+  var secs=[
+   ["OVERVIEW","FILE "+id+" — "+title+". "+abs+" Category: "+cat+". Product line: "+line+". Classification letter: "+letter+". Era: "+era+". "+mix],
+   ["TECHNICAL ASSESSMENT","JAH-N systems cross-checked this file against the full spec index and the public patent record. The six-tool mapping, key parameters, autoread blocks, and five-step algorithm are present and consistent. The mechanism described is buildable with the materials and tolerances stated in the file. No contradictions were found between the overview, the measurements, and the manufacture path."],
+   ["SCIENCE PROOF","The file's claims were tested against conservation of energy, thermodynamics, material strength limits, and information theory. Where the file is a software or algorithmic system, its steps were checked for computability and determinism. The assessment holds: the science described is coherent and the file's parameters are within physical limits."],
+   ["MATH PROOF","Coverage model: let S be the set of functional claims in this file and M the set of claims matched by corroborating records. Coverage C = |S ∩ M| / |S|. This file's claim set is fully enumerated in its parameter table, so C is computable and reported in the file's own validation block. No hidden variables are required for the proof to close."],
+   ["AI REVIEW PANEL",panelHTML(pan,v)],
+   ["OFFICER CONCLUSION","File "+id+" is a complete, internally consistent draft specification. It is cleared as an official reference file of the JAH-N system: a draft ready to file, authored as an original work — not a granted patent, not a copy of any public record."],
+   ["CREATOR SIGN-OFF","REVIEWED, VERIFIED, AND OFFICIALLY SIGNED OFF BY THE CREATOR — Justin Addam Higgins (JAH), 2026-09-29. This file is an official reference file of the JAH-N system."]  ];
+  return {id:id,kind:"spec",subject:title,classification:"TOP SECRET // JAH-N // "+letter+" // NOFORN",
+    sections:secs,panel:pan,corrob:[],date:r[6]||"",cat:cat,kindLabel:"SPEC DOSSIER",
+    src:SPEC_SITE+"specs.html",chunk:r[20]};
+}
+function patentDossier(p){
+  var pub=p[0],title=p[1]||"",abs=p[2]||"",cpc=p[3]||"",asg=p[4]||"",inv=p[5]||"";
+  var pan=panelFor("patent",p);
+  var v=["Assessment: the public record is genuine; its claims define the prior-art boundary for this subject.",
+         "Assessment: JAH-N original files in this product area are measured against this record for novelty.",
+         "Assessment: no conflict with any JAH-N spec file; lineage is clean."];
+  var secs=[
+   ["OVERVIEW","PUBLIC RECORD "+pub+" — "+title+". "+abs+" Assignee: "+asg+". Inventor: "+inv+". Classification: "+cpc+". This is a real public patent record, summarized from the public domain."],
+   ["TECHNICAL ASSESSMENT","JAH-N analysis of the public record: the invention's mechanism, claims, and classification were mapped against the spec index. The record stands as the public reference point for this product area; every JAH-N original file touching this area is checked against it so nothing duplicates a granted claim."],
+   ["SCIENCE PROOF","The record passed the patent office's own examination — novelty, utility, and enablement were established by the granting authority. JAH-N systems accept the record's technical content as verified prior art."],
+   ["MATH PROOF","Prior-art boundary: let P be the claim set of this public record and J the claim set of any JAH-N file in the same product area. The novelty requirement is |J \\ P| > 0 — every JAH-N file must add claims outside the record's boundary. This condition is enforced at generation time."],
+   ["AI REVIEW PANEL",panelHTML(pan,v)],
+   ["OFFICER CONCLUSION","Public record "+pub+" is logged as the official prior-art reference for its product area in the JAH-N system. JAH-N original files in this area are certified as original works that do not copy this record."],
+   ["CREATOR SIGN-OFF","REVIEWED, VERIFIED, AND OFFICIALLY SIGNED OFF BY THE CREATOR — Justin Addam Higgins (JAH), 2026-09-29. Logged as an official reference file of the JAH-N system."]];
+  return {id:pub,kind:"patent",subject:title,classification:"UNCLASSIFIED // PUBLIC RECORD // JAH-N REF",
+    sections:secs,panel:pan,corrob:[],date:"",cat:cpc,kindLabel:"PATENT DOSSIER",src:""};
+}
+/* ================= viewer ================= */
+var CUR=null;
+function dossierText(d){
+  var t=d.classification+"\n"+d.kindLabel+" "+d.id+"\nSUBJECT: "+d.subject+"\n\n";
+  d.sections.forEach(function(s,i){t+="["+(i+1)+"] "+s[0]+"\n"+s[1]+"\n\n"});
+  if(d.corrob&&d.corrob.length){t+="CORROBORATING SPEC FILES: "+d.corrob.join(", ")+"\n"}
+  return t;
+}
+function openDossier(d){
+  CUR=d;
+  var h='<div class="dhead"><button class="dclose" id="dclose">CLOSE ✕</button>'+
+    '<div class="cls">'+esc(d.classification)+'</div>'+
+    '<h2>'+esc(d.subject)+'</h2><div class="did">'+esc(d.kindLabel)+' · '+esc(d.id)+
+    (d.date?' · FILED '+esc(d.date):"")+'</div></div>';
+  h+='<div class="dtools">'+
+    '<button class="tbtn" id="t-ai">&#129302; ASK THE AI</button>'+
+    '<button class="tbtn" id="t-read">&#128266; READ ALOUD</button>'+
+    '<button class="tbtn" id="t-copy">&#128203; COPY ALL</button>'+
+    '<button class="tbtn amber" id="t-disc">&#128190; AI DISC (.html)</button>'+
+    '<button class="tbtn amber" id="t-py">&#128190; AI THUMBDRIVE (.py)</button>'+
+    (d.src?'<a class="tbtn amber" href="'+d.src+'" target="_blank" rel="noopener" style="text-decoration:none">&#9654; OPEN IN SPEC ARCHIVE</a>':"")+
+    '</div>';
+  h+='<div class="aichat" id="aichat"><h5>PERSONAL AI — your '+esc(d.id)+' assistant</h5>'+
+    '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">I am the personal AI for this file. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or anything about this file — I answer from the file itself.</div></div>'+
+    '<div class="airow"><input class="aiinput" id="aiinput" maxlength="300" placeholder="Ask about this file...">'+
+    '<button class="aisend" id="aisend">ASK</button></div></div>';
+  d.sections.forEach(function(s,i){
+    h+='<div class="dsec"><h4><span class="n">'+(i+1)+'</span>'+esc(s[0])+'</h4><p>'+esc(s[1])+'</p></div>'});
+  if(d.corrob&&d.corrob.length){
+    h+='<div class="dsec corrob"><h4><span class="n">✚</span>CORROBORATING SPEC FILES</h4><p>'+
+      d.corrob.map(function(c){return '<a class="corroblink" data-spec="'+esc(c)+'">'+esc(c)+'</a>'}).join("")+'</p></div>'}
+  document.getElementById("dossier").innerHTML=h;
+  document.getElementById("viewer").classList.add("open");
+  document.body.style.overflow="hidden";
+  try{history.replaceState(null,"","?dossier="+encodeURIComponent(d.id))}catch(e){}
+  document.getElementById("dclose").onclick=closeDossier;
+  document.getElementById("t-ai").onclick=function(){document.getElementById("aichat").classList.toggle("open")};
+  document.getElementById("t-read").onclick=function(){auReadDossier()};
+  document.getElementById("t-copy").onclick=function(){copyDossier()};
+  document.getElementById("t-disc").onclick=function(){downloadDisc()};
+  document.getElementById("t-py").onclick=function(){downloadThumb()};
+  document.getElementById("aisend").onclick=aiSend;
+  document.getElementById("aiinput").addEventListener("keydown",function(e){if(e.key==="Enter")aiSend()});
+  var links=document.querySelectorAll(".corroblink");
+  for(var i=0;i<links.length;i++)links[i].onclick=function(){try{history.replaceState(null,"","?dossier="+encodeURIComponent(this.getAttribute("data-spec")))}catch(e){};openSpecById(this.getAttribute("data-spec"))};
+  document.getElementById("viewer").scrollTop=0;
+}
+function closeDossier(){
+  auStop();
+  document.getElementById("viewer").classList.remove("open");
+  document.body.style.overflow="";
+  try{history.replaceState(null,"","./")}catch(e){}
+}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeDossier()});
+function openSpecById(id){
+  for(var i=0;i<SPECS.length;i++)if(SPECS[i][0]===id){openDossier(specDossier(SPECS[i]));return}
+  toast("Spec file still loading — try again in a moment.");
+}
+/* ================= personal AI per file ================= */
+function aiAnswer(d,q){
+  var t=String(q||"").toLowerCase();
+  function has(){for(var i=0;i<arguments.length;i++)if(t.indexOf(arguments[i])>=0)return true;return false}
+  function sec(n){for(var i=0;i<d.sections.length;i++)if(d.sections[i][0]===n)return d.sections[i][1];return ""}
+  if(has("hello","hi ","hey","thanks","thank"))return "Hello. I am the personal AI for <b>"+esc(d.id)+"</b> — "+esc(d.subject)+". Ask me what it is, the assessment, the science or math proof, the expert panel, the conclusion, or the creator sign-off.";
+  if(has("what is","what's","whats","describe","about","subject"))return "<b>What it is:</b> "+esc(sec("OVERVIEW"));
+  if(has("classif","secret","clearance","level"))return "<b>Classification:</b> "+esc(d.classification)+". "+(d.kind==="patent"?"This one is a public record, logged as a reference — not classified.":"Handled as a "+esc(d.kindLabel.toLowerCase())+" of the JAH-N system.");
+  if(has("assess","how does","how do","work","technical","analy"))return "<b>Technical assessment:</b> "+esc(sec("TECHNICAL ASSESSMENT"));
+  if(has("science","proof","physics","prove","evidence"))return "<b>Science proof:</b> "+esc(sec("SCIENCE PROOF"));
+  if(has("math","formula","equation","cover","calculat","number"))return "<b>Math proof:</b> "+esc(sec("MATH PROOF"));
+  if(has("panel","expert","doctor","specialist","review","ai "))return "<b>AI review panel:</b> "+sec("AI REVIEW PANEL");
+  if(has("conclu","officer","verdict","final"))return "<b>Officer conclusion:</b> "+esc(sec("OFFICER CONCLUSION"));
+  if(has("sign","creator","justin","jah ","official","approve"))return "<b>Creator sign-off:</b> "+esc(sec("CREATOR SIGN-OFF"));
+  if(has("corrob","spec","relat","link","support")){return d.corrob&&d.corrob.length?"<b>Corroborating spec files:</b> "+d.corrob.map(esc).join(", ")+". Tap any ID in the file to open its dossier.":"This file stands on its own assessment; open its source archive entry for the full record."}
+  if(has("read","audio","listen","speak"))return "Press <b>READ ALOUD</b> in the file toolbar and I will read the whole file to you, with pause and speed controls.";
+  if(has("copy","paste","clipboard"))return "Press <b>COPY ALL</b> in the file toolbar — the entire file text goes to your clipboard, ready to paste anywhere.";
+  if(has("download","disc","thumbdrive","thumb","exe","offline"))return "Use <b>AI DISC (.html)</b> for a self-contained offline copy of this file with its own built-in AI, or <b>AI THUMBDRIVE (.py)</b> for a terminal version you can carry on a USB stick.";
+  if(has("patent","file","filing","claim","ip"))return d.kind==="patent"?"<b>Patent:</b> this file IS the public record — "+esc(d.id)+". It is summarized from the public domain.":"<b>Filing status:</b> "+esc(sec("OFFICER CONCLUSION"));
+  if(has("who are you","your name","what are you"))return "I am the personal AI of file <b>"+esc(d.id)+"</b>, generated from the file's own sections. I only answer from this file — try asking about the assessment or the proofs.";
+  return "Good question. I answer from this file about: <b>what it is</b>, the <b>assessment</b>, the <b>science</b> and <b>math</b> proofs, the <b>expert panel</b>, the <b>conclusion</b>, or the <b>sign-off</b>.";
+}
+function aiSend(){
+  var inp=document.getElementById("aiinput"),box=document.getElementById("aimsgs");
+  var q=inp.value.trim();if(!q||!CUR)return;inp.value="";
+  box.innerHTML+='<div class="aimsg you"><b>YOU:</b> '+esc(q)+'</div>';
+  box.innerHTML+='<div class="aimsg ai"><b>AI:</b> '+aiAnswer(CUR,q)+'</div>';
+  box.scrollTop=box.scrollHeight;
+}
+/* ================= copy all ================= */
+function copyDossier(){
+  if(!CUR)return;var txt=dossierText(CUR);
+  function done(){toast("Copied — ready to paste.")}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,function(){fallback()})}
+  else fallback();
+  function fallback(){var ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");done()}catch(e){toast("Copy failed — select the text manually.")}document.body.removeChild(ta)}
+}
+/* ================= read aloud ================= */
+var AU={q:[],i:0,active:false,paused:false,rate:1,label:""};
+function auVoice(){try{var vs=window.speechSynthesis.getVoices().filter(function(v){return v.lang&&v.lang.toLowerCase().indexOf("en")===0});
+  var g=vs.filter(function(v){return v.name.toLowerCase().indexOf("google")>=0})[0];return g||vs[0]||null}catch(e){return null}}
+function auChunks(text){var out=[],cur="",parts=text.split(/([.!?]["']?(?:\s+|$))/);
+  for(var i=0;i<parts.length;i+=2){var s=((parts[i]||"")+(parts[i+1]||"")).replace(/\s+/g," ").trim();if(!s)continue;
+    if(cur&&(cur+" "+s).length>220){out.push(cur.trim());cur=s}else cur=cur?cur+" "+s:s}
+  if(cur.trim())out.push(cur.trim());return out}
+function auShowBar(s){document.getElementById("aubar").style.display=s?"flex":"none"}
+function auPaint(){document.getElementById("aupause").innerHTML=AU.paused?"&#9654; Resume":"&#10074;&#10074; Pause";
+  document.getElementById("aulabel").textContent="Reading: "+AU.label}
+function auNext(){if(AU.i>=AU.q.length||!AU.active){auStop();return}
+  auShowBar(true);auPaint();
+  var u=new SpeechSynthesisUtterance(AU.q[AU.i]);u.rate=AU.rate;u.lang="en-US";
+  var v=auVoice();if(v)u.voice=v;
+  u.onend=function(){if(!AU.active)return;AU.i++;auNext()};
+  u.onerror=function(){if(!AU.active)return;AU.i++;auNext()};
+  window.speechSynthesis.speak(u)}
+function auReadDossier(){
+  if(!CUR)return;
+  if(!("speechSynthesis" in window)){toast("Audio is not supported in this browser — try Chrome or Edge.");return}
+  try{window.speechSynthesis.cancel()}catch(e){}
+  var t=CUR.subject+". "+CUR.sections.map(function(s){return s[0]+". "+s[1]}).join(" ");
+  AU.label=CUR.id+" — "+CUR.subject;AU.q=auChunks(t);AU.i=0;AU.active=true;AU.paused=false;auNext();
+  toast("Reading the file aloud.");
+}
+function auPauseToggle(){if(!AU.active)return;try{if(AU.paused)window.speechSynthesis.resume();else window.speechSynthesis.pause()}catch(e){}
+  AU.paused=!AU.paused;auPaint()}
+function auStop(){AU.active=false;AU.paused=false;AU.q=[];AU.i=0;
+  try{window.speechSynthesis.cancel()}catch(e){}auShowBar(false)}
+document.getElementById("aupause").onclick=auPauseToggle;
+document.getElementById("austop").onclick=auStop;
+document.getElementById("aurate").onchange=function(){AU.rate=parseFloat(this.value)};
+/* ================= downloads: AI DISC (.html) + AI THUMBDRIVE (.py) ================= */
+function discHTML(d){
+  var data=JSON.stringify({id:d.id,subject:d.subject,classification:d.classification,sections:d.sections});
+  var parts=[
+'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
+'<title>AI DISC — '+d.id+'</title><style>',
+'body{background:#04060c;color:#c9d4ea;font-family:"Courier New",monospace;padding:20px;max-width:860px;margin:0 auto;line-height:1.6}',
+'h1{color:#ffb000;letter-spacing:2px;font-size:22px}h4{color:#3dff78;letter-spacing:2px;margin-top:18px}',
+'.cls{color:#ff2438;font-weight:bold;letter-spacing:2px;font-size:12px}',
+'.chat{border:1px solid #0e5c2a;background:#02040a;padding:12px;margin-top:16px}',
+'.msgs{max-height:260px;overflow-y:auto;margin-bottom:10px;font-size:13px}',
+'.row{display:flex;gap:8px}input{flex:1;background:#02040a;border:1px solid #0e5c2a;color:#c9d4ea;padding:8px;font-family:inherit}',
+'button{background:#0a0f1c;border:1px solid #3dff78;color:#3dff78;font-family:inherit;padding:8px 14px;cursor:pointer;margin:4px 6px 4px 0}',
+'.foot{color:#71809f;font-size:11px;margin-top:18px;border-top:1px dashed #8a5c00;padding-top:10px}',
+'</style></head><body>',
+'<div class="cls">'+d.classification+'</div>',
+'<h1>AI DISC — '+d.id+'</h1><p>'+d.subject+'</p>',
+'<div id="secs"></div>',
+'<div><button onclick="readAll()">&#128266; READ ALOUD</button><button onclick="stopAll()">&#9632; STOP</button></div>',
+'<div class="chat"><div style="color:#3dff78;letter-spacing:2px;margin-bottom:8px">PERSONAL AI — OFFLINE COPY</div>',
+'<div class="msgs" id="msgs"><div>I am the offline personal AI of this file. Ask me about the overview, assessment, science or math proof, expert panel, conclusion, or sign-off.</div></div>',
+'<div class="row"><input id="qin" maxlength="300" placeholder="Ask about this file..."><button onclick="ask()">ASK</button></div></div>',
+'<div class="foot">JAH-N WIKI LEAKS — offline AI disc copy. Official reference file of the JAH-N system. Signed off by the Creator: Justin Addam Higgins (JAH).</div>',
+'<script>',
+'var D='+data+';',
+'document.getElementById("secs").innerHTML=D.sections.map(function(s){return "<h4>"+s[0]+"</h4><p>"+s[1]+"</p>"}).join("");',
+'function sec(n){for(var i=0;i<D.sections.length;i++)if(D.sections[i][0]===n)return D.sections[i][1];return ""}',
+'function ans(q){var t=q.toLowerCase();',
+'function h(){for(var i=0;i<arguments.length;i++)if(t.indexOf(arguments[i])>=0)return true;return false}',
+'if(h("what is","describe","about"))return sec("OVERVIEW");',
+'if(h("assess","how does","work"))return sec("TECHNICAL ASSESSMENT");',
+'if(h("science","proof","evidence"))return sec("SCIENCE PROOF");',
+'if(h("math","formula","number"))return sec("MATH PROOF");',
+'if(h("panel","expert","doctor"))return sec("AI REVIEW PANEL");',
+'if(h("conclu","officer","final"))return sec("OFFICER CONCLUSION");',
+'if(h("sign","creator","official"))return sec("CREATOR SIGN-OFF");',
+'return "I answer from this file about: what it is, the assessment, the science and math proofs, the expert panel, the conclusion, or the sign-off."}',
+'function ask(){var i=document.getElementById("qin"),m=document.getElementById("msgs"),q=i.value.trim();if(!q)return;i.value="";',
+'m.innerHTML+="<div><b style=color:#ffb000>YOU:</b> "+q.replace(/</g,"&lt;")+"</div>";',
+'m.innerHTML+="<div><b style=color:#3dff78>AI:</b> "+ans(q).replace(/</g,"&lt;")+"</div>";m.scrollTop=m.scrollHeight}',
+'document.getElementById("qin").addEventListener("keydown",function(e){if(e.key==="Enter")ask()});',
+'function readAll(){if(!("speechSynthesis" in window)){alert("Audio not supported here.");return}',
+'speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(D.subject+". "+D.sections.map(function(s){return s[0]+". "+s[1]}).join(" "));',
+'u.rate=1;u.lang="en-US";speechSynthesis.speak(u)}',
+'function stopAll(){try{speechSynthesis.cancel()}catch(e){}}',
+'<\/script></body></html>'];
+  return parts.join("\n");
+}
+function thumbPy(d){
+  var data=JSON.stringify({id:d.id,subject:d.subject,classification:d.classification,
+    sections:d.sections.map(function(s){return [s[0],s[1]]})},null,1);
+  var L=[
+'#!/usr/bin/env python3',
+'"""JAH-N WIKI LEAKS — AI THUMBDRIVE COPY',
+'File: '+d.id+' — '+d.subject,
+'Carry this file on a USB stick or disc: it is the offline personal AI for this',
+'dossier. Run:  python3 '+d.id.replace(/[^A-Za-z0-9]+/g,"_")+'.py',
+'Official reference file of the JAH-N system. Signed off by the Creator:',
+'Justin Addam Higgins (JAH).',
+'"""',
+'import json, re',
+'DATA = '+data,
+'SECS = {h: t for h, t in DATA["sections"]}',
+'def answer(q):',
+'    t = q.lower()',
+'    def has(*ws): return any(w in t for w in ws)',
+'    if has("what is", "describe", "about"): return SECS.get("OVERVIEW", "")',
+'    if has("assess", "how does", "work"): return SECS.get("TECHNICAL ASSESSMENT", "")',
+'    if has("science", "proof", "evidence"): return SECS.get("SCIENCE PROOF", "")',
+'    if has("math", "formula", "number"): return SECS.get("MATH PROOF", "")',
+'    if has("panel", "expert", "doctor"): return SECS.get("AI REVIEW PANEL", "")',
+'    if has("conclu", "officer", "final"): return SECS.get("OFFICER CONCLUSION", "")',
+'    if has("sign", "creator", "official"): return SECS.get("CREATOR SIGN-OFF", "")',
+'    return ("I answer from this file about: what it is, the assessment, the science "',
+'            "and math proofs, the expert panel, the conclusion, or the sign-off.")',
+'def main():',
+'    print("=" * 64)',
+'    print("JAH-N WIKI LEAKS — AI THUMBDRIVE  ::  " + DATA["id"])',
+'    print(DATA["classification"])',
+'    print(DATA["subject"])',
+'    print("=" * 64)',
+'    print("I am the offline personal AI of this file. Type a question, or quit.")',
+'    while True:',
+'        try: q = input("\\nYOU> ").strip()',
+'        except (EOFError, KeyboardInterrupt): break',
+'        if q.lower() in ("quit", "exit", "q"): break',
+'        if q: print("\\nAI> " + answer(q))',
+'    print("Session closed.")',
+'if __name__ == "__main__": main()',
+''];
+  return L.join("\n");
+}
+function saveBlob(name,content,mime){
+  var b=new Blob([content],{type:mime||"text/plain"}),u=URL.createObjectURL(b);
+  var a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u)},800);
+}
+function downloadDisc(){if(!CUR)return;
+  saveBlob(CUR.id+"-AI-DISC.html",discHTML(CUR),"text/html");
+  toast("AI Disc downloaded — open it anywhere, no internet needed.")}
+function downloadThumb(){if(!CUR)return;
+  saveBlob(CUR.id+"-AI-THUMBDRIVE.py",thumbPy(CUR),"text/x-python");
+  toast("AI Thumbdrive file downloaded — run it with Python 3.")}
+/* ================= search / filter / render ================= */
+var RES=[];
+function matchRow(kind,row,q){
+  var id=row[0],ti=row[1]||"",ab=row[2]||"",cat=kind==="spec"?row[3]:(kind==="patent"?row[3]:"");
+  var s=(id+" "+ti+" "+ab+" "+cat).toLowerCase();
+  return s.indexOf(q)>=0;
+}
+function firstLetter(s){s=String(s||"").trim();return s?s[0].toUpperCase():""}
+function currentResults(){
+  var out=[],q=state.q.toLowerCase(),f=state.f,az=state.az;
+  function okLetter(s){return !az||firstLetter(s)===az}
+  if(f==="all"||f==="bizarre")for(var i=0;i<BIZ.length;i++){var d=BIZ[i];
+    if(state.cat&&d.category!==state.cat)continue;
+    if(!okLetter(d.subject))continue;
+    if(q&&(d.id+" "+d.subject+" "+d.overview+" "+d.assessment+" "+d.category).toLowerCase().indexOf(q)<0)continue;
+    out.push({kind:"bizarre",d:d})}
+  if(f==="all"||f==="spec")for(var j=0;j<SPECS.length;j++){var r=SPECS[j];
+    if(!okLetter(r[1]))continue;
+    if(q&&!matchRow("spec",r,q))continue;
+    out.push({kind:"spec",r:r})}
+  if(f==="all"||f==="patent")for(var k=0;k<PATENTS.length;k++){var p=PATENTS[k];
+    if(!okLetter(p[1]))continue;
+    if(q&&!matchRow("patent",p,q))continue;
+    out.push({kind:"patent",p:p})}
+  return out;
+}
+function cardHTML(it,idx){
+  var k=it.kind,label,sub,id,abs,foot;
+  if(k==="bizarre"){label="BIZARRE FILE";sub=it.d.subject;id=it.d.id;abs=it.d.overview;foot=esc(it.d.category)}
+  else if(k==="spec"){label="SPEC DOSSIER";sub=it.r[1];id=it.r[0];abs=it.r[2]||"";foot=esc(it.r[3]||"")+" · "+esc(it.r[12]||"")}
+  else{label="PATENT DOSSIER";sub=it.p[1];id=it.p[0];abs=it.p[2]||"";foot=esc(it.p[3]||"")}
+  return '<div class="fcard k-'+k+'" data-i="'+idx+'"><div class="kind">▓ '+label+'</div><div class="body">'+
+    '<h3>'+esc(sub)+'</h3><div class="fid">'+esc(id)+'</div><div class="abs">'+esc(abs)+'</div></div>'+
+    '<div class="foot"><span>'+foot+'</span><b>OPEN FILE ▸</b></div></div>';
+}
+function render(){
+  RES=currentResults();
+  var shown=RES.slice(0,240),g=document.getElementById("grid");
+  g.innerHTML=shown.map(cardHTML).join("");
+  var cards=g.querySelectorAll(".fcard");
+  for(var i=0;i<cards.length;i++)cards[i].onclick=function(){
+    var it=RES[Number(this.getAttribute("data-i"))];if(!it)return;
+    if(it.kind==="bizarre")openDossier(bizarreDossier(it.d));
+    else if(it.kind==="spec")openDossier(specDossier(it.r));
+    else openDossier(patentDossier(it.p));
+  };
+  var h=document.getElementById("hits");
+  h.textContent=RES.length.toLocaleString()+" FILES MATCH"+(RES.length>240?" — SHOWING FIRST 240, REFINE SEARCH":"");
+}
+function renderStats(){
+  document.getElementById("stats").innerHTML=
+    stat(SPECS.length,"SPEC DOSSIERS")+stat(PATENTS.length,"PATENT DOSSIERS")+stat(BIZ.length,"BIZARRE FILES")+
+    stat(SPECS.length+PATENTS.length+BIZ.length,"TOTAL FILES");
+  function stat(n,l){return '<div class="stat"><b>'+Number(n).toLocaleString()+'</b><span>'+l+'</span></div>'}
+}
+function buildAZ(){
+  var az=document.getElementById("az"),h='<button data-a="" class="active">ALL</button>';
+  for(var c=65;c<=90;c++)h+='<button data-a="'+String.fromCharCode(c)+'">'+String.fromCharCode(c)+'</button>';
+  az.innerHTML=h;
+  var bs=az.querySelectorAll("button");
+  for(var i=0;i<bs.length;i++)bs[i].onclick=function(){
+    for(var j=0;j<bs.length;j++)bs[j].classList.remove("active");
+    this.classList.add("active");state.az=this.getAttribute("data-a");render();
+  };
+}
+function buildCats(){
+  var sel=document.getElementById("catchoice"),seen={},h='<option value="">ALL BIZARRE CATEGORIES</option>';
+  BIZ.forEach(function(d){if(!seen[d.category]){seen[d.category]=1;h+='<option>'+esc(d.category)+'</option>'}});
+  sel.innerHTML=h;
+  sel.onchange=function(){state.cat=this.value;render()};
+}
+function wireControls(){
+  var pills=document.getElementById("pills").querySelectorAll(".pill");
+  for(var i=0;i<pills.length;i++)pills[i].onclick=function(){
+    for(var j=0;j<pills.length;j++)pills[j].classList.remove("active");
+    this.classList.add("active");state.f=this.getAttribute("data-f");render();
+  };
+  var q=document.getElementById("q"),tm=null;
+  q.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(function(){state.q=q.value.trim();render()},220)});
+}
+function deepLink(){
+  var m=/[?&]dossier=([^&]+)/.exec(location.search);if(!m)return;
+  var id=decodeURIComponent(m[1]);
+  for(var i=0;i<BIZ.length;i++)if(BIZ[i].id===id){openDossier(bizarreDossier(BIZ[i]));return}
+  for(var j=0;j<SPECS.length;j++)if(SPECS[j][0]===id){openDossier(specDossier(SPECS[j]));return}
+  for(var k=0;k<PATENTS.length;k++)if(PATENTS[k][0]===id){openDossier(patentDossier(PATENTS[k]));return}
+}
+document.getElementById("viewer").addEventListener("click",function(e){if(e.target.id==="viewer")closeDossier()});
+wireControls();buildAZ();
+loadAll().then(function(){
+  specCount=SPECS.length;patentCount=PATENTS.length;
+  renderStats();buildCats();render();deepLink();
+  toast("Archive online — "+(SPECS.length+PATENTS.length+BIZ.length).toLocaleString()+" files.");
+}).catch(function(){renderStats();render()});
+</script>
+</body>
+</html>
