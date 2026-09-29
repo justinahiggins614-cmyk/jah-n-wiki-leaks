@@ -373,6 +373,10 @@ function dossierText(d){
   if(d.corrob&&d.corrob.length){t+="CORROBORATING SPEC FILES: "+d.corrob.join(", ")+"\n"}
   return t;
 }
+function wikiURL(d){var p=d.id;
+ if(/^JAH-LEAK-B/i.test(d.id))p="SUB:"+d.subject;
+ else if(d.kind==="patent")p="PAT:"+d.id;
+ return "https://justinahiggins614-cmyk.github.io/jah-wiki/?page="+encodeURIComponent(p)}
 function openDossier(d){
   CUR=d;
   var h='<div class="dhead"><button class="dclose" id="dclose">CLOSE ✕</button>'+
@@ -386,6 +390,7 @@ function openDossier(d){
     '<button class="tbtn amber" id="t-zip">&#11015; DOWNLOAD ALL</button>'+
     '<button class="tbtn amber" id="t-disc">&#128190; AI DISC (.html)</button>'+
     '<button class="tbtn amber" id="t-py">&#128190; AI THUMBDRIVE (.py)</button>'+
+    '<a class="tbtn" id="t-wiki" href="'+wikiURL(d)+'" target="_blank" rel="noopener" style="text-decoration:none" title="Open the official JAH Wiki article for this file">&#128214; JAH WIKI ARTICLE</a>'+
     (d.src?'<a class="tbtn amber" href="'+d.src+'" target="_blank" rel="noopener" style="text-decoration:none">&#9654; OPEN IN SPEC ARCHIVE</a>':"")+
     '</div>';
   h+='<div class="aichat" id="aichat"><h5>PERSONAL AI — your '+esc(d.id)+' assistant</h5>'+
