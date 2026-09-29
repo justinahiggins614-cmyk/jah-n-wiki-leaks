@@ -346,6 +346,7 @@ function openDossier(d){
     '<button class="tbtn" id="t-ai">&#129302; ASK THE AI</button>'+
     '<button class="tbtn" id="t-read">&#128266; READ ALOUD</button>'+
     '<button class="tbtn" id="t-copy">&#128203; COPY ALL</button>'+
+    '<button class="tbtn amber" id="t-zip">&#11015; DOWNLOAD ALL</button>'+
     '<button class="tbtn amber" id="t-disc">&#128190; AI DISC (.html)</button>'+
     '<button class="tbtn amber" id="t-py">&#128190; AI THUMBDRIVE (.py)</button>'+
     (d.src?'<a class="tbtn amber" href="'+d.src+'" target="_blank" rel="noopener" style="text-decoration:none">&#9654; OPEN IN SPEC ARCHIVE</a>':"")+
@@ -367,6 +368,7 @@ function openDossier(d){
   document.getElementById("t-ai").onclick=function(){document.getElementById("aichat").classList.toggle("open")};
   document.getElementById("t-read").onclick=function(){auReadDossier()};
   document.getElementById("t-copy").onclick=function(){copyDossier()};
+  document.getElementById("t-zip").onclick=function(){downloadAllZip()};
   document.getElementById("t-disc").onclick=function(){downloadDisc()};
   document.getElementById("t-py").onclick=function(){downloadThumb()};
   document.getElementById("aisend").onclick=aiSend;
@@ -442,21 +444,45 @@ function auNext(){if(AU.i>=AU.q.length||!AU.active){auStop();return}
   u.onend=function(){if(!AU.active)return;AU.i++;auNext()};
   u.onerror=function(){if(!AU.active)return;AU.i++;auNext()};
   window.speechSynthesis.speak(u)}
+/* online-voice fallback for browsers with no speechSynthesis (in-app WebViews etc.) */
+function hasSpeech(){try{return ("speechSynthesis" in window)&&!!window.speechSynthesis&&typeof window.speechSynthesis.speak==="function"}catch(e){return false}}
+try{if(hasSpeech()){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){try{window.speechSynthesis.getVoices()}catch(e){}}}}catch(e){}
+function fxMsg(m){toast(m)}
+var FX={audio:null,active:false};
+function fxChunks(text){var out=[],cur="",parts=String(text).split(/([.!?]["']?(?:\s+|$))/);
+  function pushWords(s){var w=s.split(" "),c="";for(var k=0;k<w.length;k++){var t=(c+" "+w[k]).trim();if(t.length>180){if(c)out.push(c);c=w[k]}else c=t}if(c)out.push(c)}
+  for(var i=0;i<parts.length;i+=2){var s=((parts[i]||"")+(parts[i+1]||"")).replace(/\s+/g," ").trim();if(!s)continue;
+    if(s.length>180){if(cur){out.push(cur);cur=""}pushWords(s);continue}
+    if(cur&&(cur+" "+s).length>180){out.push(cur);cur=s}else cur=cur?cur+" "+s:s}
+  if(cur)out.push(cur);return out}
+function fxPlay(list,i,errs){
+  if(!FX.active||!AU.active)return;
+  if(i>=list.length){auStop();return}
+  var a;try{a=new Audio("https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q="+encodeURIComponent(list[i]))}catch(e){auStop();return}
+  try{a.playbackRate=AU.rate||1}catch(e){}
+  FX.audio=a;
+  a.onended=function(){if(AU.active&&FX.active)fxPlay(list,i+1,0)};
+  a.onerror=function(){var n=(errs||0)+1;if(n>2){auStop();fxMsg("Online voice is unreachable — open this page in Chrome for built-in audio.");return}fxPlay(list,i+1,n)};
+  try{var pr=a.play();if(pr&&pr.catch)pr.catch(function(){})}catch(e){}
+}
+function fxStart(text){FX.active=true;fxPlay(fxChunks(text),0,0)}
+function fxStop(){FX.active=false;if(FX.audio){try{FX.audio.pause()}catch(e){}FX.audio=null}}
 function auReadDossier(){
   if(!CUR)return;
-  if(!("speechSynthesis" in window)){toast("Audio is not supported in this browser — try Chrome or Edge.");return}
-  try{window.speechSynthesis.cancel()}catch(e){}
   var t=CUR.subject+". "+CUR.sections.map(function(s){return s[0]+". "+s[1]}).join(" ");
-  AU.label=CUR.id+" — "+CUR.subject;AU.q=auChunks(t);AU.i=0;AU.active=true;AU.paused=false;auNext();
-  toast("Reading the file aloud.");
+  AU.label=CUR.id+" — "+CUR.subject;AU.q=auChunks(t);AU.i=0;AU.active=true;AU.paused=false;
+  if(hasSpeech()){try{window.speechSynthesis.cancel()}catch(e){}auNext();toast("Reading the file aloud.")}
+  else{auShowBar(true);auPaint();fxStart(t);toast("This browser has no built-in voice — reading with the online voice instead.")}
 }
-function auPauseToggle(){if(!AU.active)return;try{if(AU.paused)window.speechSynthesis.resume();else window.speechSynthesis.pause()}catch(e){}
+function auPauseToggle(){if(!AU.active)return;
+  if(FX.active){var a=FX.audio;try{if(AU.paused){if(a)a.play()}else{if(a)a.pause()}}catch(e){}AU.paused=!AU.paused;auPaint();return}
+  try{if(AU.paused)window.speechSynthesis.resume();else window.speechSynthesis.pause()}catch(e){}
   AU.paused=!AU.paused;auPaint()}
-function auStop(){AU.active=false;AU.paused=false;AU.q=[];AU.i=0;
+function auStop(){AU.active=false;AU.paused=false;AU.q=[];AU.i=0;fxStop();
   try{window.speechSynthesis.cancel()}catch(e){}auShowBar(false)}
 document.getElementById("aupause").onclick=auPauseToggle;
 document.getElementById("austop").onclick=auStop;
-document.getElementById("aurate").onchange=function(){AU.rate=parseFloat(this.value)};
+document.getElementById("aurate").onchange=function(){AU.rate=parseFloat(this.value);if(FX.audio){try{FX.audio.playbackRate=AU.rate}catch(e){}}};
 /* ================= downloads: AI DISC (.html) + AI THUMBDRIVE (.py) ================= */
 function discHTML(d){
   var data=JSON.stringify({id:d.id,subject:d.subject,classification:d.classification,sections:d.sections});
@@ -498,10 +524,18 @@ function discHTML(d){
 'm.innerHTML+="<div><b style=color:#ffb000>YOU:</b> "+q.replace(/</g,"&lt;")+"</div>";',
 'm.innerHTML+="<div><b style=color:#3dff78>AI:</b> "+ans(q).replace(/</g,"&lt;")+"</div>";m.scrollTop=m.scrollHeight}',
 'document.getElementById("qin").addEventListener("keydown",function(e){if(e.key==="Enter")ask()});',
-'function readAll(){if(!("speechSynthesis" in window)){alert("Audio not supported here.");return}',
-'speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(D.subject+". "+D.sections.map(function(s){return s[0]+". "+s[1]}).join(" "));',
-'u.rate=1;u.lang="en-US";speechSynthesis.speak(u)}',
-'function stopAll(){try{speechSynthesis.cancel()}catch(e){}}',
+'var FXA=null,FXI=0,FXL=[];',
+'function fxChunks(t){var o=[],c="",p=String(t).split(/([.!?]["\']?(?:\\s+|$))/);',
+'for(var i=0;i<p.length;i+=2){var s=((p[i]||"")+(p[i+1]||"")).replace(/\\s+/g," ").trim();if(!s)continue;',
+'if(c&&(c+" "+s).length>180){o.push(c);c=s}else c=c?c+" "+s:s}if(c)o.push(c);return o}',
+'function fxNext(){if(FXI>=FXL.length){FXA=null;return}',
+'var a=new Audio("https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q="+encodeURIComponent(FXL[FXI]));',
+'FXA=a;a.onended=function(){FXI++;fxNext()};a.onerror=function(){FXI++;fxNext()};try{a.play()}catch(e){}}',
+'function readAll(){var t=D.subject+". "+D.sections.map(function(s){return s[0]+". "+s[1]}).join(" ");',
+'if(("speechSynthesis" in window)&&window.speechSynthesis){try{speechSynthesis.cancel()}catch(e){}',
+'var u=new SpeechSynthesisUtterance(t);u.rate=1;u.lang="en-US";speechSynthesis.speak(u);return}',
+'stopAll();FXL=fxChunks(t);FXI=0;fxNext()}',
+'function stopAll(){try{speechSynthesis.cancel()}catch(e){}if(FXA){try{FXA.pause()}catch(e){}FXA=null}}',
 '<\/script></body></html>'];
   return parts.join("\n");
 }
@@ -560,6 +594,65 @@ function downloadDisc(){if(!CUR)return;
 function downloadThumb(){if(!CUR)return;
   saveBlob(CUR.id+"-AI-THUMBDRIVE.py",thumbPy(CUR),"text/x-python");
   toast("AI Thumbdrive file downloaded — run it with Python 3.")}
+/* ================= download all (.zip): full dossier package ================= */
+var CRC_T=null;
+function crc32bytes(bytes){
+  if(!CRC_T){CRC_T=new Uint32Array(256);
+    for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);CRC_T[n]=c>>>0}}
+  var crc=0xFFFFFFFF;
+  for(var i=0;i<bytes.length;i++)crc=CRC_T[(crc^bytes[i])&0xFF]^(crc>>>8);
+  return (crc^0xFFFFFFFF)>>>0;
+}
+function zipFiles(files){
+  var enc=new TextEncoder(),parts=[],central=[],offset=0,i;
+  for(i=0;i<files.length;i++){
+    var data=enc.encode(files[i].data),name=enc.encode(files[i].name),crc=crc32bytes(data);
+    var lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,0,true);
+    lh.setUint32(14,crc,true);lh.setUint32(18,data.length,true);lh.setUint32(22,data.length,true);
+    lh.setUint16(26,name.length,true);
+    parts.push(lh.buffer,name.buffer,data.buffer);
+    central.push({name:name,crc:crc,size:data.length,offset:offset});
+    offset+=30+name.length+data.length;
+  }
+  var cdStart=offset,cdSize=0;
+  for(i=0;i<central.length;i++){var c=central[i],ch=new DataView(new ArrayBuffer(46));
+    ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);
+    ch.setUint32(16,c.crc,true);ch.setUint32(20,c.size,true);ch.setUint32(24,c.size,true);
+    ch.setUint16(28,c.name.length,true);ch.setUint32(42,c.offset,true);
+    parts.push(ch.buffer,c.name.buffer);cdSize+=46+c.name.length;
+  }
+  var end=new DataView(new ArrayBuffer(22));
+  end.setUint32(0,0x06054b50,true);end.setUint16(8,central.length,true);end.setUint16(10,central.length,true);
+  end.setUint32(12,cdSize,true);end.setUint32(16,cdStart,true);
+  parts.push(end.buffer);
+  return new Blob(parts,{type:"application/zip"});
+}
+function dossierReadme(d){
+  return ["JAH-N WIKI LEAKS — complete file package",d.kindLabel+" "+d.id,"SUBJECT: "+d.subject,
+   "Classification: "+d.classification,"","CONTENTS:",
+   "dossier.txt        the full dossier text (all sections)",
+   "dossier.json       the dossier data (machine-readable)",
+   "AI-DISC.html       offline AI disc — open in any browser, personal AI + read-aloud built in",
+   "AI-THUMBDRIVE.py   offline AI thumbdrive — run with: python3 "+d.id.replace(/[^A-Za-z0-9]+/g,"_")+".py",
+   "README.txt         this file","",
+   "Official reference file of the JAH-N system.",
+   "Signed off by the Creator: Justin Addam Higgins (JAH)."].join("\n")+"\n";
+}
+function downloadAllZip(){
+  if(!CUR)return;var d=CUR,base=d.id+"/";
+  var files=[
+    {name:base+"dossier.txt",data:dossierText(d)},
+    {name:base+"dossier.json",data:JSON.stringify({id:d.id,kind:d.kind,subject:d.subject,classification:d.classification,sections:d.sections,corroborating:d.corrob||[]},null,2)+"\n"},
+    {name:base+d.id+"-AI-DISC.html",data:discHTML(d)},
+    {name:base+d.id+"-AI-THUMBDRIVE.py",data:thumbPy(d)},
+    {name:base+"README.txt",data:dossierReadme(d)}
+  ];
+  var blob=zipFiles(files),u=URL.createObjectURL(blob);
+  var a=document.createElement("a");a.href=u;a.download=d.id+"-COMPLETE.zip";document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u)},800);
+  toast("Complete file package downloaded (.zip).");
+}
 /* ================= search / filter / render ================= */
 var RES=[];
 function matchRow(kind,row,q){
