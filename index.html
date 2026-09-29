@@ -322,8 +322,9 @@ function bizarreDossier(d){
   var corrob=(d.corroborating_specs||[]).map(function(s){return (s&&s.spec_id)||s});
   var secs=[["OVERVIEW",d.overview],["TECHNICAL ASSESSMENT",d.assessment],
     ["SCIENCE PROOF",d.science_proof],["MATH PROOF",d.math_proof],
-    ["AI REVIEW PANEL",d.panel_block],["OFFICER CONCLUSION",d.officer_conclusion],
-    ["CREATOR SIGN-OFF",d.creator_signoff]];
+    ["AI REVIEW PANEL",d.panel_block],["OFFICER CONCLUSION",d.officer_conclusion]];
+  if(d.sources)secs.push(["SOURCES, WITNESSES & REFERENCES",d.sources]);
+  secs.push(["CREATOR SIGN-OFF",d.creator_signoff]);
   return {id:d.id,kind:"bizarre",subject:d.subject,classification:d.classification,
     sections:secs,panel:d.panel,corrob:corrob,date:d.date_filed,
     cat:d.category,kindLabel:"BIZARRE FILE"};

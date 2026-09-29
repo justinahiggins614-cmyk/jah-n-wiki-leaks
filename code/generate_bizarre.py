@@ -24,6 +24,68 @@ SPEC_INDEXES = [
 CREATOR = "Justin Addam Higgins (JAH)"
 TODAY = date.today().isoformat()
 
+# ------------------------------------------------- real-world sources DB ---
+# code/subject_sources.json: per-subject packs of REAL public-record material
+# (facts/measurements, named witnesses, public investigations, references).
+# Researched and verified; the ONLY simulated layer in a dossier is the
+# JAH-N assessment/panel/simulation framing, marked as such in the text.
+SOURCES_PATH = os.path.join(HERE, "subject_sources.json")
+_SOURCES_DB = None
+def _load_sources():
+    global _SOURCES_DB
+    if _SOURCES_DB is None:
+        try:
+            with open(SOURCES_PATH, encoding="utf-8") as fh:
+                _SOURCES_DB = json.load(fh)
+        except Exception:
+            _SOURCES_DB = {}
+    return _SOURCES_DB
+
+def sources_text(subject):
+    """Build the SOURCES, WITNESSES & REFERENCES section from real records."""
+    base = subject.split(" — ")[0].strip()
+    db = _load_sources()
+    pack = db.get(base)
+    if not pack:
+        return ""
+    L = []
+    L.append("The public-world record for this subject. Everything below is drawn from")
+    L.append("published reports, named witnesses, and openly documented investigations —")
+    L.append("not from the simulation layer.")
+    facts = pack.get("facts") or []
+    if facts:
+        L.append("")
+        L.append("ESTABLISHED FACTS & MEASUREMENTS:")
+        for f in facts:
+            L.append("  \u2022 " + f)
+    wit = pack.get("witnesses") or []
+    if wit:
+        L.append("")
+        L.append("NAMED WITNESS REPORTS:")
+        for w in wit:
+            L.append("  \u2022 %s (%s) \u2014 %s" % (w.get("name", "?"), w.get("when", "?"), w.get("report", "")))
+    inv = pack.get("investigations") or []
+    if inv:
+        L.append("")
+        L.append("PUBLIC INVESTIGATIONS:")
+        for v in inv:
+            L.append("  \u2022 %s \u2014 %s, %s: %s" % (v.get("name", "?"), v.get("org", "?"), v.get("when", "?"), v.get("finding", "")))
+    refs = pack.get("references") or []
+    if refs:
+        L.append("")
+        L.append("SOURCES & REFERENCES:")
+        for r in refs:
+            L.append("  \u2022 %s \u2014 %s" % (r.get("title", "?"), r.get("url", "")))
+    cav = pack.get("caveat")
+    if cav:
+        L.append("")
+        L.append("CAVEAT: " + cav)
+    L.append("")
+    L.append("SYSTEM NOTE: the JAH-N technical assessment, AI review panel, and divergence")
+    L.append("simulation elsewhere in this file are the system's simulation layer. The")
+    L.append("records above are the public-world sources they are checked against.")
+    return "\n".join(L)
+
 # ---------------------------------------------------------------- panels ---
 PANELS = {
     "UFO": [
@@ -589,6 +651,7 @@ def build_dossier(i, cat, subject, overview, keywords, spec_rows):
         "panel_block": panel_block,
         "officer_conclusion": conclusion,
         "creator_signoff": signoff,
+        "sources": sources_text(subject),
         "corroborating_specs": specs,
         "date_filed": TODAY,
     }
