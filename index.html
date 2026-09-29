@@ -66,6 +66,18 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 .stat::before,.stat::after{content:"";position:absolute;width:10px;height:10px;border:2px solid var(--amber-d)}
 .stat::before{top:-2px;left:-2px;border-right:0;border-bottom:0}
 .stat::after{bottom:-2px;right:-2px;border-left:0;border-top:0}
+/* ===== milestone ===== */
+.milestone{border:1px solid var(--amber-d);background:linear-gradient(180deg,rgba(138,92,0,.14),rgba(138,92,0,.04));
+  padding:16px 18px;margin:0 0 16px;position:relative;overflow:hidden}
+.milestone::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(45deg,transparent 0 18px,rgba(255,176,0,.05) 18px 36px)}
+.ms-head{color:var(--amber);letter-spacing:3px;font-size:14px;font-weight:bold;text-align:center;margin-bottom:10px;
+  text-shadow:0 0 14px rgba(255,176,0,.4)}
+.ms-bar{height:22px;border:1px solid var(--amber-d);background:#02040a;position:relative;overflow:hidden}
+.ms-fill{height:100%;background:repeating-linear-gradient(45deg,var(--amber) 0 12px,#b97a00 12px 24px);
+  box-shadow:0 0 18px rgba(255,176,0,.5);transition:width .8s}
+.ms-count{color:var(--amber);letter-spacing:2px;font-size:15px;font-weight:bold;text-align:center;margin:8px 0 4px}
+.ms-sub{color:var(--dim);font-size:11px;letter-spacing:1px;text-align:center}
 /* ===== controls ===== */
 .ctrl{border:1px solid var(--line);background:var(--panel);padding:14px;margin-bottom:6px}
 .searchrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
@@ -177,6 +189,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
   </div>
 
   <div class="stats" id="stats"></div>
+  <div class="milestone" id="milestone"></div>
 
   <div class="ctrl">
     <div class="searchrow"><input id="q" type="text" placeholder="SEARCH ALL FILES — subjects, titles, specs, patents..." autocomplete="off"></div>
@@ -221,6 +234,7 @@ var SHARDS = [
 ];
 /* spec index row: 0=id 1=title 2=abstract 3=category 4=cpc 5=era 6=date 11=letter 12=line 19=mix_from 20=chunk */
 var BIZ=[], SPECS=[], PATENTS=[], specCount=0, patentCount=0;
+var BIZIDX=[], BIZSHARDS=[{base:"",index:"data/bizarre/bizarre.idx.json.gz"}], CHUNKCACHE={};
 var state={f:"all", az:"", cat:"", q:""};
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function toast(m){var t=document.getElementById("toast");t.textContent=m;t.style.display="block";
@@ -241,8 +255,29 @@ function gunzip(ab){return new Promise(function(res,rej){
   (function pump(){r.read().then(function(o){if(o.done){res(ch.join(""))}else{ch.push(new TextDecoder().decode(o.value));pump()}})})()})}
 function loadJSONgz(url){return fetch(url).then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(gunzip)}
 function loadJSON(url){return fetch(url).then(function(r){if(!r.ok)throw 0;return r.json()})}
+function loadBizarreIdx(){
+  return loadJSON("data/bizarre/shards.json").then(function(d){if(d&&d.shards)BIZSHARDS=d.shards}).catch(function(){})
+  .then(function(){
+    return Promise.all(BIZSHARDS.map(function(sh){
+      return loadJSONgz(sh.base+sh.index).then(function(t){
+        var rows=t.trim().split("\n");
+        for(var i=0;i<rows.length;i++){try{var r=JSON.parse(rows[i]);r.push(sh.base);BIZIDX.push(r)}catch(e){}}
+      }).catch(function(){});
+    }));
+  });
+}
+function openDripDossier(br){
+  var id=br[0],chunk=br[3],base=br[4]||"";
+  function openFrom(list){for(var i=0;i<list.length;i++)if(list[i].id===id){openDossier(bizarreDossier(list[i]));return}toast("File not found in its chunk.")}
+  if(CHUNKCACHE[chunk]){openFrom(CHUNKCACHE[chunk]);return}
+  toast("Retrieving classified file…");
+  loadJSONgz(base+"data/bizarre/chunks/"+chunk+".json.gz").then(function(t){
+    var list=JSON.parse(t);CHUNKCACHE[chunk]=list;openFrom(list);
+  }).catch(function(){toast("Could not retrieve the file — try again.")});
+}
 function loadAll(){
-  var p=[loadJSON("data/bizarre.json").then(function(d){BIZ=d})];
+  var p=[loadJSON("data/bizarre.json").then(function(d){BIZ=d}).catch(function(){BIZ=[]})];
+  p.push(loadBizarreIdx());
   p.push(loadJSONgz("data/patents.idx.json.gz").then(function(t){
     PATENTS=t.trim().split("\n").map(function(l){try{return JSON.parse(l)}catch(e){return null}}).filter(Boolean);
     patentCount=PATENTS.length}));
@@ -284,12 +319,13 @@ function panelHTML(pan,verdict){
 /* ================= dossier model ================= */
 /* dossier: {id,kind,subject,classification,sections:[[h,t]..],panel,corrob,src} */
 function bizarreDossier(d){
+  var corrob=(d.corroborating_specs||[]).map(function(s){return (s&&s.spec_id)||s});
   var secs=[["OVERVIEW",d.overview],["TECHNICAL ASSESSMENT",d.assessment],
     ["SCIENCE PROOF",d.science_proof],["MATH PROOF",d.math_proof],
     ["AI REVIEW PANEL",d.panel_block],["OFFICER CONCLUSION",d.officer_conclusion],
     ["CREATOR SIGN-OFF",d.creator_signoff]];
   return {id:d.id,kind:"bizarre",subject:d.subject,classification:d.classification,
-    sections:secs,panel:d.panel,corrob:d.corroborating_specs,date:d.date_filed,
+    sections:secs,panel:d.panel,corrob:corrob,date:d.date_filed,
     cat:d.category,kindLabel:"BIZARRE FILE"};
 }
 function specDossier(r){
@@ -669,6 +705,11 @@ function currentResults(){
     if(!okLetter(d.subject))continue;
     if(q&&(d.id+" "+d.subject+" "+d.overview+" "+d.assessment+" "+d.category).toLowerCase().indexOf(q)<0)continue;
     out.push({kind:"bizarre",d:d})}
+  if(f==="all"||f==="bizarre")for(var bi=0;bi<BIZIDX.length;bi++){var br=BIZIDX[bi];
+    if(state.cat&&br[2]!==state.cat)continue;
+    if(!okLetter(br[1]))continue;
+    if(q&&(br[0]+" "+br[1]+" "+br[2]).toLowerCase().indexOf(q)<0)continue;
+    out.push({kind:"drip",br:br})}
   if(f==="all"||f==="spec")for(var j=0;j<SPECS.length;j++){var r=SPECS[j];
     if(!okLetter(r[1]))continue;
     if(q&&!matchRow("spec",r,q))continue;
@@ -680,11 +721,12 @@ function currentResults(){
   return out;
 }
 function cardHTML(it,idx){
-  var k=it.kind,label,sub,id,abs,foot;
+  var k=it.kind,cc=(k==="drip"?"bizarre":k),label,sub,id,abs,foot;
   if(k==="bizarre"){label="BIZARRE FILE";sub=it.d.subject;id=it.d.id;abs=it.d.overview;foot=esc(it.d.category)}
+  else if(k==="drip"){label="BIZARRE FILE";sub=it.br[1];id=it.br[0];abs="Classified dossier — open the file for the full briefing: overview, technical assessment, science and math proofs, AI review panel, officer conclusion.";foot=esc(it.br[2])}
   else if(k==="spec"){label="SPEC DOSSIER";sub=it.r[1];id=it.r[0];abs=it.r[2]||"";foot=esc(it.r[3]||"")+" · "+esc(it.r[12]||"")}
   else{label="PATENT DOSSIER";sub=it.p[1];id=it.p[0];abs=it.p[2]||"";foot=esc(it.p[3]||"")}
-  return '<div class="fcard k-'+k+'" data-i="'+idx+'"><div class="kind">▓ '+label+'</div><div class="body">'+
+  return '<div class="fcard k-'+cc+'" data-i="'+idx+'"><div class="kind">▓ '+label+'</div><div class="body">'+
     '<h3>'+esc(sub)+'</h3><div class="fid">'+esc(id)+'</div><div class="abs">'+esc(abs)+'</div></div>'+
     '<div class="foot"><span>'+foot+'</span><b>OPEN FILE ▸</b></div></div>';
 }
@@ -696,6 +738,7 @@ function render(){
   for(var i=0;i<cards.length;i++)cards[i].onclick=function(){
     var it=RES[Number(this.getAttribute("data-i"))];if(!it)return;
     if(it.kind==="bizarre")openDossier(bizarreDossier(it.d));
+    else if(it.kind==="drip")openDripDossier(it.br);
     else if(it.kind==="spec")openDossier(specDossier(it.r));
     else openDossier(patentDossier(it.p));
   };
@@ -703,10 +746,20 @@ function render(){
   h.textContent=RES.length.toLocaleString()+" FILES MATCH"+(RES.length>240?" — SHOWING FIRST 240, REFINE SEARCH":"");
 }
 function renderStats(){
+  var biz=BIZ.length+BIZIDX.length,total=SPECS.length+PATENTS.length+biz;
   document.getElementById("stats").innerHTML=
-    stat(SPECS.length,"SPEC DOSSIERS")+stat(PATENTS.length,"PATENT DOSSIERS")+stat(BIZ.length,"BIZARRE FILES")+
-    stat(SPECS.length+PATENTS.length+BIZ.length,"TOTAL FILES");
+    stat(SPECS.length,"SPEC DOSSIERS")+stat(PATENTS.length,"PATENT DOSSIERS")+stat(biz,"BIZARRE FILES")+
+    stat(total,"TOTAL FILES");
   function stat(n,l){return '<div class="stat"><b>'+Number(n).toLocaleString()+'</b><span>'+l+'</span></div>'}
+  renderMilestone(total,biz);
+}
+function renderMilestone(total,biz){
+  var goal=1000000,pct=Math.min(100,total/goal*100);
+  document.getElementById("milestone").innerHTML=
+    '<div class="ms-head">★ MILESTONE — 1,000,000 WIKI FILES ★</div>'+
+    '<div class="ms-bar"><div class="ms-fill" style="width:'+pct.toFixed(2)+'%"></div></div>'+
+    '<div class="ms-count">'+Number(total).toLocaleString()+' / 1,000,000 FILES — '+pct.toFixed(1)+'%</div>'+
+    '<div class="ms-sub">SPEC DOSSIERS '+SPECS.length.toLocaleString()+' · PATENT DOSSIERS '+PATENTS.length.toLocaleString()+' · BIZARRE FILES '+Number(biz).toLocaleString()+' — the archive grows automatically, around the clock</div>';
 }
 function buildAZ(){
   var az=document.getElementById("az"),h='<button data-a="" class="active">ALL</button>';
@@ -721,6 +774,7 @@ function buildAZ(){
 function buildCats(){
   var sel=document.getElementById("catchoice"),seen={},h='<option value="">ALL BIZARRE CATEGORIES</option>';
   BIZ.forEach(function(d){if(!seen[d.category]){seen[d.category]=1;h+='<option>'+esc(d.category)+'</option>'}});
+  BIZIDX.forEach(function(r){if(!seen[r[2]]){seen[r[2]]=1;h+='<option>'+esc(r[2])+'</option>'}});
   sel.innerHTML=h;
   sel.onchange=function(){state.cat=this.value;render()};
 }
@@ -737,6 +791,7 @@ function deepLink(){
   var m=/[?&]dossier=([^&]+)/.exec(location.search);if(!m)return;
   var id=decodeURIComponent(m[1]);
   for(var i=0;i<BIZ.length;i++)if(BIZ[i].id===id){openDossier(bizarreDossier(BIZ[i]));return}
+  for(var bi=0;bi<BIZIDX.length;bi++)if(BIZIDX[bi][0]===id){openDripDossier(BIZIDX[bi]);return}
   for(var j=0;j<SPECS.length;j++)if(SPECS[j][0]===id){openDossier(specDossier(SPECS[j]));return}
   for(var k=0;k<PATENTS.length;k++)if(PATENTS[k][0]===id){openDossier(patentDossier(PATENTS[k]));return}
 }
