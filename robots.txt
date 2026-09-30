@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
 Sitemap: https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/sitemap.xml
+Sitemap: https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/sitemap-index.xml
