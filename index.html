@@ -7,10 +7,10 @@
 <meta name="description" content="The official JAH-N reference archive: top-secret dossiers on the spec files, public patent records, and bizarre subjects — every file with its own personal AI, read-aloud, copy, and downloadable AI disc/thumbdrive copies.">
 <style>
 :root{
-  --bg:#04060c; --bg2:#070b16; --panel:#0a1020; --panel2:#0d1528;
+  --bg:#0e1626; --bg2:#131e33; --panel:#182642; --panel2:#1d2c4c;
   --amber:#ffb000; --amber-d:#8a5c00; --green:#3dff78; --green-d:#0e5c2a;
-  --red:#ff2438; --red-d:#7a0e18; --ink:#e9effc;--dim:#9fb1d3; --line:#1a2540;
-  --paper:#0b1222;
+  --red:#ff2438; --red-d:#7a0e18; --ink:#e9effc;--dim:#9fb1d3; --line:#2c3f66;
+  --paper:#141f36;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--bg)}
@@ -40,7 +40,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 .blink{animation:blink 1.6s steps(2) infinite}
 @keyframes blink{50%{opacity:.35}}
 /* ===== masthead ===== */
-.mast{border:1px solid var(--line);background:linear-gradient(180deg,#0c1428,#070b16);
+.mast{border:1px solid var(--line);background:linear-gradient(180deg,#0c1428,#131e33);
   margin:18px 0 0;padding:26px 22px;position:relative;overflow:hidden}
 .mast::before{content:"";position:absolute;inset:0;pointer-events:none;
   background-image:linear-gradient(rgba(53,255,120,.05) 1px,transparent 1px),
@@ -549,7 +549,7 @@ function discHTML(d){
   var parts=[
 '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
 '<title>AI DISC — '+d.id+'</title><style>',
-'body{background:#04060c;color:#e9effc;font-family:"Courier New",monospace;padding:20px;max-width:860px;margin:0 auto;line-height:1.6}',
+'body{background:#0e1626;color:#e9effc;font-family:"Courier New",monospace;padding:20px;max-width:860px;margin:0 auto;line-height:1.6}',
 'h1{color:#ffb000;letter-spacing:2px;font-size:22px}h4{color:#3dff78;letter-spacing:2px;margin-top:18px}',
 '.cls{color:#ff2438;font-weight:bold;letter-spacing:2px;font-size:12px}',
 '.chat{border:1px solid #0e5c2a;background:#02040a;padding:12px;margin-top:16px}',
