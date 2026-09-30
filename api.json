@@ -1,0 +1,31 @@
+{
+  "site": "JAH-N Wiki",
+  "site_url": "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/",
+  "creator": "Justin Addam Higgins (JAH)",
+  "description": "Classified-dossier archive: every spec, patent, and bizarre subject as a top-secret file with sources, panels, and officer conclusions.",
+  "for_bots": "Machine-readable manifest. Humans use the site above; bots, scrapers, and AI assistants should use the endpoints below \u2014 plain JSON/JSONL over HTTPS, no JavaScript needed.",
+  "records_approx": 3000,
+  "records_as_of": "2026-09-29",
+  "note": "Counts grow on automated schedules; re-read this file for the latest shape of the data.",
+  "endpoints": [
+    {
+      "path": "data/bizarre.json",
+      "format": "json",
+      "desc": "Base bizarre-subject dossiers (120 subjects)."
+    },
+    {
+      "path": "data/bizarre/",
+      "format": "directory of json",
+      "desc": "Numbered bizarre case-file dossiers (drip-fed)."
+    }
+  ],
+  "deep_links": [
+    {
+      "pattern": "?dossier=<id>",
+      "desc": "Deep link to a dossier."
+    }
+  ],
+  "raw_github_base": "https://raw.githubusercontent.com/justinahiggins614-cmyk/jah-n-wiki-leaks/master/",
+  "raw_example": "https://raw.githubusercontent.com/justinahiggins614-cmyk/jah-n-wiki-leaks/master/data/bizarre.json",
+  "sitemap": "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/sitemap.xml"
+}
