@@ -867,7 +867,7 @@ function currentResults(){
   return out;
 }
 function cardHTML(it,idx){
-  var k=it.kind,cc=(k==="drip"?"bizarre":k),label,sub,id,abs,foot;
+  var k=it.kind,cc=(k==="drip"?"bizarre":k),label,sub,id,abs,foot,stat;
   if(k==="bizarre"){label="BIZARRE FILE";sub=it.d.subject;id=it.d.id;abs=it.d.overview;foot=esc(it.d.category);stat="SPECULATIVE ANALYSIS"}
   else if(k==="drip"){label="BIZARRE FILE";sub=it.br[1];id=it.br[0];abs="Classified dossier — open the file for the full briefing: overview, technical assessment, science and math proofs, AI review panel, officer conclusion.";foot=esc(it.br[2]);stat="SPECULATIVE ANALYSIS"}
   else if(k==="spec"){label="SPEC DOSSIER";sub=it.r[1];id=it.r[0];abs=it.r[2]||"";foot=esc(it.r[3]||"")+" · "+esc(it.r[12]||"");stat="DRAFT \u00b7 JAH ORIGINAL"}
