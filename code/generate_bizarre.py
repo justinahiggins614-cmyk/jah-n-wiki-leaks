@@ -654,6 +654,7 @@ def build_dossier(i, cat, subject, overview, keywords, spec_rows):
         "sources": sources_text(subject),
         "corroborating_specs": specs,
         "date_filed": TODAY,
+        "version": 1,
     }
 
 

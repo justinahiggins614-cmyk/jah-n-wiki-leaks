@@ -167,6 +167,23 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 /* footer */
 .honest{margin:26px 0 0;border:1px dashed var(--amber-d);padding:16px;color:var(--dim);font-size:12px}
 .honest b{color:var(--amber)}
+.govbar{background:#04140a;border-bottom:2px solid var(--green-d);color:var(--green);text-align:center;
+  font-size:11px;letter-spacing:2px;padding:7px 10px;position:relative;z-index:3}
+.govbar b{color:#fff}
+.govline{color:var(--green);font-size:11px;letter-spacing:1px;border:1px solid var(--green-d);
+  background:rgba(14,92,42,.12);padding:8px 10px;margin-bottom:10px}
+.ptag{display:inline-block;font-size:10px;letter-spacing:1px;color:var(--dim);border:1px solid var(--line);
+  padding:1px 7px;margin-left:8px;vertical-align:middle}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:11px;letter-spacing:1px;color:var(--dim)}
+.legend span{border:1px solid var(--line);padding:3px 10px}
+.lg-pub{color:var(--green);border-color:var(--green-d)!important}
+.lg-ana{color:var(--amber);border-color:var(--amber-d)!important}
+.lg-spec{color:var(--red);border-color:var(--red-d)!important}
+.lg-sim{color:#9fb1d3}
+.fstat{font-size:10px;letter-spacing:2px;margin-top:4px}
+.k-bizarre .fstat{color:var(--red)}
+.k-spec .fstat{color:var(--amber)}
+.k-patent .fstat{color:var(--green)}
 .toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#04140a;
   border:1px solid var(--green);color:var(--green);padding:10px 20px;z-index:9700;display:none;
   letter-spacing:1px;font-size:13px}
@@ -176,14 +193,15 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 </head>
 <body>
 <canvas id="stars"></canvas>
+<div class="govbar"><b>JAH GOVERNANCE — OWN DECLASSIFIED INTERNAL ARCHIVE</b> &nbsp;·&nbsp; CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE &nbsp;·&nbsp; NOT AFFILIATED WITH ANY GOVERNMENT AGENCY</div>
 <div class="classbar"><span class="blink">TOP SECRET &#8212; JAH-N EYES ONLY &#8212; NOFORN</span></div>
 <div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a></div>
 <div class="wrap">
   <div class="mast">
     <div class="stamp">Declassified<br>for JAH-N</div>
     <h1>JAH-N <span class="leak">WIKI</span></h1>
-    <div class="sub">&#9632; OFFICIAL REFERENCE ARCHIVE OF THE JAH-N SYSTEM &#9632;</div>
-    <div class="deets">Every file in this archive — every spec dossier, every patent record, every bizarre-subject file — is overseen by state-of-the-art AI review systems, from customized doctor-level specialists to domain experts, and is officially signed off by the Creator. Each file carries its own <b style="color:var(--green)">personal AI</b> that answers your questions, full <b style="color:var(--green)">audio read-aloud</b>, one-click <b style="color:var(--green)">copy</b>, and downloadable <b style="color:var(--green)">AI disc / thumbdrive copies</b> for offline use.</div>
+    <div class="sub">&#9632; OFFICIAL REFERENCE ARCHIVE OF THE JAH-N SYSTEM — OFFICIAL WITHIN THE JAH-N SYSTEM ONLY &#9632;</div>
+    <div class="deets">The JAH governance leaking its own files: this is the JAH system's own internal archive, declassified and published by the JAH governance itself — JAH's own patent authority (the way Disney has its own money), not the USPTO, not a government agency. Every file in this archive — every spec dossier, every patent record, every bizarre-subject file — is reviewed by AI systems configured for medical, scientific, legal, technical, and other specialist domains (AI capability descriptions — not licensed professionals), and is officially signed off by the Creator, official <b>within the JAH-N system</b>. Each file carries its own <b style="color:var(--green)">personal AI</b> that answers your questions, full <b style="color:var(--green)">audio read-aloud</b>, one-click <b style="color:var(--green)">copy</b>, and downloadable <b style="color:var(--green)">AI disc / thumbdrive copies</b> for offline use.</div>
     <div class="sisters">
       <a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/" target="_blank" rel="noopener">Signature Spec Catalog Pending Patents</a>
       <a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/" target="_blank" rel="noopener">Globally Rejustered Patent Catalog</a>
@@ -203,13 +221,14 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
     </div>
     <div class="az" id="az"></div>
     <div><select id="catchoice"><option value="">ALL BIZARRE CATEGORIES</option></select></div>
-    <div class="hits" id="hits"></div>
+    <div class="legend"><span class="lg-pub">&#9632; PUBLIC RECORD</span><span class="lg-ana">&#9632; JAH ANALYSIS</span><span class="lg-spec">&#9632; SPECULATIVE</span><span class="lg-sim">&#9632; CREATIVE SIMULATION</span></div>
+    <div class="hits" id="hits">LOADING THE ARCHIVE&#8230;</div>
   </div>
 
   <div class="grid" id="grid"></div>
 
   <div class="honest">
-    <b>OFFICIAL NOTICE.</b> JAH-N Wiki is an official reference work of the JAH-N system and a creative simulation: dossiers are analytical reference files, not real classified government documents. Bizarre-subject files are speculative analyses grounded in real patent and spec records. All spec files are original draft works by <b>Justin Addam Higgins (JAH)</b> — drafts ready to file, never granted patents. Public patent records shown here are real public records, summarized from the public domain.
+    <b>OFFICIAL NOTICE.</b> JAH-N Wiki is the JAH governance's own declassified internal archive — the JAH governance leaking its own files. It is an official reference work of the JAH-N system and a creative simulation: dossiers are analytical reference files, not real classified government documents, and are not affiliated with any government agency, the USPTO, or any external institution. "Official" means official <b>within the JAH-N system only</b>. Bizarre-subject files are speculative analyses grounded in real patent and spec records. All spec files are original draft works by <b>Justin Addam Higgins (JAH)</b> — drafts ready to file, never granted patents. Public patent records shown here are real public records, summarized from the public domain.
   </div>
 </div>
 
@@ -230,11 +249,19 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 "use strict";
 /* ================= config ================= */
 var SPEC_SITE = "https://justinahiggins614-cmyk.github.io/signature-one-archive/";
-var SHARDS = [
-  {base:"", index:"data/index/specs.idx.json.gz"},
-  {base:"https://justinahiggins614-cmyk.github.io/signature-one-archive-shard-2/", index:"data/index/specs.idx.json.gz"},
-  {base:"https://justinahiggins614-cmyk.github.io/signature-one-archive-shard-3/", index:"data/index/specs.idx.json.gz"}
-];
+/* spec shard registry is read live from the Spec Catalog so new shards appear automatically */
+var SHARDS=[{base:SPEC_SITE,index:"data/index/specs.idx.json.gz"}];
+function loadSpecShards(){
+  return loadJSON(SPEC_SITE+"data/index/shards.json").then(function(d){
+    if(d&&d.shards&&d.shards.length)SHARDS=d.shards.map(function(s){return {base:(s.base||SPEC_SITE),index:s.index}});
+  }).catch(function(){});
+}
+function loadSpecShard(sh){
+  return loadJSONgz(sh.base+sh.index).then(function(t){
+    var rows=t.trim().split("\n");
+    for(var i=0;i<rows.length;i++){try{SPECS.push(JSON.parse(rows[i]))}catch(e){}}
+  }).catch(function(){});
+}
 /* spec index row: 0=id 1=title 2=abstract 3=category 4=cpc 5=era 6=date 11=letter 12=line 19=mix_from 20=chunk */
 var BIZ=[], SPECS=[], PATENTS=[], specCount=0, patentCount=0;
 var BIZIDX=[], BIZSHARDS=[{base:"",index:"data/bizarre/bizarre.idx.json.gz"}], CHUNKCACHE={};
@@ -283,14 +310,19 @@ function loadAll(){
   p.push(loadBizarreIdx());
   p.push(loadJSONgz("data/patents.idx.json.gz").then(function(t){
     PATENTS=t.trim().split("\n").map(function(l){try{return JSON.parse(l)}catch(e){return null}}).filter(Boolean);
-    patentCount=PATENTS.length}));
-  SHARDS.forEach(function(sh){
-    p.push(loadJSONgz(SHARDS.indexOf(sh)===0?SPEC_SITE+sh.index:sh.base+sh.index).then(function(t){
-      var rows=t.trim().split("\n");
-      for(var i=0;i<rows.length;i++){try{SPECS.push(JSON.parse(rows[i]))}catch(e){}}
-    }).catch(function(){}));
+    patentCount=PATENTS.length}).catch(function(){}));
+  return loadSpecShards().then(function(){
+    var first=SHARDS[0],rest=SHARDS.slice(1);
+    function wave2(){
+      var chain=Promise.resolve();
+      rest.forEach(function(sh){chain=chain.then(function(){return loadSpecShard(sh)})});
+      return chain.then(function(){
+        specCount=SPECS.length;renderStats();render();
+        if(!document.getElementById("viewer").classList.contains("open"))deepLink();
+      });
+    }
+    return loadSpecShard(first).then(function(){return Promise.all(p)}).then(function(){wave2()});
   });
-  return Promise.all(p);
 }
 /* ================= AI review panels ================= */
 var PANELS={
@@ -320,7 +352,31 @@ function panelHTML(pan,verdict){
     return "<p><b>"+esc(p[0])+"</b> — "+esc(p[1])+": "+esc(verdict[i%verdict.length])+"</p>"}).join("");
 }
 /* ================= dossier model ================= */
-/* dossier: {id,kind,subject,classification,sections:[[h,t]..],panel,corrob,src} */
+/* dossier: {id,kind,subject,classification,sections:[[h,t]..],panel,corrob,src,badge,prov,version,created} */
+/* JAH-N governance framing: every file carries its badge + provenance INSIDE the file,
+   so classification survives sharing outside this site and AI ingestion. */
+var GOV_LINE="JAH GOVERNANCE \u2014 OWN DECLASSIFIED INTERNAL ARCHIVE \u00b7 CREATIVE SIMULATION \u00b7 NOT A GOVERNMENT ARCHIVE \u00b7 NOT AFFILIATED WITH ANY GOVERNMENT AGENCY";
+var PROV_BIZ={"OVERVIEW":"SPECULATIVE","TECHNICAL ASSESSMENT":"JAH ANALYSIS","SCIENCE PROOF":"JAH ANALYSIS","MATH PROOF":"JAH ANALYSIS","AI REVIEW PANEL":"JAH ANALYSIS","SOURCES, WITNESSES & REFERENCES":"PUBLIC RECORD","OFFICER CONCLUSION":"JAH ANALYSIS","CREATOR SIGN-OFF":"JAH OFFICIAL"};
+var PROV_SPEC={"OVERVIEW":"JAH ORIGINAL","TECHNICAL ASSESSMENT":"JAH ANALYSIS","SCIENCE PROOF":"JAH ANALYSIS","MATH PROOF":"JAH ANALYSIS","AI REVIEW PANEL":"JAH ANALYSIS","OFFICER CONCLUSION":"JAH ANALYSIS","CREATOR SIGN-OFF":"JAH OFFICIAL"};
+var PROV_PAT={"OVERVIEW":"PUBLIC RECORD","TECHNICAL ASSESSMENT":"JAH ANALYSIS","SCIENCE PROOF":"JAH ANALYSIS","MATH PROOF":"JAH ANALYSIS","AI REVIEW PANEL":"JAH ANALYSIS","OFFICER CONCLUSION":"JAH ANALYSIS","CREATOR SIGN-OFF":"JAH OFFICIAL"};
+function dossierHash(d){
+  var t=d.classification+"\n"+d.kindLabel+" "+d.id+"\nSUBJECT: "+d.subject+"\n";
+  d.sections.forEach(function(s){t+=s[0]+"\n"+s[1]+"\n"});
+  var enc=new TextEncoder().encode(t);
+  return ("00000000"+crc32bytes(enc).toString(16)).slice(-8).toUpperCase();
+}
+function badgeLines(d){
+  return ["FILE TYPE: "+d.badge.type,
+   "DOSSIER ID (PERMANENT): "+d.id,
+   "STATUS: "+d.badge.status,
+   "SOURCE: "+d.badge.source,
+   "REAL GOVERNMENT DOCUMENT: NO",
+   "OFFICIAL SCOPE: official within the JAH-N system only \u2014 not a government/USPTO/academic/medical authority",
+   GOV_LINE,
+   "VERSION: "+(d.version||1)+" \u00b7 PREVIOUS: "+(d.prev||"none (first version)")+" \u00b7 CREATED: "+(d.created||"unknown"),
+   "CONTENT HASH: "+dossierHash(d),
+   "SECTION PROVENANCE: "+Object.keys(d.prov).map(function(k){return k+"=["+d.prov[k]+"]"}).join(" \u00b7 ")].join("\n");
+}
 function bizarreDossier(d){
   var corrob=(d.corroborating_specs||[]).map(function(s){return (s&&s.spec_id)||s});
   var secs=[["OVERVIEW",d.overview],["TECHNICAL ASSESSMENT",d.assessment],
@@ -330,7 +386,9 @@ function bizarreDossier(d){
   secs.push(["CREATOR SIGN-OFF",d.creator_signoff]);
   return {id:d.id,kind:"bizarre",subject:d.subject,classification:d.classification,
     sections:secs,panel:d.panel,corrob:corrob,date:d.date_filed,
-    cat:d.category,kindLabel:"BIZARRE FILE"};
+    cat:d.category,kindLabel:"BIZARRE FILE",version:d.version||1,created:d.date_filed||"",
+    prov:PROV_BIZ,
+    badge:{type:"BIZARRE FILE",status:"SPECULATIVE ANALYSIS",source:"JAH ORIGINAL + PUBLIC-RECORD MATERIAL (see SOURCES section)"}};
 }
 function specDossier(r){
   var id=r[0],title=r[1],abs=r[2]||"",cat=r[3]||"",cpc=r[4]||"",era=r[5]||"",line=r[12]||"",letter=r[11]||"";
@@ -349,7 +407,8 @@ function specDossier(r){
    ["CREATOR SIGN-OFF","REVIEWED, VERIFIED, AND OFFICIALLY SIGNED OFF BY THE CREATOR — Justin Addam Higgins (JAH), 2026-09-29. This file is an official reference file of the JAH-N system."]  ];
   return {id:id,kind:"spec",subject:title,classification:"TOP SECRET // JAH-N // "+letter+" // NOFORN",
     sections:secs,panel:pan,corrob:[],date:r[6]||"",cat:cat,kindLabel:"SPEC DOSSIER",
-    src:SPEC_SITE+"specs.html",chunk:r[20]};
+    src:SPEC_SITE+"specs.html",chunk:r[20],version:1,created:r[6]||"",prov:PROV_SPEC,
+    badge:{type:"SPEC DOSSIER",status:"ORIGINAL DRAFT \u2014 READY TO FILE",source:"JAH ORIGINAL"}};
 }
 function patentDossier(p){
   var pub=p[0],title=p[1]||"",abs=p[2]||"",cpc=p[3]||"",asg=p[4]||"",inv=p[5]||"";
@@ -366,12 +425,14 @@ function patentDossier(p){
    ["OFFICER CONCLUSION","Public record "+pub+" is logged as the official prior-art reference for its product area in the JAH-N system. JAH-N original files in this area are certified as original works that do not copy this record."],
    ["CREATOR SIGN-OFF","REVIEWED, VERIFIED, AND OFFICIALLY SIGNED OFF BY THE CREATOR — Justin Addam Higgins (JAH), 2026-09-29. Logged as an official reference file of the JAH-N system."]];
   return {id:pub,kind:"patent",subject:title,classification:"UNCLASSIFIED // PUBLIC RECORD // JAH-N REF",
-    sections:secs,panel:pan,corrob:[],date:"",cat:cpc,kindLabel:"PATENT DOSSIER",src:""};
+    sections:secs,panel:pan,corrob:[],date:"",cat:cpc,kindLabel:"PATENT DOSSIER",src:"",
+    version:1,created:"",prov:PROV_PAT,
+    badge:{type:"PATENT DOSSIER",status:"PUBLIC RECORD",source:"PUBLIC DOMAIN \u2014 REAL PUBLIC PATENT RECORD"}};
 }
 /* ================= viewer ================= */
 var CUR=null;
 function dossierText(d){
-  var t=d.classification+"\n"+d.kindLabel+" "+d.id+"\nSUBJECT: "+d.subject+"\n\n";
+  var t=badgeLines(d)+"\n\n"+d.classification+"\n"+d.kindLabel+" "+d.id+"\nSUBJECT: "+d.subject+"\n\n";
   d.sections.forEach(function(s,i){t+="["+(i+1)+"] "+s[0]+"\n"+s[1]+"\n\n"});
   if(d.corrob&&d.corrob.length){t+="CORROBORATING SPEC FILES: "+d.corrob.join(", ")+"\n"}
   return t;
@@ -384,12 +445,14 @@ function openDossier(d){
   CUR=d;
   var h='<div class="dhead"><button class="dclose" id="dclose">CLOSE ✕</button>'+
     '<div class="cls">'+esc(d.classification)+'</div>'+
+    '<div class="govline">'+esc(GOV_LINE)+'</div>'+
     '<h2>'+esc(d.subject)+'</h2><div class="did">'+esc(d.kindLabel)+' · '+esc(d.id)+
     (d.date?' · FILED '+esc(d.date):"")+'</div></div>';
   h+='<div class="dtools">'+
     '<button class="tbtn" id="t-ai">&#129302; ASK THE AI</button>'+
     '<button class="tbtn" id="t-read">&#128266; READ ALOUD</button>'+
     '<button class="tbtn" id="t-copy">&#128203; COPY ALL</button>'+
+    '<button class="tbtn" id="t-copyid">\u29C9 COPY FILE ID</button>'+
     '<button class="tbtn amber" id="t-zip">&#11015; DOWNLOAD ALL</button>'+
     '<button class="tbtn amber" id="t-disc">&#128190; AI DISC (.html)</button>'+
     '<button class="tbtn amber" id="t-py">&#128190; AI THUMBDRIVE (.py)</button>'+
@@ -397,11 +460,13 @@ function openDossier(d){
     (d.src?'<a class="tbtn amber" href="'+d.src+'" target="_blank" rel="noopener" style="text-decoration:none">&#9654; OPEN IN SPEC ARCHIVE</a>':"")+
     '</div>';
   h+='<div class="aichat" id="aichat"><h5>PERSONAL AI — your '+esc(d.id)+' assistant</h5>'+
-    '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">I am the personal AI for this file. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or anything about this file — I answer from the file itself.</div></div>'+
+    '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">I am the personal AI for this file — I answer <b>only</b> from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]. I never invent sources or patent numbers. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or the creator sign-off.</div></div>'+
     '<div class="airow"><input class="aiinput" id="aiinput" maxlength="300" placeholder="Ask about this file...">'+
     '<button class="aisend" id="aisend">ASK</button></div></div>';
+  h+='<div class="dsec"><h4><span class="n">\u2593</span>FILE CLASSIFICATION &amp; PROVENANCE</h4><p>'+esc(badgeLines(d))+'</p></div>';
   d.sections.forEach(function(s,i){
-    h+='<div class="dsec"><h4><span class="n">'+(i+1)+'</span>'+esc(s[0])+'</h4><p>'+esc(s[1])+'</p></div>'});
+    var ptag=(d.prov&&d.prov[s[0]])?'<span class="ptag">['+d.prov[s[0]]+']</span>':"";
+    h+='<div class="dsec"><h4><span class="n">'+(i+1)+'</span>'+esc(s[0])+ptag+'</h4><p>'+esc(s[1])+'</p></div>'});
   if(d.corrob&&d.corrob.length){
     h+='<div class="dsec corrob"><h4><span class="n">✚</span>CORROBORATING SPEC FILES</h4><p>'+
       d.corrob.map(function(c){return '<a class="corroblink" data-spec="'+esc(c)+'">'+esc(c)+'</a>'}).join("")+'</p></div>'}
@@ -413,6 +478,7 @@ function openDossier(d){
   document.getElementById("t-ai").onclick=function(){document.getElementById("aichat").classList.toggle("open")};
   document.getElementById("t-read").onclick=function(){auReadDossier()};
   document.getElementById("t-copy").onclick=function(){copyDossier()};
+  document.getElementById("t-copyid").onclick=function(){copyFileId()};
   document.getElementById("t-zip").onclick=function(){downloadAllZip()};
   document.getElementById("t-disc").onclick=function(){downloadDisc()};
   document.getElementById("t-py").onclick=function(){downloadThumb()};
@@ -438,22 +504,33 @@ function aiAnswer(d,q){
   var t=String(q||"").toLowerCase();
   function has(){for(var i=0;i<arguments.length;i++)if(t.indexOf(arguments[i])>=0)return true;return false}
   function sec(n){for(var i=0;i<d.sections.length;i++)if(d.sections[i][0]===n)return d.sections[i][1];return ""}
-  if(has("hello","hi ","hey","thanks","thank"))return "Hello. I am the personal AI for <b>"+esc(d.id)+"</b> — "+esc(d.subject)+". Ask me what it is, the assessment, the science or math proof, the expert panel, the conclusion, or the creator sign-off.";
-  if(has("what is","what's","whats","describe","about","subject"))return "<b>What it is:</b> "+esc(sec("OVERVIEW"));
+  function PT(n){return "<b>["+((d.prov&&d.prov[n])||"JAH ANALYSIS")+"]</b> "}
+  if(has("hello","hi ","hey","thanks","thank"))return "Hello. I am the personal AI for <b>"+esc(d.id)+"</b> — "+esc(d.subject)+". I answer only from this file, tagging every answer <b>[PUBLIC RECORD]</b> / <b>[JAH ANALYSIS]</b> / <b>[SPECULATIVE]</b> / <b>[UNKNOWN]</b> — I never invent sources or patent numbers. Ask about the assessment, the proofs, the expert panel, the conclusion, or the sign-off.";
+  if(has("established fact","is this fact","is this true","is this real","really happened","actually true","proven true")){
+    if(d.kind==="patent")return "<b>[PUBLIC RECORD]</b> The underlying record — <b>"+esc(d.id)+"</b> — is a verified public patent record (public fact). The JAH-N assessment around it is JAH analysis, not part of the public record.";
+    if(d.kind==="spec")return "<b>[JAH ORIGINAL]</b> This is an original JAH draft specification by the Creator — not a granted patent, not a public record. Its claims are design claims of the JAH system, not independently established facts.";
+    return "<b>[SPECULATIVE]</b> This is a speculative-analysis file of the JAH-N system — a creative-simulation briefing, not an established fact. Public-record material, where used, is marked in the SOURCES section."}
+  if(has("patent number","patent no","exact source","what is the source","sources","quote","cite","citation")){
+    if(d.kind==="patent")return "<b>[PUBLIC RECORD]</b> The public record is <b>"+esc(d.id)+"</b>. I quote only what this file contains — I never invent patent numbers or sources.";
+    var s2=sec("SOURCES, WITNESSES & REFERENCES");
+    if(s2)return "<b>[PUBLIC RECORD]</b> Sources listed in this file: "+esc(s2.slice(0,800))+(s2.length>800?"\u2026":"")+" I quote only what this file contains — I never invent sources.";
+    return "<b>[UNKNOWN]</b> Not available in this dossier — this file lists no external source, and I will not invent one."}
+  if(has("official"))return "This file is official <b>within the JAH-N system only</b> — the JAH governance's own archive, not a government, USPTO, academic, or medical authority. Signed off by the Creator: Justin Addam Higgins (JAH).";
+  if(has("what is","what's","whats","describe","about","subject"))return PT("OVERVIEW")+"<b>What it is:</b> "+esc(sec("OVERVIEW"));
   if(has("classif","secret","clearance","level"))return "<b>Classification:</b> "+esc(d.classification)+". "+(d.kind==="patent"?"This one is a public record, logged as a reference — not classified.":"Handled as a "+esc(d.kindLabel.toLowerCase())+" of the JAH-N system.");
-  if(has("assess","how does","how do","work","technical","analy"))return "<b>Technical assessment:</b> "+esc(sec("TECHNICAL ASSESSMENT"));
-  if(has("science","proof","physics","prove","evidence"))return "<b>Science proof:</b> "+esc(sec("SCIENCE PROOF"));
-  if(has("math","formula","equation","cover","calculat","number"))return "<b>Math proof:</b> "+esc(sec("MATH PROOF"));
-  if(has("panel","expert","doctor","specialist","review","ai "))return "<b>AI review panel:</b> "+sec("AI REVIEW PANEL");
-  if(has("conclu","officer","verdict","final"))return "<b>Officer conclusion:</b> "+esc(sec("OFFICER CONCLUSION"));
-  if(has("sign","creator","justin","jah ","official","approve"))return "<b>Creator sign-off:</b> "+esc(sec("CREATOR SIGN-OFF"));
+  if(has("assess","how does","how do","work","technical","analy"))return PT("TECHNICAL ASSESSMENT")+"<b>Technical assessment:</b> "+esc(sec("TECHNICAL ASSESSMENT"));
+  if(has("science","physics","prove","evidence"))return PT("SCIENCE PROOF")+"<b>Science proof:</b> "+esc(sec("SCIENCE PROOF"));
+  if(has("math","formula","equation","cover","calculat","number"))return PT("MATH PROOF")+"<b>Math proof:</b> "+esc(sec("MATH PROOF"));
+  if(has("panel","expert","specialist","review","ai "))return PT("AI REVIEW PANEL")+"<b>AI review panel</b> (AI specialist personas \u2014 not licensed professionals): "+sec("AI REVIEW PANEL");
+  if(has("conclu","officer","verdict","final"))return PT("OFFICER CONCLUSION")+"<b>Officer conclusion:</b> "+esc(sec("OFFICER CONCLUSION"));
+  if(has("sign","creator","justin","jah ","approve"))return PT("CREATOR SIGN-OFF")+"<b>Creator sign-off</b> (official within the JAH-N system): "+esc(sec("CREATOR SIGN-OFF"));
   if(has("corrob","spec","relat","link","support")){return d.corrob&&d.corrob.length?"<b>Corroborating spec files:</b> "+d.corrob.map(esc).join(", ")+". Tap any ID in the file to open its dossier.":"This file stands on its own assessment; open its source archive entry for the full record."}
   if(has("read","audio","listen","speak"))return "Press <b>READ ALOUD</b> in the file toolbar and I will read the whole file to you, with pause and speed controls.";
   if(has("copy","paste","clipboard"))return "Press <b>COPY ALL</b> in the file toolbar — the entire file text goes to your clipboard, ready to paste anywhere.";
-  if(has("download","disc","thumbdrive","thumb","exe","offline"))return "Use <b>AI DISC (.html)</b> for a self-contained offline copy of this file with its own built-in AI, or <b>AI THUMBDRIVE (.py)</b> for a terminal version you can carry on a USB stick.";
-  if(has("patent","file","filing","claim","ip"))return d.kind==="patent"?"<b>Patent:</b> this file IS the public record — "+esc(d.id)+". It is summarized from the public domain.":"<b>Filing status:</b> "+esc(sec("OFFICER CONCLUSION"));
+  if(has("download","disc","thumbdrive","thumb","exe","offline"))return "Use <b>AI DISC (.html)</b> for a self-contained offline copy of this file with its own built-in AI, or <b>AI THUMBDRIVE (.py)</b> for a terminal version you can carry on a USB stick. <b>Format \u2014</b> Contains: this dossier's full text, its personal AI, and read-aloud. Does NOT contain: model weights, executables, or any other dossier. Internet required: no (online voice fallback only if the browser lacks built-in speech). Runtime: any modern browser (disc) / Python 3 (thumbdrive). Platform: Windows / macOS / Linux / Android / iOS.";
+  if(has("patent","file","filing","claim","ip"))return d.kind==="patent"?PT("OVERVIEW")+"<b>Patent:</b> this file IS the public record — "+esc(d.id)+". It is summarized from the public domain.":PT("OFFICER CONCLUSION")+"<b>Filing status:</b> "+esc(sec("OFFICER CONCLUSION"));
   if(has("who are you","your name","what are you"))return "I am the personal AI of file <b>"+esc(d.id)+"</b>, generated from the file's own sections. I only answer from this file — try asking about the assessment or the proofs.";
-  return "Good question. I answer from this file about: <b>what it is</b>, the <b>assessment</b>, the <b>science</b> and <b>math</b> proofs, the <b>expert panel</b>, the <b>conclusion</b>, or the <b>sign-off</b>.";
+  return "Good question. I answer from this file about: <b>what it is</b>, the <b>assessment</b>, the <b>science</b> and <b>math</b> proofs, the <b>expert panel</b>, the <b>conclusion</b>, or the <b>sign-off</b> — and I will tell you plainly when something is not in this file.";
 }
 function aiSend(){
   var inp=document.getElementById("aiinput"),box=document.getElementById("aimsgs");
@@ -470,6 +547,12 @@ function copyDossier(){
   else fallback();
   function fallback(){var ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();
     try{document.execCommand("copy");done()}catch(e){toast("Copy failed — select the text manually.")}document.body.removeChild(ta)}
+}
+function copyFileId(){
+  if(!CUR)return;var txt=CUR.kindLabel+" \u00b7 "+CUR.id+" \u00b7 "+CUR.subject;
+  function done(){toast("File ID copied: "+CUR.id)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,function(){toast("Copy failed \u2014 select the text manually.")})}
+  else toast("Copy failed \u2014 select the text manually.");
 }
 /* ================= read aloud ================= */
 var AU={q:[],i:0,active:false,paused:false,rate:1,label:""};
@@ -545,8 +628,18 @@ document.getElementById("aupause").onclick=auPauseToggle;
 document.getElementById("austop").onclick=auStop;
 document.getElementById("aurate").onchange=function(){AU.rate=parseFloat(this.value);if(FX.audio){try{FX.audio.playbackRate=AU.rate}catch(e){}}};
 /* ================= downloads: AI DISC (.html) + AI THUMBDRIVE (.py) ================= */
+function discFactAns(d){
+  if(d.kind==="patent")return "[PUBLIC RECORD] The underlying record — "+d.id+" — is a verified public patent record. The JAH-N assessment around it is JAH analysis, not part of the public record.";
+  if(d.kind==="spec")return "[JAH ORIGINAL] This is an original JAH draft specification by the Creator — not a granted patent, not a public record. Its claims are design claims of the JAH system, not independently established facts.";
+  return "[SPECULATIVE] This is a speculative-analysis file of the JAH-N system — a creative-simulation briefing, not an established fact.";
+}
+function discSrcAns(d){
+  for(var i=0;i<d.sections.length;i++)if(d.sections[i][0]==="SOURCES, WITNESSES & REFERENCES")return "[PUBLIC RECORD] Sources listed in this file: "+d.sections[i][1].slice(0,500)+". I quote only what this file contains — I never invent sources.";
+  return "[UNKNOWN] Not available in this dossier — I will not invent a source.";
+}
 function discHTML(d){
-  var data=JSON.stringify({id:d.id,subject:d.subject,classification:d.classification,sections:d.sections});
+  var factAns=discFactAns(d),srcAns=discSrcAns(d);
+  var data=JSON.stringify({id:d.id,subject:d.subject,classification:d.classification,governance:GOV_LINE,badge:d.badge,provenance:d.prov,version:d.version||1,content_hash:dossierHash(d),sections:d.sections});
   var parts=[
 '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
 '<title>AI DISC — '+d.id+'</title><style>',
@@ -560,27 +653,31 @@ function discHTML(d){
 '.foot{color:#71809f;font-size:11px;margin-top:18px;border-top:1px dashed #8a5c00;padding-top:10px}',
 '</style></head><body>',
 '<div class="cls">'+d.classification+'</div>',
-'<h1>AI DISC — '+d.id+'</h1><p>'+d.subject+'</p>',
+'<div style="color:#3dff78;font-size:11px;letter-spacing:1px;margin:6px 0">'+GOV_LINE+'</div>',
+'<h1>AI DISC — '+d.id+'</h1><p>'+d.subject+'</p><p style="color:#9fb1d3;font-size:12px">'+d.badge.type+' \u00b7 '+d.badge.status+' \u00b7 REAL GOVERNMENT DOCUMENT: NO \u00b7 official within the JAH-N system only</p>',
 '<div id="secs"></div>',
 '<div><button onclick="readAll()">&#128266; READ ALOUD</button><button onclick="stopAll()">&#9632; STOP</button></div>',
 '<div class="chat"><div style="color:#3dff78;letter-spacing:2px;margin-bottom:8px">PERSONAL AI — OFFLINE COPY</div>',
 '<div class="msgs" id="msgs"><div>I am the offline personal AI of this file. Ask me about the overview, assessment, science or math proof, expert panel, conclusion, or sign-off.</div></div>',
 '<div class="row"><input id="qin" maxlength="300" placeholder="Ask about this file..."><button onclick="ask()">ASK</button></div></div>',
-'<div class="foot">JAH-N JAH-N WIKI — offline AI disc copy. Official reference file of the JAH-N system. Signed off by the Creator: Justin Addam Higgins (JAH).</div>',
+'<div class="foot">'+GOV_LINE+'<br>JAH-N JAH-N WIKI — offline AI disc copy. Official reference file of the JAH-N system (official within the JAH-N system only — not affiliated with any government agency). Signed off by the Creator: Justin Addam Higgins (JAH).</div>',
 '<script>',
 'var D='+data+';',
-'document.getElementById("secs").innerHTML=D.sections.map(function(s){return "<h4>"+s[0]+"</h4><p>"+s[1]+"</p>"}).join("");',
+'function e2(s){return String(s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}',
+'document.getElementById("secs").innerHTML=D.sections.map(function(s){return "<h4>"+e2(s[0])+"</h4><p>"+e2(s[1])+"</p>"}).join("");',
 'function sec(n){for(var i=0;i<D.sections.length;i++)if(D.sections[i][0]===n)return D.sections[i][1];return ""}',
 'function ans(q){var t=q.toLowerCase();',
 'function h(){for(var i=0;i<arguments.length;i++)if(t.indexOf(arguments[i])>=0)return true;return false}',
-'if(h("what is","describe","about"))return sec("OVERVIEW");',
-'if(h("assess","how does","work"))return sec("TECHNICAL ASSESSMENT");',
-'if(h("science","proof","evidence"))return sec("SCIENCE PROOF");',
-'if(h("math","formula","number"))return sec("MATH PROOF");',
-'if(h("panel","expert","doctor"))return sec("AI REVIEW PANEL");',
-'if(h("conclu","officer","final"))return sec("OFFICER CONCLUSION");',
-'if(h("sign","creator","official"))return sec("CREATOR SIGN-OFF");',
-'return "I answer from this file about: what it is, the assessment, the science and math proofs, the expert panel, the conclusion, or the sign-off."}',
+'if(h("what is","describe","about"))return e2(sec("OVERVIEW"));',
+'if(h("assess","how does","work"))return e2(sec("TECHNICAL ASSESSMENT"));',
+'if(h("science","proof","evidence"))return e2(sec("SCIENCE PROOF"));',
+'if(h("math","formula","number"))return e2(sec("MATH PROOF"));',
+'if(h("panel","expert","doctor"))return e2(sec("AI REVIEW PANEL"))+" (AI specialist personas — not licensed professionals)";',
+'if(h("conclu","officer","final"))return e2(sec("OFFICER CONCLUSION"));',
+'if(h("sign","creator","official"))return e2(sec("CREATOR SIGN-OFF"));',
+'if(h("established fact","is this fact","is this true","is this real"))return '+JSON.stringify(factAns)+';',
+'if(h("patent number","patent no","source","quote","cite"))return '+JSON.stringify(srcAns)+';',
+'return "I answer from this file about: what it is, the assessment, the science and math proofs, the expert panel, the conclusion, or the sign-off. I will tell you plainly when something is not in this file."}',
 'function ask(){var i=document.getElementById("qin"),m=document.getElementById("msgs"),q=i.value.trim();if(!q)return;i.value="";',
 'm.innerHTML+="<div><b style=color:#ffb000>YOU:</b> "+q.replace(/</g,"&lt;")+"</div>";',
 'm.innerHTML+="<div><b style=color:#3dff78>AI:</b> "+ans(q).replace(/</g,"&lt;")+"</div>";m.scrollTop=m.scrollHeight}',
@@ -608,12 +705,16 @@ function discHTML(d){
   return parts.join("\n");
 }
 function thumbPy(d){
-  var data=JSON.stringify({id:d.id,subject:d.subject,classification:d.classification,
+  var data=JSON.stringify({id:d.id,subject:d.subject,classification:d.classification,governance:GOV_LINE,
+    badge:d.badge,provenance:d.prov,version:d.version||1,content_hash:dossierHash(d),
     sections:d.sections.map(function(s){return [s[0],s[1]]})},null,1);
   var L=[
 '#!/usr/bin/env python3',
 '"""JAH-N JAH-N WIKI — AI THUMBDRIVE COPY',
 'File: '+d.id+' — '+d.subject,
+GOV_LINE,
+d.badge.type+' · '+d.badge.status+' · REAL GOVERNMENT DOCUMENT: NO',
+'Official within the JAH-N system only — not affiliated with any government agency.',
 'Carry this file on a USB stick or disc: it is the offline personal AI for this',
 'dossier. Run:  python3 '+d.id.replace(/[^A-Za-z0-9]+/g,"_")+'.py',
 'Official reference file of the JAH-N system. Signed off by the Creator:',
@@ -697,21 +798,34 @@ function zipFiles(files){
   return new Blob(parts,{type:"application/zip"});
 }
 function dossierReadme(d){
-  return ["JAH-N JAH-N WIKI — complete file package",d.kindLabel+" "+d.id,"SUBJECT: "+d.subject,
-   "Classification: "+d.classification,"","CONTENTS:",
+  return ["JAH-N JAH-N WIKI — complete file package",
+   GOV_LINE,
+   d.kindLabel+" "+d.id,
+   "SUBJECT: "+d.subject,
+   "Classification: "+d.classification,
+   "Status: "+d.badge.status+" · Source: "+d.badge.source,
+   "Real government document: NO · Official scope: within the JAH-N system only",
+   "Version: "+(d.version||1)+" · Content hash: "+dossierHash(d),
+   "","CONTENTS:",
    "dossier.txt        the full dossier text (all sections)",
-   "dossier.json       the dossier data (machine-readable)",
+   "dossier.json       the dossier data (machine-readable, with provenance)",
    "AI-DISC.html       offline AI disc — open in any browser, personal AI + read-aloud built in",
    "AI-THUMBDRIVE.py   offline AI thumbdrive — run with: python3 "+d.id.replace(/[^A-Za-z0-9]+/g,"_")+".py",
-   "README.txt         this file","",
-   "Official reference file of the JAH-N system.",
+   "README.txt         this file",
+   "","AI DISC / THUMBDRIVE FORMAT:",
+   "Contains:    this dossier's full text, its personal AI, and read-aloud",
+   "Does NOT:    contain model weights, executables, or any other dossier",
+   "Internet:    not required (online voice fallback only if the browser lacks built-in speech)",
+   "Runtime:     any modern browser (.html) · Python 3 (.py)",
+   "Platform:    Windows / macOS / Linux / Android / iOS",
+   "","Official reference file of the JAH-N system.",
    "Signed off by the Creator: Justin Addam Higgins (JAH)."].join("\n")+"\n";
 }
 function downloadAllZip(){
   if(!CUR)return;var d=CUR,base=d.id+"/";
   var files=[
     {name:base+"dossier.txt",data:dossierText(d)},
-    {name:base+"dossier.json",data:JSON.stringify({id:d.id,kind:d.kind,subject:d.subject,classification:d.classification,sections:d.sections,corroborating:d.corrob||[]},null,2)+"\n"},
+    {name:base+"dossier.json",data:JSON.stringify({id:d.id,kind:d.kind,kindLabel:d.kindLabel,subject:d.subject,classification:d.classification,governance:GOV_LINE,badge:d.badge,provenance:d.prov,version:d.version||1,created:d.created||"",content_hash:dossierHash(d),sections:d.sections,corroborating:d.corrob||[]},null,2)+"\n"},
     {name:base+d.id+"-AI-DISC.html",data:discHTML(d)},
     {name:base+d.id+"-AI-THUMBDRIVE.py",data:thumbPy(d)},
     {name:base+"README.txt",data:dossierReadme(d)}
@@ -754,12 +868,12 @@ function currentResults(){
 }
 function cardHTML(it,idx){
   var k=it.kind,cc=(k==="drip"?"bizarre":k),label,sub,id,abs,foot;
-  if(k==="bizarre"){label="BIZARRE FILE";sub=it.d.subject;id=it.d.id;abs=it.d.overview;foot=esc(it.d.category)}
-  else if(k==="drip"){label="BIZARRE FILE";sub=it.br[1];id=it.br[0];abs="Classified dossier — open the file for the full briefing: overview, technical assessment, science and math proofs, AI review panel, officer conclusion.";foot=esc(it.br[2])}
-  else if(k==="spec"){label="SPEC DOSSIER";sub=it.r[1];id=it.r[0];abs=it.r[2]||"";foot=esc(it.r[3]||"")+" · "+esc(it.r[12]||"")}
-  else{label="PATENT DOSSIER";sub=it.p[1];id=it.p[0];abs=it.p[2]||"";foot=esc(it.p[3]||"")}
+  if(k==="bizarre"){label="BIZARRE FILE";sub=it.d.subject;id=it.d.id;abs=it.d.overview;foot=esc(it.d.category);stat="SPECULATIVE ANALYSIS"}
+  else if(k==="drip"){label="BIZARRE FILE";sub=it.br[1];id=it.br[0];abs="Classified dossier — open the file for the full briefing: overview, technical assessment, science and math proofs, AI review panel, officer conclusion.";foot=esc(it.br[2]);stat="SPECULATIVE ANALYSIS"}
+  else if(k==="spec"){label="SPEC DOSSIER";sub=it.r[1];id=it.r[0];abs=it.r[2]||"";foot=esc(it.r[3]||"")+" · "+esc(it.r[12]||"");stat="DRAFT \u00b7 JAH ORIGINAL"}
+  else{label="PATENT DOSSIER";sub=it.p[1];id=it.p[0];abs=it.p[2]||"";foot=esc(it.p[3]||"");stat="PUBLIC RECORD"}
   return '<div class="fcard k-'+cc+'" data-i="'+idx+'"><div class="kind">▓ '+label+'</div><div class="body">'+
-    '<h3>'+esc(sub)+'</h3><div class="fid">'+esc(id)+'</div><div class="abs">'+esc(abs)+'</div></div>'+
+    '<h3>'+esc(sub)+'</h3><div class="fid">'+esc(id)+'</div><div class="fstat">'+stat+'</div><div class="abs">'+esc(abs)+'</div></div>'+
     '<div class="foot"><span>'+foot+'</span><b>OPEN FILE ▸</b></div></div>';
 }
 function render(){
@@ -775,7 +889,7 @@ function render(){
     else openDossier(patentDossier(it.p));
   };
   var h=document.getElementById("hits");
-  h.textContent=RES.length.toLocaleString()+" FILES MATCH"+(RES.length>240?" — SHOWING FIRST 240, REFINE SEARCH":"");
+  h.textContent=RES.length?RES.length.toLocaleString()+" FILES MATCH"+(RES.length>240?" — SHOWING FIRST 240, REFINE SEARCH":""):"0 FILES MATCH — try a title, dossier ID, patent number, or browse A–Z";
 }
 function renderStats(){
   var biz=BIZ.length+BIZIDX.length,total=SPECS.length+PATENTS.length+biz;
@@ -833,7 +947,8 @@ loadAll().then(function(){
   specCount=SPECS.length;patentCount=PATENTS.length;
   renderStats();buildCats();render();deepLink();
   toast("Archive online — "+(SPECS.length+PATENTS.length+BIZ.length).toLocaleString()+" files.");
-}).catch(function(){renderStats();render()});
+}).catch(function(){renderStats();render();
+  document.getElementById("hits").innerHTML='ARCHIVE FAILED TO LOAD — <button class="pill" onclick="location.reload()">RETRY</button>';});
 </script>
 </body>
 </html>
