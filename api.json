@@ -4,8 +4,8 @@
   "creator": "Justin Addam Higgins (JAH)",
   "description": "The JAH governance's own declassified internal archive: every spec, patent, and bizarre subject as a top-secret file with sources, panels, and officer conclusions. JAH's own patent authority — official within the JAH-N system only; not a government archive, not affiliated with any government agency or the USPTO.",
   "for_bots": "Machine-readable manifest. Humans use the site above; bots, scrapers, and AI assistants should use the endpoints below — plain JSON/JSONL over HTTPS, no JavaScript needed.",
-  "records_approx": 17200,
-  "records_as_of": "2026-09-30",
+  "records_approx": 27140,
+  "records_as_of": "2026-10-01",
   "note": "Counts grow on automated schedules; re-read this file for the latest shape of the data.",
   "endpoints": [
     {
@@ -17,6 +17,21 @@
       "path": "data/bizarre/",
       "format": "directory of json",
       "desc": "Numbered bizarre case-file dossiers (drip-fed)."
+    },
+    {
+      "path": "data/bizarre/bizarre.idx.json.gz",
+      "format": "gzipped jsonl",
+      "desc": "Machine-readable index of all drip bizarre dossiers: [id, subject, category, chunk] per line."
+    },
+    {
+      "path": "data/bizarre/chunks/biz-cNNNNNN.json.gz",
+      "format": "gzipped json",
+      "desc": "Full dossier records, 250 per chunk; ids JAH-LEAK-B0121+ are permanent and never re-used."
+    },
+    {
+      "path": "data/patents.idx.json.gz",
+      "format": "gzipped jsonl",
+      "desc": "Mirrored public patent records shown as patent dossiers."
     }
   ],
   "deep_links": [
