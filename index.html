@@ -180,6 +180,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 .lg-ana{color:var(--amber);border-color:var(--amber-d)!important}
 .lg-spec{color:var(--red);border-color:var(--red-d)!important}
 .lg-sim{color:#9fb1d3}
+.lg-unk{color:#8fa3c8;border-style:dashed!important}
 .fstat{font-size:10px;letter-spacing:2px;margin-top:4px}
 .k-bizarre .fstat{color:var(--red)}
 .k-spec .fstat{color:var(--amber)}
@@ -221,7 +222,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
     </div>
     <div class="az" id="az"></div>
     <div><select id="catchoice"><option value="">ALL BIZARRE CATEGORIES</option></select></div>
-    <div class="legend"><span class="lg-pub">&#9632; PUBLIC RECORD</span><span class="lg-ana">&#9632; JAH ANALYSIS</span><span class="lg-spec">&#9632; SPECULATIVE</span><span class="lg-sim">&#9632; CREATIVE SIMULATION</span></div>
+    <div class="legend"><span class="lg-pub">&#9632; PUBLIC RECORD</span><span class="lg-ana">&#9632; JAH ANALYSIS</span><span class="lg-spec">&#9632; SPECULATIVE</span><span class="lg-sim">&#9632; CREATIVE SIMULATION</span><span class="lg-unk">&#9632; UNKNOWN</span></div>
     <div class="hits" id="hits">LOADING THE ARCHIVE&#8230;</div>
   </div>
 
@@ -263,7 +264,7 @@ function loadSpecShard(sh){
   }).catch(function(){});
 }
 /* spec index row: 0=id 1=title 2=abstract 3=category 4=cpc 5=era 6=date 11=letter 12=line 19=mix_from 20=chunk */
-var BIZ=[], SPECS=[], PATENTS=[], specCount=0, patentCount=0;
+var BIZ=[], SPECS=[], PATENTS=[], specCount=0, patentCount=0, SPECS_DONE=false;
 var BIZIDX=[], BIZSHARDS=[{base:"",index:"data/bizarre/bizarre.idx.json.gz"}], CHUNKCACHE={};
 var state={f:"all", az:"", cat:"", q:""};
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
@@ -317,11 +318,15 @@ function loadAll(){
       var chain=Promise.resolve();
       rest.forEach(function(sh){chain=chain.then(function(){return loadSpecShard(sh)})});
       return chain.then(function(){
-        specCount=SPECS.length;renderStats();render();
+        specCount=SPECS.length;SPECS_DONE=true;renderStats();render();
         if(!document.getElementById("viewer").classList.contains("open"))deepLink();
       });
     }
-    return loadSpecShard(first).then(function(){return Promise.all(p)}).then(function(){wave2()});
+    return loadSpecShard(first).then(function(){return Promise.all(p)}).then(function(){
+      renderStats();buildCats();render();
+      if(!document.getElementById("viewer").classList.contains("open"))deepLink();
+      return wave2();
+    });
   });
 }
 /* ================= AI review panels ================= */
@@ -407,7 +412,7 @@ function specDossier(r){
    ["CREATOR SIGN-OFF","REVIEWED, VERIFIED, AND OFFICIALLY SIGNED OFF BY THE CREATOR — Justin Addam Higgins (JAH), 2026-09-29. This file is an official reference file of the JAH-N system."]  ];
   return {id:id,kind:"spec",subject:title,classification:"TOP SECRET // JAH-N // "+letter+" // NOFORN",
     sections:secs,panel:pan,corrob:[],date:r[6]||"",cat:cat,kindLabel:"SPEC DOSSIER",
-    src:SPEC_SITE+"specs.html",chunk:r[20],version:1,created:r[6]||"",prov:PROV_SPEC,
+    src:SPEC_SITE+"specs.html?spec="+encodeURIComponent(id),srclabel:"&#9654; OPEN IN SPEC ARCHIVE",chunk:r[20],version:1,created:r[6]||"",prov:PROV_SPEC,
     badge:{type:"SPEC DOSSIER",status:"ORIGINAL DRAFT \u2014 READY TO FILE",source:"JAH ORIGINAL"}};
 }
 function patentDossier(p){
@@ -425,7 +430,8 @@ function patentDossier(p){
    ["OFFICER CONCLUSION","Public record "+pub+" is logged as the official prior-art reference for its product area in the JAH-N system. JAH-N original files in this area are certified as original works that do not copy this record."],
    ["CREATOR SIGN-OFF","REVIEWED, VERIFIED, AND OFFICIALLY SIGNED OFF BY THE CREATOR — Justin Addam Higgins (JAH), 2026-09-29. Logged as an official reference file of the JAH-N system."]];
   return {id:pub,kind:"patent",subject:title,classification:"UNCLASSIFIED // PUBLIC RECORD // JAH-N REF",
-    sections:secs,panel:pan,corrob:[],date:"",cat:cpc,kindLabel:"PATENT DOSSIER",src:"",
+    sections:secs,panel:pan,corrob:[],date:"",cat:cpc,kindLabel:"PATENT DOSSIER",
+    src:"https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/?patent="+encodeURIComponent(pub),srclabel:"&#9654; OPEN IN PATENT CATALOG",
     version:1,created:"",prov:PROV_PAT,
     badge:{type:"PATENT DOSSIER",status:"PUBLIC RECORD",source:"PUBLIC DOMAIN \u2014 REAL PUBLIC PATENT RECORD"}};
 }
@@ -453,11 +459,11 @@ function openDossier(d){
     '<button class="tbtn" id="t-read">&#128266; READ ALOUD</button>'+
     '<button class="tbtn" id="t-copy">&#128203; COPY ALL</button>'+
     '<button class="tbtn" id="t-copyid">\u29C9 COPY FILE ID</button>'+
-    '<button class="tbtn amber" id="t-zip">&#11015; DOWNLOAD ALL</button>'+
-    '<button class="tbtn amber" id="t-disc">&#128190; AI DISC (.html)</button>'+
-    '<button class="tbtn amber" id="t-py">&#128190; AI THUMBDRIVE (.py)</button>'+
+    '<button class="tbtn amber" id="t-zip" title="Complete file package (.zip): dossier.txt + dossier.json (machine-readable, version + content hash) + AI disc (.html) + AI thumbdrive (.py) + README with format, platform, and runtime details">&#11015; DOWNLOAD ALL</button>'+
+    '<button class="tbtn amber" id="t-disc" title="AI Disc (.html): self-contained offline copy of this dossier — full text, personal AI, read-aloud. Runs in any modern browser; no internet needed.">&#128190; AI DISC (.html)</button>'+
+    '<button class="tbtn amber" id="t-py" title="AI Thumbdrive (.py): offline terminal personal AI for this dossier. Run with Python 3 on Windows, macOS, or Linux.">&#128190; AI THUMBDRIVE (.py)</button>'+
     '<a class="tbtn" id="t-wiki" href="'+wikiURL(d)+'" target="_blank" rel="noopener" style="text-decoration:none" title="Open the official JAH Wiki article for this file">&#128214; JAH WIKI ARTICLE</a>'+
-    (d.src?'<a class="tbtn amber" href="'+d.src+'" target="_blank" rel="noopener" style="text-decoration:none">&#9654; OPEN IN SPEC ARCHIVE</a>':"")+
+    (d.src?'<a class="tbtn amber" href="'+esc(d.src)+'" target="_blank" rel="noopener" style="text-decoration:none" title="Open the source record in its home archive (same file ID)">'+(d.srclabel||"&#9654; OPEN SOURCE ARCHIVE")+'</a>':"")+
     '</div>';
   h+='<div class="aichat" id="aichat"><h5>PERSONAL AI — your '+esc(d.id)+' assistant</h5>'+
     '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">I am the personal AI for this file — I answer <b>only</b> from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]. I never invent sources or patent numbers. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or the creator sign-off.</div></div>'+
@@ -497,7 +503,7 @@ function closeDossier(){
 document.addEventListener("keydown",function(e){if(e.key==="Escape")closeDossier()});
 function openSpecById(id){
   for(var i=0;i<SPECS.length;i++)if(SPECS[i][0]===id){openDossier(specDossier(SPECS[i]));return}
-  toast("Spec file still loading — try again in a moment.");
+  toast(SPECS_DONE?"Spec "+id+" is not in this archive.":"Spec file still loading — try again in a moment.");
 }
 /* ================= personal AI per file ================= */
 function aiAnswer(d,q){
@@ -940,13 +946,15 @@ function deepLink(){
   for(var bi=0;bi<BIZIDX.length;bi++)if(BIZIDX[bi][0]===id){openDripDossier(BIZIDX[bi]);return}
   for(var j=0;j<SPECS.length;j++)if(SPECS[j][0]===id){openDossier(specDossier(SPECS[j]));return}
   for(var k=0;k<PATENTS.length;k++)if(PATENTS[k][0]===id){openDossier(patentDossier(PATENTS[k]));return}
+  if(SPECS_DONE)toast("Dossier "+id+" was not found in this archive.");
 }
 document.getElementById("viewer").addEventListener("click",function(e){if(e.target.id==="viewer")closeDossier()});
 wireControls();buildAZ();
 loadAll().then(function(){
   specCount=SPECS.length;patentCount=PATENTS.length;
-  renderStats();buildCats();render();deepLink();
-  toast("Archive online — "+(SPECS.length+PATENTS.length+BIZ.length).toLocaleString()+" files.");
+  renderStats();buildCats();render();
+  if(!document.getElementById("viewer").classList.contains("open"))deepLink();
+  toast("Archive online — "+(SPECS.length+PATENTS.length+BIZ.length+BIZIDX.length).toLocaleString()+" files.");
 }).catch(function(){renderStats();render();
   document.getElementById("hits").innerHTML='ARCHIVE FAILED TO LOAD — <button class="pill" onclick="location.reload()">RETRY</button>';});
 </script>
