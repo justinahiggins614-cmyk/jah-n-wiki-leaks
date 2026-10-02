@@ -52,7 +52,7 @@ def main():
     # cross-site deep-link targets used by wikiURL()/patentDossier()
     urls.add("https://justinahiggins614-cmyk.github.io/jah-wiki/")
     urls.add("https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/")
-    # canonical JAH NETWORK destinations (TIER 1-2)
+    # canonical JAH NETWORK destinations (all 25 sites)
     urls.update([
         "https://justinahiggins614-cmyk.github.io/jah-ai-models/",
         "https://justinahiggins614-cmyk.github.io/jah-calculator/",
@@ -63,6 +63,22 @@ def main():
         "https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html",
         "https://justinahiggins614-cmyk.github.io/signature-llama/",
         "https://justinahiggins614-cmyk.github.io/jah-computer-systems/",
+        "https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/",
+        "https://justinahiggins614-cmyk.github.io/signature-university/",
+        "https://justinahiggins614-cmyk.github.io/signature-books/",
+        "https://justinahiggins614-cmyk.github.io/signature-comics/",
+        "https://justinahiggins614-cmyk.github.io/signature-newspapers/",
+        "https://justinahiggins614-cmyk.github.io/signature-3d-print/",
+        "https://justinahiggins614-cmyk.github.io/signature-backend/",
+        "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/",
+        "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
+        "https://justinahiggins614-cmyk.github.io/signature-ai-olypics/",
+        "https://justinahiggins614-cmyk.github.io/signature-chip-maker/",
+        "https://justinahiggins614-cmyk.github.io/signature-app-archive/",
+        "https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/",
+        "https://justinahiggins614-cmyk.github.io/signature-experiment-solver/",
+        "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/",
+        "https://justinahiggins614-cmyk.github.io/signature-ai-video-maker/",
     ])
     # TTS failover tiers (failover is fine if one is down, but log status)
     tts = [
