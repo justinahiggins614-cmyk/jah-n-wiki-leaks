@@ -165,6 +165,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 #aulabel{color:var(--green);letter-spacing:1px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #aurate{background:#02040a;border:1px solid var(--line);color:var(--ink);font-family:inherit;padding:5px}
 /* footer */
+.upd{margin:0 0 16px;color:var(--green);font-size:11px;letter-spacing:2px;text-align:right;border-bottom:1px solid var(--line);padding-bottom:8px}
 .honest{margin:26px 0 0;border:1px dashed var(--amber-d);padding:16px;color:var(--dim);font-size:12px}
 .honest b{color:var(--amber)}
 .govbar{background:#04140a;border-bottom:2px solid var(--green-d);color:var(--green);text-align:center;
@@ -172,6 +173,14 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 .govbar b{color:#fff}
 .govline{color:var(--green);font-size:11px;letter-spacing:1px;border:1px solid var(--green-d);
   background:rgba(14,92,42,.12);padding:8px 10px;margin-bottom:10px}
+.filetag{display:inline-block;font-weight:bold;letter-spacing:2px;font-size:14px;margin:10px 0;
+  padding:8px 14px;border:2px solid;text-transform:uppercase}
+.filetag.bizarre{color:#fff;background:rgba(122,14,24,.55);border-color:var(--red);
+  text-shadow:0 0 10px rgba(255,36,56,.6)}
+.filetag.spec{color:#fff;background:rgba(138,92,0,.5);border-color:var(--amber);
+  text-shadow:0 0 10px rgba(255,176,0,.6)}
+.filetag.patent{color:#04140a;background:var(--green);border-color:var(--green)}
+.dossier .dver{color:var(--amber);font-size:11px;letter-spacing:2px;margin-top:4px}
 .ptag{display:inline-block;font-size:10px;letter-spacing:1px;color:var(--dim);border:1px solid var(--line);
   padding:1px 7px;margin-left:8px;vertical-align:middle}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:11px;letter-spacing:1px;color:var(--dim)}
@@ -190,13 +199,13 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
   letter-spacing:1px;font-size:13px}
 @media(max-width:640px){.stamp{display:none}.dossier .dhead{padding-right:70px}}
 </style>
-<style>.jahnet{background:#0a0a0a;border-bottom:1px solid #3a0d0d;color:#8a8f7a;font-size:.76em;padding:6px 10px;text-align:center;line-height:2;letter-spacing:.02em}.jahnet-t{color:#ff4444;font-weight:700;letter-spacing:.25em;margin-right:10px}.jahnet a{color:#7aaa7a;text-decoration:none;margin:0 7px;white-space:nowrap}.jahnet a:hover{text-decoration:underline}</style>
+<style>.jahnet{background:#0a0a0a;border-bottom:1px solid #3a0d0d;color:#8a8f7a;font-size:.76em;padding:6px 10px;text-align:center;line-height:2;letter-spacing:.02em}.jahnet-t{color:#ff4444;font-weight:700;letter-spacing:.25em;margin-right:10px}.jahnet a{color:#7aaa7a;text-decoration:none;margin:0 7px;white-space:nowrap}.jahnet a:hover{text-decoration:underline}.jahnet-here{color:#ff4444;font-weight:700;letter-spacing:.2em;border:1px solid #ff4444;padding:1px 8px;margin-left:10px;white-space:nowrap;display:inline-block}</style>
 </head>
 <body>
 <canvas id="stars"></canvas>
 <div class="govbar"><b>JAH GOVERNANCE — OWN DECLASSIFIED INTERNAL ARCHIVE</b> &nbsp;·&nbsp; CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE &nbsp;·&nbsp; NOT AFFILIATED WITH ANY GOVERNMENT AGENCY</div>
 <div class="classbar"><span class="blink">TOP SECRET &#8212; JAH-N EYES ONLY &#8212; NOFORN</span></div>
-<div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a></div>
+<div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a><span class="jahnet-here">&#9670; YOU ARE HERE: JAH-N WIKI</span></div>
 <div class="wrap">
   <div class="mast">
     <div class="stamp">Declassified<br>for JAH-N</div>
@@ -210,10 +219,11 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
   </div>
 
   <div class="stats" id="stats"></div>
+  <div class="upd" id="upd">&#9632; ARCHIVE DATA LAST UPDATED: checking&#8230;</div>
   <div class="milestone" id="milestone"></div>
 
   <div class="ctrl">
-    <div class="searchrow"><input id="q" type="text" placeholder="SEARCH ALL FILES — subjects, titles, specs, patents..." autocomplete="off"></div>
+    <div class="searchrow"><input id="q" type="text" aria-label="Search all files" placeholder="SEARCH ALL FILES — subjects, titles, specs, patents..." autocomplete="off"></div>
     <div class="pills" id="pills">
       <button class="pill active" data-f="all">ALL FILES</button>
       <button class="pill" data-f="bizarre">BIZARRE FILES</button>
@@ -233,7 +243,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
   </div>
 </div>
 
-<div id="viewer"><div class="dossier" id="dossier"></div></div>
+<div id="viewer" role="dialog" aria-modal="true" aria-label="Dossier viewer"><div class="dossier" id="dossier"></div></div>
 
 <div id="aubar">
   <span id="aulabel">Reading</span>
@@ -323,7 +333,7 @@ function loadAll(){
       });
     }
     return loadSpecShard(first).then(function(){return Promise.all(p)}).then(function(){
-      renderStats();buildCats();render();
+      renderStats();buildCats();render();showUpdated();
       if(!document.getElementById("viewer").classList.contains("open"))deepLink();
       return wave2();
     });
@@ -449,11 +459,14 @@ function wikiURL(d){var p=d.id;
  return "https://justinahiggins614-cmyk.github.io/jah-wiki/?page="+encodeURIComponent(p)}
 function openDossier(d){
   CUR=d;
-  var h='<div class="dhead"><button class="dclose" id="dclose">CLOSE ✕</button>'+
+  var ver=d.version||1; /* v1.0 baseline: additive dossier-version field, never rewriting history */
+  var h='<div class="dhead"><button class="dclose" id="dclose" aria-label="Close dossier">CLOSE ✕</button>'+
     '<div class="cls">'+esc(d.classification)+'</div>'+
     '<div class="govline">'+esc(GOV_LINE)+'</div>'+
+    '<div class="filetag '+d.kind+'">&#9619; FILE CLASSIFICATION: '+esc(d.badge.status)+' &#9619;</div>'+
     '<h2>'+esc(d.subject)+'</h2><div class="did">'+esc(d.kindLabel)+' · '+esc(d.id)+
-    (d.date?' · FILED '+esc(d.date):"")+'</div></div>';
+    (d.date?' · FILED '+esc(d.date):"")+'</div>'+
+    '<div class="dver">DOSSIER VERSION v'+ver+'.0 · CONTENT HASH IN BADGE SECTION BELOW</div></div>';
   h+='<div class="dtools">'+
     '<button class="tbtn" id="t-ai">&#129302; ASK THE AI</button>'+
     '<button class="tbtn" id="t-read">&#128266; READ ALOUD</button>'+
@@ -481,6 +494,7 @@ function openDossier(d){
   document.body.style.overflow="hidden";
   try{history.replaceState(null,"","?dossier="+encodeURIComponent(d.id))}catch(e){}
   document.getElementById("dclose").onclick=closeDossier;
+  try{document.getElementById("dclose").focus()}catch(e){}
   document.getElementById("t-ai").onclick=function(){document.getElementById("aichat").classList.toggle("open")};
   document.getElementById("t-read").onclick=function(){auReadDossier()};
   document.getElementById("t-copy").onclick=function(){copyDossier()};
@@ -904,6 +918,20 @@ function renderStats(){
     stat(total,"TOTAL FILES");
   function stat(n,l){return '<div class="stat"><b>'+Number(n).toLocaleString()+'</b><span>'+l+'</span></div>'}
   renderMilestone(total,biz);
+}
+/* TIER 2-6: archive "last updated" from the drip's own state file (rewritten every
+   drip run) — data-derived, visually separate from the dossier-count chips. */
+function showUpdated(){
+  var el=document.getElementById("upd");
+  fetch("data/bizarre/state.json",{method:"HEAD"}).then(function(r){
+    var lm=r.headers.get("last-modified");
+    if(lm){
+      var d=new Date(lm);
+      el.innerHTML="&#9632; ARCHIVE DATA LAST UPDATED: "+esc(d.toUTCString().replace(" GMT"," UTC"));
+    } else {
+      el.innerHTML="&#9632; ARCHIVE DATA LAST UPDATED: not reported by server";
+    }
+  }).catch(function(){el.innerHTML="&#9632; ARCHIVE DATA LAST UPDATED: unavailable offline";});
 }
 function renderMilestone(total,biz){
   var goal=1000000,pct=Math.min(100,total/goal*100);
