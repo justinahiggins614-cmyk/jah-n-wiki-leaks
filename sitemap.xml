@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/index.html</loc><changefreq>daily</changefreq></url>
+  <!-- Bizarre dossiers (every JAH-LEAK-B######): sitemap-records-1.xml (see sitemap-index.xml). -->
+  <!-- Spec dossiers (JAH-SPEC-######): covered by the Signature Spec Catalog sitemap (signature-one-archive). -->
+  <!-- Patent dossiers (public records): covered by the Globally Rejustered Patent Catalog sitemap (cyber-patent-catalog). -->
 </urlset>

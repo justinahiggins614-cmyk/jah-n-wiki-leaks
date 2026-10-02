@@ -210,6 +210,13 @@ def main():
     save_state(st)
     print(f"DONE: +{made} dossiers, next_id={st['next_id']}, total drip={st['counter']}")
 
+    # refresh static discoverability artifacts (count block, sitemap, api.json)
+    try:
+        import build_static_discoverability as bsd
+        bsd.main()
+    except Exception as e:
+        print(f"  static discoverability refresh skipped: {e}", flush=True)
+
 
 if __name__ == "__main__":
     main()

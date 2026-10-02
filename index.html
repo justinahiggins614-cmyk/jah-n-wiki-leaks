@@ -4,7 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JAH-N Wiki — Official Reference Archive of the JAH-N System</title>
+<link id="canon" rel="canonical" href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">
 <meta name="description" content="The official JAH-N reference archive: top-secret dossiers on the spec files, public patent records, and bizarre subjects — every file with its own personal AI, read-aloud, copy, and downloadable AI disc/thumbdrive copies.">
+<meta name="robots" content="index, follow">
+<meta name="ai-disclaimer" content="CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE. NOT AFFILIATED WITH ANY GOVERNMENT AGENCY.">
+<script type="application/ld+json" id="ld-site">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebSite","name":"JAH-N Wiki","alternateName":"JAH-N WIKI","url":"https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/","inLanguage":"en","description":"The JAH governance's own declassified internal archive: bizarre-subject dossiers, original spec dossiers, and public patent records. Creative simulation — not a government archive, not affiliated with any government agency; official within the JAH-N system only."},
+{"@type":"CreativeWork","name":"JAH-N Wiki — bizarre dossier archive","url":"https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/","creator":{"@type":"Person","name":"Justin Addam Higgins"},"description":"Dossiers are analytical reference files: bizarre-subject files are speculative analyses grounded in real patent and spec records; spec dossiers are original drafts ready to file (never granted patents); patent dossiers are real public records summarized from the public domain. CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE. NOT AFFILIATED WITH ANY GOVERNMENT AGENCY."}
+]}
+</script>
 <style>
 :root{
   --bg:#0e1626; --bg2:#131e33; --panel:#182642; --panel2:#1d2c4c;
@@ -90,9 +99,9 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 .pill.active{border-color:var(--green);color:var(--green);background:rgba(14,92,42,.15);
   box-shadow:0 0 10px rgba(53,255,120,.15)}
 .az{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
-.az button{background:transparent;border:1px solid var(--line);color:var(--dim);width:30px;height:30px;
-  font-family:inherit;font-size:12px;cursor:pointer}
-.az button.active,.az button:hover{border-color:var(--amber);color:var(--amber)}
+.az a{background:transparent;border:1px solid var(--line);color:var(--dim);width:30px;height:30px;
+  font-family:inherit;font-size:12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.az a.active,.az a:hover{border-color:var(--amber);color:var(--amber)}
 #catchoice{background:#02040a;border:1px solid var(--line);color:var(--ink);padding:8px;
   font-family:inherit;font-size:12px;max-width:100%}
 .hits{color:var(--dim);font-size:12px;letter-spacing:2px;margin:8px 2px}
@@ -112,6 +121,20 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 .fcard .foot{padding:8px 12px;border-top:1px solid var(--line);font-size:11px;color:var(--dim);
   display:flex;justify-content:space-between;gap:6px}
 .fcard .foot b{color:var(--amber)}
+/* cards are real <a> links (crawlable, keyboard-focusable) — visual design unchanged */
+.fcard,.fcard:visited{display:block;color:inherit;text-decoration:none}
+.fcard:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0;background:#04140a;color:var(--green);padding:8px 16px;z-index:10000;letter-spacing:2px;font-size:12px;text-decoration:none;border:1px solid var(--green)}
+.skip:focus{left:8px;top:8px}
+.crawlcount{margin:0 0 16px;border:1px solid var(--line);background:var(--panel);padding:12px 16px;color:var(--green);font-size:12px;letter-spacing:1px}
+.crawlcount b{color:var(--amber);letter-spacing:2px;font-size:13px}
+.crawlcount .crawlsub{color:var(--dim);font-size:11px}
+.method{margin:26px 0 0;border:1px solid var(--line);background:var(--panel);padding:18px 20px;color:#b9c6de;font-size:13px}
+.method h2{color:var(--amber);letter-spacing:3px;font-size:15px;margin-bottom:10px}
+.method dl{display:grid;grid-template-columns:1fr;gap:10px}
+.method dt{color:var(--green);letter-spacing:2px;font-size:12px;font-weight:bold}
+.method dd{margin:2px 0 6px;color:#b9c6de}
+.method .disc{color:#fff;font-weight:bold;letter-spacing:1px}
 .redact{background:#000;color:transparent;border:1px solid #222;user-select:none}
 /* ===== dossier viewer ===== */
 #viewer{position:fixed;inset:0;z-index:9500;display:none;overflow-y:auto;background:rgba(2,4,10,.92);
@@ -202,11 +225,12 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 <style>.jahnet{background:#0a0a0a;border-bottom:1px solid #3a0d0d;color:#8a8f7a;font-size:.76em;padding:6px 10px;text-align:center;line-height:2;letter-spacing:.02em}.jahnet-t{color:#ff4444;font-weight:700;letter-spacing:.25em;margin-right:10px}.jahnet a{color:#7aaa7a;text-decoration:none;margin:0 7px;white-space:nowrap}.jahnet a:hover{text-decoration:underline}.jahnet-here{color:#ff4444;font-weight:700;letter-spacing:.2em;border:1px solid #ff4444;padding:1px 8px;margin-left:10px;white-space:nowrap;display:inline-block}</style>
 </head>
 <body>
-<canvas id="stars"></canvas>
+<a class="skip" href="#grid">SKIP TO FILES</a>
+<canvas id="stars" aria-hidden="true"></canvas>
 <div class="govbar"><b>JAH GOVERNANCE — OWN DECLASSIFIED INTERNAL ARCHIVE</b> &nbsp;·&nbsp; CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE &nbsp;·&nbsp; NOT AFFILIATED WITH ANY GOVERNMENT AGENCY</div>
 <div class="classbar"><span class="blink">TOP SECRET &#8212; JAH-N EYES ONLY &#8212; NOFORN</span></div>
 <div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a><span class="jahnet-here">&#9670; YOU ARE HERE: JAH-N WIKI</span></div>
-<div class="wrap">
+<div class="wrap" role="main">
   <div class="mast">
     <div class="stamp">Declassified<br>for JAH-N</div>
     <h1>JAH-N <span class="leak">WIKI</span></h1>
@@ -219,6 +243,12 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
   </div>
 
   <div class="stats" id="stats"></div>
+<!-- STATIC-COUNT-START -->
+<div class="crawlcount" id="crawlcount">
+<b>■ <span id="crawlcount-n">29,140</span> BIZARRE DOSSIERS</b> (counted in this page&#8217;s static HTML as of <span id="crawlcount-d">2026-10-01</span>)<br>
+<span class="crawlsub">What this counts: bizarre-subject dossiers with permanent JAH-LEAK-B###### IDs (the base set plus the drip-fed case files, JAH-LEAK-B0001&#8211;JAH-LEAK-B29140). Spec dossiers and public-patent dossiers mirrored on this page are counted separately in their home catalogs (Signature Spec Catalog, Globally Rejustered Patent Catalog). The live counters above refresh from the same data on every visit.</span>
+</div>
+<!-- STATIC-COUNT-END -->
   <div class="upd" id="upd">&#9632; ARCHIVE DATA LAST UPDATED: checking&#8230;</div>
   <div class="milestone" id="milestone"></div>
 
@@ -231,9 +261,9 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
       <button class="pill" data-f="patent">PATENT DOSSIERS</button>
     </div>
     <div class="az" id="az"></div>
-    <div><select id="catchoice"><option value="">ALL BIZARRE CATEGORIES</option></select></div>
+    <div><label for="catchoice" class="sr-only" style="position:absolute;left:-9999px">Filter bizarre files by category</label><select id="catchoice" aria-label="Filter bizarre files by category"><option value="">ALL BIZARRE CATEGORIES</option></select></div>
     <div class="legend"><span class="lg-pub">&#9632; PUBLIC RECORD</span><span class="lg-ana">&#9632; JAH ANALYSIS</span><span class="lg-spec">&#9632; SPECULATIVE</span><span class="lg-sim">&#9632; CREATIVE SIMULATION</span><span class="lg-unk">&#9632; UNKNOWN</span></div>
-    <div class="hits" id="hits">LOADING THE ARCHIVE&#8230;</div>
+    <div class="hits" id="hits" role="status" aria-live="polite">LOADING THE ARCHIVE&#8230;</div>
   </div>
 
   <div class="grid" id="grid"></div>
@@ -241,6 +271,22 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
   <div class="honest">
     <b>OFFICIAL NOTICE.</b> JAH-N Wiki is the JAH governance's own declassified internal archive — the JAH governance leaking its own files. It is an official reference work of the JAH-N system and a creative simulation: dossiers are analytical reference files, not real classified government documents, and are not affiliated with any government agency, the USPTO, or any external institution. "Official" means official <b>within the JAH-N system only</b>. Bizarre-subject files are speculative analyses grounded in real patent and spec records. All spec files are original draft works by <b>Justin Addam Higgins (JAH)</b> — drafts ready to file, never granted patents. Public patent records shown here are real public records, summarized from the public domain.
   </div>
+
+  <section class="method" id="methodology" aria-labelledby="method-h">
+    <h2 id="method-h">&#9632; DATA &amp; METHODOLOGY</h2>
+    <dl>
+      <dt>DOSSIER ID SCHEME</dt>
+      <dd>Bizarre-subject dossiers carry permanent IDs of the form <b>JAH-LEAK-B######</b> (e.g. JAH-LEAK-B0001). IDs are sequential, permanent, and never re-used; every ID listed in the sitemap opens its dossier at <b>?dossier=&lt;id&gt;</b>. Spec dossiers use JAH-SPEC-###### IDs and open the same way; patent dossiers use the public patent publication number as their ID. Every ID is stable across versions.</dd>
+      <dt>CLASSIFICATION SYSTEM</dt>
+      <dd>Each dossier carries a <b>FILE CLASSIFICATION</b> tag and a classification banner. Dossier types: <b>BIZARRE FILE</b> (speculative analysis), <b>SPEC DOSSIER</b> (original draft by Justin Addam Higgins, JAH — draft, ready to file, not a granted patent), <b>PATENT DOSSIER</b> (real public record, summarized from the public domain). Classification labels are per-file and travel with the file in every download (dossier.txt, dossier.json, AI disc, AI thumbdrive).</dd>
+      <dt>SOURCE / PROVENANCE PER RECORD</dt>
+      <dd>Every dossier carries a machine-readable <b>FILE CLASSIFICATION &amp; PROVENANCE</b> section and a per-section provenance tag — <b>[PUBLIC RECORD]</b>, <b>[JAH ANALYSIS]</b>, <b>[SPECULATIVE]</b>, <b>[JAH ORIGINAL]</b>, <b>[JAH OFFICIAL]</b>, or <b>[UNKNOWN]</b> — plus a SOURCES / WITNESSES / REFERENCES section where public-record material is used. The complete file package download includes dossier.json with full provenance and a content hash.</dd>
+      <dt>VERSIONING</dt>
+      <dd>Dossier records are stamped v1.0 (baseline); the version never rewrites history — corrections, if any, land in new versioned fields. Dossier content is hashed (CRC32 content hash shown in the badge section) so any copy can be verified byte-identical against the archive.</dd>
+      <dt>FRAMING — READ THIS</dt>
+      <dd><span class="disc">CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE.</span> <span class="disc">NOT AFFILIATED WITH ANY GOVERNMENT AGENCY.</span> JAH-N Wiki is the JAH governance's own declassified internal archive — a creative simulation and analytical reference work, official within the JAH-N system only. Bizarre-subject files are speculative analyses, not established facts. AI expert panels are AI personas, not licensed professionals. Spec files are original drafts by Justin Addam Higgins (JAH), ready to file, never granted patents. Public patent records are real public-domain records. Nothing on this page is a real classified government document.</dd>
+    </dl>
+  </section>
 </div>
 
 <div id="viewer" role="dialog" aria-modal="true" aria-label="Dossier viewer"><div class="dossier" id="dossier"></div></div>
@@ -493,6 +539,28 @@ function openDossier(d){
   document.getElementById("viewer").classList.add("open");
   document.body.style.overflow="hidden";
   try{history.replaceState(null,"","?dossier="+encodeURIComponent(d.id))}catch(e){}
+  /* machine-readable dossier metadata: JSON-LD (Article), canonical URL, title, meta */
+  (function(){
+    var old=document.getElementById("ld-dossier");if(old)old.parentNode.removeChild(old);
+    var prov=(d.prov&&d.prov["OVERVIEW"])||d.badge.status;
+    var ld={"@context":"https://schema.org","@type":"Article",
+      "identifier":d.id,"headline":d.subject,
+      "url":"https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier="+encodeURIComponent(d.id),
+      "about":d.kindLabel,
+      "isPartOf":{"@type":"WebSite","name":"JAH-N Wiki","url":"https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/"},
+      "author":{"@type":"Person","name":"Justin Addam Higgins"},
+      "datePublished":d.created||undefined,
+      "version":"v"+(d.version||1)+".0",
+      "description":d.classification+" — "+d.subject+". Provenance: "+prov+". CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE. NOT AFFILIATED WITH ANY GOVERNMENT AGENCY. Official within the JAH-N system only.",
+      "disambiguatingDescription":"CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE. NOT AFFILIATED WITH ANY GOVERNMENT AGENCY."};
+    var s=document.createElement("script");s.type="application/ld+json";s.id="ld-dossier";
+    s.textContent=JSON.stringify(ld);document.head.appendChild(s);
+    var can=document.getElementById("canon");
+    if(can)can.setAttribute("href","https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier="+encodeURIComponent(d.id));
+    document.title=d.id+" — "+d.subject+" | JAH-N Wiki";
+    var md=document.querySelector('meta[name="description"]');
+    if(md)md.setAttribute("content",(d.kindLabel+" "+d.id+": "+d.subject+" — "+d.classification+". Creative simulation, official within the JAH-N system only.").slice(0,300));
+  })();
   document.getElementById("dclose").onclick=closeDossier;
   try{document.getElementById("dclose").focus()}catch(e){}
   document.getElementById("t-ai").onclick=function(){document.getElementById("aichat").classList.toggle("open")};
@@ -512,6 +580,13 @@ function closeDossier(){
   auStop();
   document.getElementById("viewer").classList.remove("open");
   document.body.style.overflow="";
+  /* restore head metadata to the archive defaults */
+  var old=document.getElementById("ld-dossier");if(old)old.parentNode.removeChild(old);
+  var can=document.getElementById("canon");
+  if(can)can.setAttribute("href","https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/");
+  document.title="JAH-N Wiki — Official Reference Archive of the JAH-N System";
+  var md=document.querySelector('meta[name="description"]');
+  if(md)md.setAttribute("content","The official JAH-N reference archive: top-secret dossiers on the spec files, public patent records, and bizarre subjects — every file with its own personal AI, read-aloud, copy, and downloadable AI disc/thumbdrive copies.");
   try{history.replaceState(null,"","./")}catch(e){}
 }
 document.addEventListener("keydown",function(e){if(e.key==="Escape")closeDossier()});
@@ -892,16 +967,17 @@ function cardHTML(it,idx){
   else if(k==="drip"){label="BIZARRE FILE";sub=it.br[1];id=it.br[0];abs="Classified dossier — open the file for the full briefing: overview, technical assessment, science and math proofs, AI review panel, officer conclusion.";foot=esc(it.br[2]);stat="SPECULATIVE ANALYSIS"}
   else if(k==="spec"){label="SPEC DOSSIER";sub=it.r[1];id=it.r[0];abs=it.r[2]||"";foot=esc(it.r[3]||"")+" · "+esc(it.r[12]||"");stat="DRAFT \u00b7 JAH ORIGINAL"}
   else{label="PATENT DOSSIER";sub=it.p[1];id=it.p[0];abs=it.p[2]||"";foot=esc(it.p[3]||"");stat="PUBLIC RECORD"}
-  return '<div class="fcard k-'+cc+'" data-i="'+idx+'"><div class="kind">▓ '+label+'</div><div class="body">'+
+  return '<a class="fcard k-'+cc+'" data-i="'+idx+'" href="?dossier='+esc(encodeURIComponent(id))+'" aria-label="Open file '+esc(id)+': '+esc(sub)+'"><div class="kind">▓ '+label+'</div><div class="body">'+
     '<h3>'+esc(sub)+'</h3><div class="fid">'+esc(id)+'</div><div class="fstat">'+stat+'</div><div class="abs">'+esc(abs)+'</div></div>'+
-    '<div class="foot"><span>'+foot+'</span><b>OPEN FILE ▸</b></div></div>';
+    '<div class="foot"><span>'+foot+'</span><b>OPEN FILE ▸</b></div></a>';
 }
 function render(){
   RES=currentResults();
   var shown=RES.slice(0,240),g=document.getElementById("grid");
   g.innerHTML=shown.map(cardHTML).join("");
   var cards=g.querySelectorAll(".fcard");
-  for(var i=0;i<cards.length;i++)cards[i].onclick=function(){
+  for(var i=0;i<cards.length;i++)cards[i].onclick=function(e){
+    if(e&&e.preventDefault)e.preventDefault(); /* links work without JS; with JS open the viewer in place */
     var it=RES[Number(this.getAttribute("data-i"))];if(!it)return;
     if(it.kind==="bizarre")openDossier(bizarreDossier(it.d));
     else if(it.kind==="drip")openDripDossier(it.br);
@@ -918,6 +994,11 @@ function renderStats(){
     stat(total,"TOTAL FILES");
   function stat(n,l){return '<div class="stat"><b>'+Number(n).toLocaleString()+'</b><span>'+l+'</span></div>'}
   renderMilestone(total,biz);
+  /* the static crawlable count block above gets the live number too (JS counter
+     stays; curl/no-JS readers keep the build-time figure and its as-of date) */
+  var cn=document.getElementById("crawlcount-n"),cd=document.getElementById("crawlcount-d");
+  if(cn)cn.textContent=Number(biz).toLocaleString();
+  if(cd)cd.textContent=new Date().toISOString().slice(0,10)+" (live)";
 }
 /* TIER 2-6: archive "last updated" from the drip's own state file (rewritten every
    drip run) — data-derived, visually separate from the dossier-count chips. */
@@ -942,14 +1023,23 @@ function renderMilestone(total,biz){
     '<div class="ms-sub">SPEC DOSSIERS '+SPECS.length.toLocaleString()+' · PATENT DOSSIERS '+PATENTS.length.toLocaleString()+' · BIZARRE FILES '+Number(biz).toLocaleString()+' — the archive grows automatically, around the clock</div>';
 }
 function buildAZ(){
-  var az=document.getElementById("az"),h='<button data-a="" class="active">ALL</button>';
-  for(var c=65;c<=90;c++)h+='<button data-a="'+String.fromCharCode(c)+'">'+String.fromCharCode(c)+'</button>';
+  var az=document.getElementById("az"),h='<a data-a="" class="active" href="./" aria-label="Browse all files">ALL</a>';
+  for(var c=65;c<=90;c++){var L=String.fromCharCode(c);
+    h+='<a data-a="'+L+'" href="?az='+L+'" aria-label="Browse files starting with '+L+'">'+L+'</a>'}
   az.innerHTML=h;
-  var bs=az.querySelectorAll("button");
-  for(var i=0;i<bs.length;i++)bs[i].onclick=function(){
-    for(var j=0;j<bs.length;j++)bs[j].classList.remove("active");
-    this.classList.add("active");state.az=this.getAttribute("data-a");render();
+  var ls=az.querySelectorAll("a");
+  for(var i=0;i<ls.length;i++)ls[i].onclick=function(e){
+    if(e&&e.preventDefault)e.preventDefault();
+    for(var j=0;j<ls.length;j++)ls[j].classList.remove("active");
+    this.classList.add("active");
+    state.az=this.getAttribute("data-a");
+    try{history.replaceState(null,"",state.az?"?az="+state.az:"./")}catch(x){}
+    render();
   };
+  /* reflect ?az= when arriving on a deep link */
+  var m=/[?&]az=([A-Za-z]?)/.exec(location.search);
+  if(m&&m[1]){state.az=m[1].toUpperCase();
+    for(var k=0;k<ls.length;k++)ls[k].classList.toggle("active",ls[k].getAttribute("data-a")===state.az)}
 }
 function buildCats(){
   var sel=document.getElementById("catchoice"),seen={},h='<option value="">ALL BIZARRE CATEGORIES</option>';
@@ -961,9 +1051,11 @@ function buildCats(){
 function wireControls(){
   var pills=document.getElementById("pills").querySelectorAll(".pill");
   for(var i=0;i<pills.length;i++)pills[i].onclick=function(){
-    for(var j=0;j<pills.length;j++)pills[j].classList.remove("active");
-    this.classList.add("active");state.f=this.getAttribute("data-f");render();
+    for(var j=0;j<pills.length;j++){pills[j].classList.remove("active");pills[j].setAttribute("aria-pressed","false")}
+    this.classList.add("active");this.setAttribute("aria-pressed","true");
+    state.f=this.getAttribute("data-f");render();
   };
+  for(var a=0;a<pills.length;a++)pills[a].setAttribute("aria-pressed",pills[a].classList.contains("active")?"true":"false");
   var q=document.getElementById("q"),tm=null;
   q.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(function(){state.q=q.value.trim();render()},220)});
 }

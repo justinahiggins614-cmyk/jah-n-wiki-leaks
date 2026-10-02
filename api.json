@@ -2,11 +2,11 @@
   "site": "JAH-N Wiki",
   "site_url": "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/",
   "creator": "Justin Addam Higgins (JAH)",
-  "description": "The JAH governance's own declassified internal archive: every spec, patent, and bizarre subject as a top-secret file with sources, panels, and officer conclusions. JAH's own patent authority — official within the JAH-N system only; not a government archive, not affiliated with any government agency or the USPTO.",
-  "for_bots": "Machine-readable manifest. Humans use the site above; bots, scrapers, and AI assistants should use the endpoints below — plain JSON/JSONL over HTTPS, no JavaScript needed.",
-  "records_approx": 27140,
+  "description": "The JAH governance's own declassified internal archive: every spec, patent, and bizarre subject as a top-secret file with sources, panels, and officer conclusions. JAH's own patent authority \u2014 official within the JAH-N system only; not a government archive, not affiliated with any government agency or the USPTO.",
+  "for_bots": "Machine-readable manifest. Humans use the site above; bots, scrapers, and AI assistants should use the endpoints below \u2014 plain JSON/JSONL over HTTPS, no JavaScript needed.",
+  "records_approx": 29140,
   "records_as_of": "2026-10-01",
-  "note": "Counts grow on automated schedules; re-read this file for the latest shape of the data.",
+  "note": "Counts grow on automated schedules; re-read this file for the latest shape of the data. Spec and patent dossiers mirrored on this site are counted separately in their home catalogs.",
   "endpoints": [
     {
       "path": "data/bizarre.json",
@@ -38,6 +38,22 @@
     {
       "pattern": "?dossier=<id>",
       "desc": "Deep link to a dossier."
+    },
+    {
+      "pattern": "?az=<A-Z>",
+      "desc": "Browse dossiers by first letter of subject (real crawlable links)."
+    },
+    {
+      "pattern": "#methodology",
+      "desc": "Data & methodology section: ID scheme, classification, provenance, versioning, disclaimers."
+    },
+    {
+      "pattern": "?az=<A-Z>",
+      "desc": "Browse dossiers by first letter of subject (real crawlable links)."
+    },
+    {
+      "pattern": "#methodology",
+      "desc": "Data & methodology section: ID scheme, classification, provenance, versioning, disclaimers."
     }
   ],
   "raw_github_base": "https://raw.githubusercontent.com/justinahiggins614-cmyk/jah-n-wiki-leaks/master/",
