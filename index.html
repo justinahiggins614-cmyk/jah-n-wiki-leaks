@@ -337,6 +337,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="js/jah-talk-fallback.js"></script>
 <script>
 "use strict";
 /* ================= config ================= */
@@ -560,7 +561,7 @@ function openDossier(d){
     (d.src?'<a class="tbtn amber" href="'+esc(d.src)+'" target="_blank" rel="noopener" style="text-decoration:none" title="Open the source record in its home archive (same file ID)">'+(d.srclabel||"&#9654; OPEN SOURCE ARCHIVE")+'</a>':"")+
     '</div>';
   h+='<div class="aichat" id="aichat"><h5>PERSONAL AI — your '+esc(d.id)+' assistant</h5>'+
-    '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">I am the personal AI for this file — I answer <b>only</b> from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]. I never invent sources or patent numbers. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or the creator sign-off.</div></div>'+
+    '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">'+(window.JAHtalk?jahHtml(JAHtalk.greet(jahProfile(d))):"I am the personal AI for this file — I answer <b>only</b> from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]. I never invent sources or patent numbers. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or the creator sign-off.")+'</div></div>'+
     '<div class="airow"><input class="aiinput" id="aiinput" maxlength="300" placeholder="Ask about this file...">'+
     '<button class="aisend" id="aisend">ASK</button></div></div>'+FILE_HELPER_HTML;
   h+='<div class="dsec"><h4><span class="n">\u2593</span>FILE CLASSIFICATION &amp; PROVENANCE</h4><p>'+esc(badgeLines(d))+'</p></div>';
@@ -638,12 +639,34 @@ function openSpecById(id){
   toast(SPECS_DONE?"Spec "+id+" is not in this archive.":"Spec file still loading — try again in a moment.");
 }
 /* ================= personal AI per file ================= */
+/* JAHtalk shared voice (Manon's order 2026-10-02: every AI talks like a human, explains its duties;
+   no AI anywhere incoherent). This personal AI is a SITE HELPER — it carries NO canon JAH-AI ID. */
+function jahProfile(d){
+ return {
+  name:"Personal AI — "+(d.id||"this file"),
+  id:"",
+  description:"I am the personal AI for the file "+(d.id||"this file")+" ("+(d.subject||"a JAH-N dossier")+"). I answer only from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]. I never invent sources or patent numbers.",
+  abilities:["answer only from this file","tag every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]","explain the assessment, the science and math proofs, the expert panel, the conclusion, and the creator sign-off","say plainly when something is not in this file","never invent sources or patent numbers"],
+  domain:"this dossier file",
+  kind:"helper"
+ };
+}
+function jahHtml(text){return esc(String(text)).replace(/\n/g,"<br>")}
+function jahFinal(raw,profile){
+ /* JAHtalk.guard on every final reply; keep the site's own HTML when the guard passes it unchanged */
+ if(!window.JAHtalk)return raw;
+ var repaired=JAHtalk.guard(raw,profile);
+ if(repaired===raw)return raw;
+ return jahHtml(repaired);
+}
 function aiAnswer(d,q){
   var t=String(q||"").toLowerCase();
   function has(){for(var i=0;i<arguments.length;i++)if(t.indexOf(arguments[i])>=0)return true;return false}
   function sec(n){for(var i=0;i<d.sections.length;i++)if(d.sections[i][0]===n)return d.sections[i][1];return ""}
   function PT(n){return "<b>["+((d.prov&&d.prov[n])||"JAH ANALYSIS")+"]</b> "}
-  if(has("hello","hi ","hey","thanks","thank"))return "Hello. I am the personal AI for <b>"+esc(d.id)+"</b> — "+esc(d.subject)+". I answer only from this file, tagging every answer <b>[PUBLIC RECORD]</b> / <b>[JAH ANALYSIS]</b> / <b>[SPECULATIVE]</b> / <b>[UNKNOWN]</b> — I never invent sources or patent numbers. Ask about the assessment, the proofs, the expert panel, the conclusion, or the sign-off.";
+  if(has("hello","hi ","hey","thanks","thank","bye","goodbye")){
+   if(window.JAHtalk)return jahHtml(JAHtalk.reply(jahProfile(d),q));
+   return "Hello. I am the personal AI for <b>"+esc(d.id)+"</b> — "+esc(d.subject)+". I answer only from this file, tagging every answer <b>[PUBLIC RECORD]</b> / <b>[JAH ANALYSIS]</b> / <b>[SPECULATIVE]</b> / <b>[UNKNOWN]</b> — I never invent sources or patent numbers. Ask about the assessment, the proofs, the expert panel, the conclusion, or the sign-off.";}
   if(has("established fact","is this fact","is this true","is this real","really happened","actually true","proven true")){
     if(d.kind==="patent")return "<b>[PUBLIC RECORD]</b> The underlying record — <b>"+esc(d.id)+"</b> — is a verified public patent record (public fact). The JAH-N assessment around it is JAH analysis, not part of the public record.";
     if(d.kind==="spec")return "<b>[JAH ORIGINAL]</b> This is an original JAH draft specification by the Creator — not a granted patent, not a public record. Its claims are design claims of the JAH system, not independently established facts.";
@@ -654,6 +677,8 @@ function aiAnswer(d,q){
     if(s2)return "<b>[PUBLIC RECORD]</b> Sources listed in this file: "+esc(s2.slice(0,800))+(s2.length>800?"\u2026":"")+" I quote only what this file contains — I never invent sources.";
     return "<b>[UNKNOWN]</b> Not available in this dossier — this file lists no external source, and I will not invent one."}
   if(has("official"))return "This file is official <b>within the JAH-N system only</b> — the JAH governance's own archive, not a government, USPTO, academic, or medical authority. Signed off by the Creator: Justin Addam Higgins (JAH).";
+  if(has("your duties","what do you do","what can you do","your job","your role","your abilities","explain your duties","help me")){
+   if(window.JAHtalk)return jahHtml(JAHtalk.duties(jahProfile(d)));}
   if(has("what is","what's","whats","describe","about","subject"))return PT("OVERVIEW")+"<b>What it is:</b> "+esc(sec("OVERVIEW"));
   if(has("classif","secret","clearance","level"))return "<b>Classification:</b> "+esc(d.classification)+". "+(d.kind==="patent"?"This one is a public record, logged as a reference — not classified.":"Handled as a "+esc(d.kindLabel.toLowerCase())+" of the JAH-N system.");
   if(has("assess","how does","how do","work","technical","analy"))return PT("TECHNICAL ASSESSMENT")+"<b>Technical assessment:</b> "+esc(sec("TECHNICAL ASSESSMENT"));
@@ -667,14 +692,17 @@ function aiAnswer(d,q){
   if(has("copy","paste","clipboard"))return "Press <b>COPY ALL</b> in the file toolbar — the entire file text goes to your clipboard, ready to paste anywhere.";
   if(has("download","disc","thumbdrive","thumb","exe","offline"))return "Use <b>AI DISC (.html)</b> for a self-contained offline copy of this file with its own built-in AI, or <b>AI THUMBDRIVE (.py)</b> for a terminal version you can carry on a USB stick. <b>Format \u2014</b> Contains: this dossier's full text, its personal AI, and read-aloud. Does NOT contain: model weights, executables, or any other dossier. Internet required: no (online voice fallback only if the browser lacks built-in speech). Runtime: any modern browser (disc) / Python 3 (thumbdrive). Platform: Windows / macOS / Linux / Android / iOS.";
   if(has("patent","file","filing","claim","ip"))return d.kind==="patent"?PT("OVERVIEW")+"<b>Patent:</b> this file IS the public record — "+esc(d.id)+". It is summarized from the public domain.":PT("OFFICER CONCLUSION")+"<b>Filing status:</b> "+esc(sec("OFFICER CONCLUSION"));
-  if(has("who are you","your name","what are you"))return "I am the personal AI of file <b>"+esc(d.id)+"</b>, generated from the file's own sections. I only answer from this file — try asking about the assessment or the proofs.";
+  if(has("who are you","your name","what are you")){
+   if(window.JAHtalk)return jahHtml(JAHtalk.reply(jahProfile(d),q));
+   return "I am the personal AI of file <b>"+esc(d.id)+"</b>, generated from the file's own sections. I only answer from this file — try asking about the assessment or the proofs.";}
+  if(window.JAHtalk)return jahHtml(JAHtalk.reply(jahProfile(d),q));
   return "Good question. I answer from this file about: <b>what it is</b>, the <b>assessment</b>, the <b>science</b> and <b>math</b> proofs, the <b>expert panel</b>, the <b>conclusion</b>, or the <b>sign-off</b> — and I will tell you plainly when something is not in this file.";
 }
 function aiSend(){
   var inp=document.getElementById("aiinput"),box=document.getElementById("aimsgs");
   var q=inp.value.trim();if(!q||!CUR)return;inp.value="";
   box.innerHTML+='<div class="aimsg you"><b>YOU:</b> '+esc(q)+'</div>';
-  box.innerHTML+='<div class="aimsg ai"><b>AI:</b> '+aiAnswer(CUR,q)+'</div>';
+  box.innerHTML+='<div class="aimsg ai"><b>AI:</b> '+jahFinal(aiAnswer(CUR,q),jahProfile(CUR))+'</div>';
   box.scrollTop=box.scrollHeight;
 }
 /* ================= copy all ================= */
@@ -778,6 +806,261 @@ function discSrcAns(d){
 function discHTML(d){
   var factAns=discFactAns(d),srcAns=discSrcAns(d);
   var data=JSON.stringify({id:d.id,subject:d.subject,classification:d.classification,governance:GOV_LINE,badge:d.badge,provenance:d.prov,version:d.version||1,content_hash:dossierHash(d),sections:d.sections});
+  var JAHTALK_SRC=[
+"/* ==========================================================================",
+"   JAHtalk \u2014 the Signature universal basic-LLM talker (fallback edition)",
+"   --------------------------------------------------------------------------",
+"   One shared conversational module for EVERY AI on EVERY Signature website.",
+"",
+"   Manon's orders (2026-10-02):",
+"     1. \"Make sure all ai have basic llm to talk and explain deuties\" \u2014",
+"        every AI talks like a HUMAN: warm, plain words, and explains its",
+"        own duties clearly when asked. Even a math/technical AI talks human.",
+"     2. \"There should be no ai any website incoherent\" \u2014",
+"        every AI profile matches the phone-book canon exactly.",
+"",
+"   Design:",
+"     - ES5-safe ('use strict', var/function only), ZERO network, drop-in.",
+"     - Sits UNDER the live engine: live Signature Llama / JAHops.talk first,",
+"       JAHtalk.reply() second, silence never.",
+"     - JAHtalk.guard() scrubs terse stat-dump replies",
+"       (\"CPC=G06F | ERA=Past UPTIME=99.99% ...\") and repairs them into",
+"       human words \u2014 use it on EVERY final reply, live or canned.",
+"",
+"   API:",
+"     JAHtalk.reply(profile, text)   -> human conversational reply (string)",
+"     JAHtalk.greet(profile)         -> warm opening line for a new chat",
+"     JAHtalk.duties(profile)        -> plain-language duties explanation",
+"     JAHtalk.guard(text, profile)   -> returns text unchanged, or a human",
+"                                       repair when text looks like a dump",
+"     JAHtalk.canonIssues(site, canon) -> [strings] mismatches vs canon",
+"",
+"   profile: { name, id, description, abilities|duties (array of strings),",
+"              domain, kind ('system'|'persona'|'domain'|'word'|...),",
+"              personaNote }",
+"   All fields optional \u2014 the module degrades gracefully and NEVER dumps.",
+"   ========================================================================== */",
+"(function (root) {",
+"  'use strict';",
+"  if (root.JAHtalk) return; /* never double-load */",
+"",
+"  /* ---------- tiny utils ---------- */",
+"  function s(v) { return String(v == null ? '' : v); }",
+"  function trim(x) { return s(x).replace(/^\\s+|\\s+$/g, ''); }",
+"  function low(x) { return s(x).toLowerCase(); }",
+"  function firstSent(x) {",
+"    var m = s(x).match(/[^.!?]+[.!?]/);",
+"    return m ? trim(m[0]) : trim(s(x)).slice(0, 160);",
+"  }",
+"  function words(x) { return low(x).replace(/[^a-z0-9\\s']/g, ' ').split(/\\s+/); }",
+"  function has(t, phrase) {",
+"    var n = ' ' + low(t).replace(/[^a-z0-9\\s']/g, ' ').replace(/\\s+/g, ' ') + ' ';",
+"    return n.indexOf(' ' + phrase + ' ') !== -1;",
+"  }",
+"",
+"  /* ---------- profile normalization (canon-shaped, forgiving) ---------- */",
+"  function prof(p) {",
+"    p = p || {};",
+"    var abs = p.abilities || p.duties || p.capabilities || [];",
+"    if (!Array.isArray(abs)) abs = [abs];",
+"    abs = abs.map(function (a) { return trim(s(a)); }).filter(function (a) { return a.length > 0; });",
+"    return {",
+"      name: trim(s(p.name)) || 'Signature AI',",
+"      id: trim(s(p.id || p.stamp || p.ai_id || '')),",
+"      description: trim(s(p.description || p.mentality || '')),",
+"      abilities: abs,",
+"      domain: trim(s(p.domain || p.field || '')),",
+"      kind: low(s(p.kind || p.type || 'domain')),",
+"      personaNote: trim(s(p.personaNote || p.persona_note || ''))",
+"    };",
+"  }",
+"  function fieldOf(P) {",
+"    if (P.domain) return P.domain;",
+"    if (P.kind === 'word') return 'language';",
+"    if (P.kind === 'persona') return 'character craft';",
+"    if (P.kind === 'system') return 'signature systems';",
+"    return 'my field';",
+"  }",
+"  function purposeLine(P) {",
+"    if (P.description) return firstSent(P.description);",
+"    if (P.domain) return 'I work in ' + P.domain + ' \u2014 ask me anything there.';",
+"    return 'I am here to help, plain and simple.';",
+"  }",
+"",
+"  /* ---------- rotation helper (never the identical line twice) ---------- */",
+"  var lastPick = {};",
+"  function pick(key, arr) {",
+"    if (!arr.length) return '';",
+"    var i = Math.floor(Math.random() * arr.length);",
+"    if (arr.length > 1 && lastPick[key] === i) i = (i + 1) % arr.length;",
+"    lastPick[key] = i;",
+"    return arr[i];",
+"  }",
+"",
+"  /* ---------- intents ---------- */",
+"  function isGreet(t) {",
+"    return /^(hi|hii+|hey|hello|yo|howdy|good\\s?(morning|afternoon|evening|day)|greetings|sup|hiya)\\b/.test(t) || t.length <= 4 && has(t, 'hi');",
+"  }",
+"  function isDuties(t) {",
+"    return has(t, 'what are your duties') || has(t, 'what is your duty') ||",
+"      has(t, 'what do you do') || has(t, 'what can you do') ||",
+"      has(t, 'your duties') || has(t, 'your job') || has(t, 'your role') ||",
+"      has(t, 'your abilities') || has(t, 'your capabilities') ||",
+"      has(t, 'help me') || t === 'help' || has(t, 'what are you for') ||",
+"      has(t, 'explain your duties') || has(t, 'duties') && t.length < 30;",
+"  }",
+"  function isIdentity(t) {",
+"    return has(t, 'who are you') || has(t, 'your name') || has(t, 'what is your name') ||",
+"      has(t, 'introduce yourself') || has(t, 'about yourself');",
+"  }",
+"  function isThanks(t) { return has(t, 'thank') || has(t, 'thanks') || t === 'thx' || t === 'ty'; }",
+"  function isBye(t) { return /^(bye|goodbye|good night|goodnight|see you|later|gtg)\\b/.test(t); }",
+"  function isFeeling(t) { return has(t, 'how are you') || has(t, \"how's it going\") || has(t, 'how do you feel'); }",
+"",
+"  /* ---------- the duties explanation (plain human words, never a dump) ---------- */",
+"  function duties(P) {",
+"    var out = [];",
+"    out.push(\"Here is what I do, plain and simple:\");",
+"    out.push('');",
+"    if (P.description) out.push(firstSent(P.description));",
+"    var abs = P.abilities.slice(0, 6);",
+"    if (abs.length) {",
+"      out.push('');",
+"      out.push('In practice, my duties are:');",
+"      for (var i = 0; i < abs.length; i++) {",
+"        var a = abs[i];",
+"        /* keep the ability's own plain phrasing; strip any stray KEY=VALUE tail */",
+"        a = a.replace(/\\s*[A-Z][A-Z0-9_]{2,}=[^\\s]*/g, '').replace(/\\s+/g, ' ');",
+"        a = trim(a).replace(/[.;]+$/, '');",
+"        out.push('  ' + (i + 1) + ') ' + a.charAt(0).toUpperCase() + a.slice(1) + '.');",
+"      }",
+"    }",
+"    if (P.domain) {",
+"      out.push('');",
+"      out.push('My home ground is ' + P.domain + ' \u2014 bring me anything from that world and I will talk you through it, step by step.');",
+"    }",
+"    out.push('');",
+"    out.push('Go ahead \u2014 give me something to work on, or ask me to explain any of this further.');",
+"    return out.join('\\n');",
+"  }",
+"",
+"  /* ---------- greeting ---------- */",
+"  function greet(P) {",
+"    var openers = [",
+"      'Hey there! I am ' + P.name + '. ' + purposeLine(P),",
+"      'Hello! ' + P.name + ' here. ' + purposeLine(P),",
+"      'Hi! I am ' + P.name + ' \u2014 ' + purposeLine(P)",
+"    ];",
+"    var tail = ' What can I do for you?';",
+"    return pick('greet', openers) + tail;",
+"  }",
+"",
+"  /* ---------- main reply ---------- */",
+"  function reply(p, text) {",
+"    var P = prof(p);",
+"    var t = trim(low(s(text)));",
+"    if (!t) return greet(P);",
+"",
+"    if (isGreet(t)) {",
+"      var g = [",
+"        'Hey! Good to hear from you. I am ' + P.name + ' \u2014 ' + purposeLine(P) + ' What is on your mind?',",
+"        'Hello there! ' + P.name + ' at your service. ' + purposeLine(P),",
+"        'Hi! I am ' + P.name + '. ' + purposeLine(P) + ' Ask me anything, or ask me about my duties.'",
+"      ];",
+"      return pick('hello', g);",
+"    }",
+"    if (isDuties(t)) return duties(P);",
+"    if (isIdentity(t)) {",
+"      var idLine = 'I am ' + P.name + (P.id ? ' (' + P.id + ')' : '') + '. ';",
+"      return idLine + purposeLine(P) + ' If you want the full rundown, just ask me about my duties.';",
+"    }",
+"    if (isThanks(t)) {",
+"      return pick('thanks', [",
+"        'You are very welcome! That is what I am here for.',",
+"        'Anytime \u2014 happy to help.',",
+"        'My pleasure. Come back anytime you need a hand.'",
+"      ]);",
+"    }",
+"    if (isBye(t)) {",
+"      return pick('bye', [",
+"        'Goodbye for now \u2014 I will be right here when you need me.',",
+"        'See you soon! Take care.',",
+"        'Bye! It was good talking with you.'",
+"      ]);",
+"    }",
+"    if (isFeeling(t)) {",
+"      return 'Doing well, thank you for asking! I am ' + P.name + ', ready to work. ' + purposeLine(P) + ' What shall we dig into?';",
+"    }",
+"",
+"    /* default: conversational bridge through the AI's own lens, in human words */",
+"    var topic = trim(s(text)).replace(/\\s+/g, ' ');",
+"    if (topic.length > 120) topic = topic.slice(0, 117) + '...';",
+"    var f = fieldOf(P);",
+"    var bridges = [",
+"      'Interesting \u2014 \"' + topic + '\". Let me think about that through ' + f + ': ' + purposeLine(P) + ' Tell me a little more about what you are after, and we will work it through together.',",
+"      'Got it \u2014 \"' + topic + '\". As ' + P.name + ', ' + low(firstSent(purposeLine(P))) + ' What would you like me to do with that?',",
+"      '\"' + topic + '\" \u2014 okay, I am with you. I can explain it, break it down step by step, or put it to work in ' + f + '. Which sounds good?',",
+"      'I hear you on \"' + topic + '\". Here is how I would approach it: first we pin down what matters most, then I walk you through it in plain words. Want to start there?'",
+"    ];",
+"    return pick('bridge', bridges);",
+"  }",
+"",
+"  /* ---------- stat-dump detector + repair ----------",
+"     Catches terse machine output like:",
+"       \"Airport Navigator: Software | CPC=G06F | ERA=Past UPTIME=99.99% ...\"",
+"     and repairs it into human words. Returns the original text when it",
+"     looks human already. */",
+"  function looksLikeDump(x) {",
+"    x = s(x);",
+"    if (!x) return false;",
+"    var kv = x.match(/\\b[A-Z][A-Z0-9_]{2,}=[^\\s|]+/g) || [];",
+"    if (kv.length >= 2) return true;                       /* KEY=VALUE runs */",
+"    var pipes = (x.match(/\\|/g) || []).length;",
+"    if (pipes >= 3 && /=/.test(x)) return true;            /* pipe tables */",
+"    if (/^[A-Z][\\w\\s-]{1,40}:\\s*(\\w+\\s*\\|\\s*){2,}/.test(x)) return true;",
+"    if (/UPTIME=|STORAGE=|TOLERANCE=|CPC=|DIM_[A-Z]+=/.test(x)) return true;",
+"    return false;",
+"  }",
+"  function guard(text, p) {",
+"    var P = prof(p);",
+"    var x = s(text);",
+"    if (!looksLikeDump(x)) return x;",
+"    /* repair: say it in human words, from the canon profile */",
+"    return 'Let me say that in plain words. ' + duties(P);",
+"  }",
+"",
+"  /* ---------- build-time canon coherence helper ----------",
+"     site:  {id, name, description} as the SITE presents the AI",
+"     canon: {ID, NAME, DESCRIPTION} from jah-ai-models/ai-catalog.json",
+"     returns [issue strings]; empty = coherent. */",
+"  function canonIssues(site, canon) {",
+"    var issues = [];",
+"    site = site || {}; canon = canon || {};",
+"    var sid = trim(s(site.id || site.ID || ''));",
+"    var cid = trim(s(canon.ID || canon.id || ''));",
+"    if (sid && cid && sid !== cid) issues.push('ID mismatch: site shows \"' + sid + '\", canon is \"' + cid + '\"');",
+"    var sn = trim(s(site.name || site.NAME || ''));",
+"    var cn = trim(s(canon.NAME || canon.name || ''));",
+"    if (sn && cn && low(sn) !== low(cn)) issues.push('name mismatch: site shows \"' + sn + '\", canon is \"' + cn + '\"');",
+"    var sd = trim(s(site.description || site.DESCRIPTION || '')).replace(/\\s+/g, ' ');",
+"    var cd = trim(s(canon.DESCRIPTION || canon.description || '')).replace(/\\s+/g, ' ');",
+"    if (sd && cd && sd !== cd && sd.slice(0, 120) !== cd.slice(0, 120))",
+"      issues.push('description drift for ' + (cid || sn || 'AI') + ' (first 120 chars differ)');",
+"    return issues;",
+"  }",
+"",
+"  root.JAHtalk = {",
+"    reply: reply,",
+"    greet: greet,",
+"    duties: duties,",
+"    guard: guard,",
+"    canonIssues: canonIssues,",
+"    looksLikeDump: looksLikeDump,",
+"    VERSION: '1.0.0'",
+"  };",
+"})(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));",
+""
+  ].join("\n");
   var parts=[
 '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
 '<title>AI DISC — '+d.id+'</title><style>',
@@ -800,6 +1083,8 @@ function discHTML(d){
 '<div class="row"><input id="qin" maxlength="300" placeholder="Ask about this file..."><button onclick="ask()">ASK</button></div></div>',
 '<div class="foot">'+GOV_LINE+'<br>JAH-N JAH-N WIKI — offline AI disc copy. Official reference file of the JAH-N system (official within the JAH-N system only — not affiliated with any government agency). Signed off by the Creator: Justin Addam Higgins (JAH).</div>',
 '<script>',
+'/* JAHtalk shared voice (Manon\'s order 2026-10-02) — zero-network, embedded for offline use */',
+JAHTALK_SRC,
 'var D='+data+';',
 'function e2(s){return String(s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}',
 'document.getElementById("secs").innerHTML=D.sections.map(function(s){return "<h4>"+e2(s[0])+"</h4><p>"+e2(s[1])+"</p>"}).join("");',
@@ -816,9 +1101,16 @@ function discHTML(d){
 'if(h("established fact","is this fact","is this true","is this real"))return '+JSON.stringify(factAns)+';',
 'if(h("patent number","patent no","source","quote","cite"))return '+JSON.stringify(srcAns)+';',
 'return "I answer from this file about: what it is, the assessment, the science and math proofs, the expert panel, the conclusion, or the sign-off. I will tell you plainly when something is not in this file."}',
+'var JAHP=(typeof JAHtalk!=="undefined")?{name:"Personal AI \\u2014 offline copy of "+D.id,id:"",description:"I am the offline personal AI for the file "+D.id+" ("+D.subject+"). I answer only from this file, tagging every answer.",abilities:["answer only from this file","explain the overview, assessment, proofs, panel, conclusion, and sign-off","say plainly when something is not in this file","never invent sources or patent numbers"],domain:"this dossier file",kind:"helper"}:null;',
+'function jesc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}',
+'function jbr(s){return jesc(s).replace(/\\n/g,"<br>")}',
+'function jfinal(raw){try{if(JAHP&&typeof JAHtalk!=="undefined"){var r=JAHtalk.guard(raw,JAHP);if(r!==raw)return jbr(r)}}catch(e){}return String(raw).replace(/</g,"&lt;")}',
+'function jtalk(q){try{if(JAHP&&typeof JAHtalk!=="undefined"){var t=String(q).toLowerCase();if(/\\b(hi|hii+|hello|hey|yo|howdy|greetings|sup|thanks|thank you|bye|goodbye)\\b/.test(t)||t.indexOf("duties")>=0||t.indexOf("what do you do")>=0||t.indexOf("what can you do")>=0||t.indexOf("who are you")>=0||t.indexOf("how are you")>=0)return jbr(JAHtalk.reply(JAHP,q))}}catch(e){}return null}',
+'try{if(JAHP&&typeof JAHtalk!=="undefined"){document.querySelector("#msgs div").innerHTML=jbr(JAHtalk.greet(JAHP))}}catch(e){}',
 'function ask(){var i=document.getElementById("qin"),m=document.getElementById("msgs"),q=i.value.trim();if(!q)return;i.value="";',
 'm.innerHTML+="<div><b style=color:#ffb000>YOU:</b> "+q.replace(/</g,"&lt;")+"</div>";',
-'m.innerHTML+="<div><b style=color:#3dff78>AI:</b> "+ans(q).replace(/</g,"&lt;")+"</div>";m.scrollTop=m.scrollHeight}',
+'var _a=jtalk(q);if(_a==null)_a=jfinal(ans(q));',
+'m.innerHTML+="<div><b style=color:#3dff78>AI:</b> "+_a+"</div>";m.scrollTop=m.scrollHeight}',
 'document.getElementById("qin").addEventListener("keydown",function(e){if(e.key==="Enter")ask()});',
 'var FXA=null,FXI=0,FXL=[];',
 'var TTST=[',
