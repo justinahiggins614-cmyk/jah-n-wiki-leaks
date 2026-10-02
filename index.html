@@ -223,13 +223,40 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 @media(max-width:640px){.stamp{display:none}.dossier .dhead{padding-right:70px}}
 </style>
 <style>.jahnet{background:#0a0a0a;border-bottom:1px solid #3a0d0d;color:#8a8f7a;font-size:.76em;padding:6px 10px;text-align:center;line-height:2;letter-spacing:.02em}.jahnet-t{color:#ff4444;font-weight:700;letter-spacing:.25em;margin-right:10px}.jahnet a{color:#7aaa7a;text-decoration:none;margin:0 7px;white-space:nowrap}.jahnet a:hover{text-decoration:underline}.jahnet-here{color:#ff4444;font-weight:700;letter-spacing:.2em;border:1px solid #ff4444;padding:1px 8px;margin-left:10px;white-space:nowrap;display:inline-block}</style>
+<style>
+/* FILE FINDER + FILE HELPER (additive, 2026-10-02) */
+.finder{border:1px solid var(--green-d);background:#030704;margin:12px 0;padding:10px 12px}
+.finder-h{color:var(--green);font-weight:700;letter-spacing:.18em;font-size:.78em;margin-bottom:8px}
+.finder-row{display:flex;gap:8px}
+#finderq{flex:1;min-width:0;background:#02040a;border:1px solid var(--green-d);color:var(--ink);padding:9px 10px;font:inherit}
+#finderq:focus{outline:none;border-color:var(--green)}
+#findergo{background:var(--green-d);border:1px solid var(--green);color:#04140a;font:inherit;font-weight:700;padding:9px 18px;cursor:pointer;white-space:nowrap}
+#findergo:hover{background:var(--green)}
+.finder-res{margin-top:10px}
+.finder-count{color:var(--green);letter-spacing:.12em;font-size:.75em;margin:4px 0 8px}
+.finder-none{color:#9fb3a3;font-size:.85em;padding:6px 0}
+.finder-res .fcard b.take{color:var(--green)}
+.helper{border:1px dashed var(--green-d);background:#020603;margin:14px 0;padding:10px 12px}
+.helper-h{color:var(--green);font-weight:700;letter-spacing:.15em;font-size:.78em;margin-bottom:8px}
+.helper-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.hchip{background:transparent;border:1px solid var(--green-d);color:var(--green);font:inherit;font-size:.78em;padding:5px 10px;cursor:pointer}
+.hchip:hover{border-color:var(--green)}
+.helper-log{max-height:230px;overflow:auto;margin-bottom:8px}
+.hmsg{margin:6px 0;font-size:.86em;line-height:1.5}
+.hmsg.you{color:#9fb3a3}
+.hmsg.ai{color:var(--ink)}
+.helper-row{display:flex;gap:6px}
+.helper-input{flex:1;min-width:0;background:#02040a;border:1px solid var(--green-d);color:var(--ink);padding:8px 10px;font:inherit}
+.helper-input:focus{outline:none;border-color:var(--green)}
+.helper-send{background:var(--green-d);border:1px solid var(--green);color:#04140a;font:inherit;font-weight:700;padding:8px 14px;cursor:pointer;white-space:nowrap}
+</style>
 </head>
 <body>
 <a class="skip" href="#grid">SKIP TO FILES</a>
 <canvas id="stars" aria-hidden="true"></canvas>
 <div class="govbar"><b>JAH GOVERNANCE — OWN DECLASSIFIED INTERNAL ARCHIVE</b> &nbsp;·&nbsp; CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE &nbsp;·&nbsp; NOT AFFILIATED WITH ANY GOVERNMENT AGENCY</div>
 <div class="classbar"><span class="blink">TOP SECRET &#8212; JAH-N EYES ONLY &#8212; NOFORN</span></div>
-<div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">The Signature Book Depository</a><span class="jahnet-here">&#9670; YOU ARE HERE: JAH-N WIKI</span></div>
+<div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">The Signature 3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Signature Backend</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">The Signature Boundless Generator Archive</a><span class="jahnet-here">&#9670; YOU ARE HERE: JAH-N WIKI</span></div>
 <div class="wrap" role="main">
   <div class="mast">
     <div class="stamp">Declassified<br>for JAH-N</div>
@@ -259,6 +286,14 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
       <button class="pill" data-f="bizarre">BIZARRE FILES</button>
       <button class="pill" data-f="spec">SPEC DOSSIERS</button>
       <button class="pill" data-f="patent">PATENT DOSSIERS</button>
+    </div>
+    <div class="finder" id="finder">
+      <div class="finder-h">&#9639; FILE FINDER &mdash; describe what you are after in plain words</div>
+      <div class="finder-row">
+        <input id="finderq" type="text" aria-label="Describe what you are looking for" placeholder="Describe what you're looking for&hellip;" autocomplete="off">
+        <button id="findergo" type="button">FIND IT</button>
+      </div>
+      <div class="finder-res" id="finderres" aria-live="polite"></div>
     </div>
     <div class="az" id="az"></div>
     <div><label for="catchoice" class="sr-only" style="position:absolute;left:-9999px">Filter bizarre files by category</label><select id="catchoice" aria-label="Filter bizarre files by category"><option value="">ALL BIZARRE CATEGORIES</option></select></div>
@@ -527,7 +562,7 @@ function openDossier(d){
   h+='<div class="aichat" id="aichat"><h5>PERSONAL AI — your '+esc(d.id)+' assistant</h5>'+
     '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">I am the personal AI for this file — I answer <b>only</b> from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]. I never invent sources or patent numbers. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or the creator sign-off.</div></div>'+
     '<div class="airow"><input class="aiinput" id="aiinput" maxlength="300" placeholder="Ask about this file...">'+
-    '<button class="aisend" id="aisend">ASK</button></div></div>';
+    '<button class="aisend" id="aisend">ASK</button></div></div>'+FILE_HELPER_HTML;
   h+='<div class="dsec"><h4><span class="n">\u2593</span>FILE CLASSIFICATION &amp; PROVENANCE</h4><p>'+esc(badgeLines(d))+'</p></div>';
   d.sections.forEach(function(s,i){
     var ptag=(d.prov&&d.prov[s[0]])?'<span class="ptag">['+d.prov[s[0]]+']</span>':"";
@@ -572,6 +607,14 @@ function openDossier(d){
   document.getElementById("t-py").onclick=function(){downloadThumb()};
   document.getElementById("aisend").onclick=aiSend;
   document.getElementById("aiinput").addEventListener("keydown",function(e){if(e.key==="Enter")aiSend()});
+  /* FILE HELPER wiring (additive) */
+  var hsend=document.getElementById("helpersend");
+  if(hsend)hsend.onclick=function(){var ii=document.getElementById("helperinput");var v=ii.value.trim();if(!v)return;ii.value="";helperAsk(v);};
+  var hinp=document.getElementById("helperinput");
+  if(hinp)hinp.addEventListener("keydown",function(e){if(e.key==="Enter"){var v=this.value.trim();if(v){this.value="";helperAsk(v);}}});
+  var hchips=document.querySelectorAll("#helper .hchip");
+  for(var hx=0;hx<hchips.length;hx++)(function(b){b.onclick=function(){helperAsk(b.getAttribute("data-hq"));};})(hchips[hx]);
+
   var links=document.querySelectorAll(".corroblink");
   for(var i=0;i<links.length;i++)links[i].onclick=function(){try{history.replaceState(null,"","?dossier="+encodeURIComponent(this.getAttribute("data-spec")))}catch(e){};openSpecById(this.getAttribute("data-spec"))};
   document.getElementById("viewer").scrollTop=0;
@@ -1069,7 +1112,89 @@ function deepLink(){
   if(SPECS_DONE)toast("Dossier "+id+" was not found in this archive.");
 }
 document.getElementById("viewer").addEventListener("click",function(e){if(e.target.id==="viewer")closeDossier()});
+
+/* ================= FILE FINDER (additive, 2026-10-02) =================
+   Keyword extraction -> the archive's EXISTING search (currentResults) ->
+   top 5 as deep-link cards. Deterministic, no backend calls. */
+var FINDER_STOP={a:1,an:1,the:1,of:1,to:1,is:1,it:1,in:1,and:1,what:1,how:1,does:1,do:1,
+for:1,with:1,on:1,by:1,i:1,you:1,me:1,my:1,this:1,that:1,tell:1,about:1,please:1,can:1,
+are:1,was:1,were:1,be:1,or:1,as:1,at:1,from:1,find:1,looking:1,want:1,need:1,show:1,
+give:1,some:1,which:1,who:1,when:1,where:1,why:1,all:1,there:1,have:1,has:1,had:1,
+will:1,would:1,could:1,should:1,they:1,we:1,our:1,us:1,if:1,not:1,no:1,but:1,so:1,
+very:1,more:1,many:1,other:1,than:1,just:1,like:1,also:1,over:1,through:1,before:1,
+after:1,each:1,these:1,those:1,then:1,now:1};
+function finderWords(sx){return String(sx==null?"":sx).toLowerCase().replace(/[^a-z0-9\s]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!FINDER_STOP[w];});}
+function finderCardHTML(it){
+  var k=it.kind,cc=(k==="drip"?"bizarre":k),label,sub,id,abs,foot,stat;
+  if(k==="bizarre"){label="BIZARRE FILE";sub=it.d.subject;id=it.d.id;abs=it.d.overview;foot=esc(it.d.category);stat="SPECULATIVE ANALYSIS";}
+  else if(k==="drip"){label="BIZARRE FILE";sub=it.br[1];id=it.br[0];abs="Classified dossier — open the file for the full briefing: overview, technical assessment, science and math proofs, AI review panel, officer conclusion.";foot=esc(it.br[2]);stat="SPECULATIVE ANALYSIS";}
+  else if(k==="spec"){label="SPEC DOSSIER";sub=it.r[1];id=it.r[0];abs=it.r[2]||"";foot=esc(it.r[3]||"");stat="DRAFT · JAH ORIGINAL";}
+  else{label="PATENT DOSSIER";sub=it.p[1];id=it.p[0];abs=it.p[2]||"";foot=esc(it.p[3]||"");stat="PUBLIC RECORD";}
+  return '<a class="fcard k-'+cc+'" href="?dossier='+esc(encodeURIComponent(id))+'" aria-label="Open file '+esc(id)+': '+esc(sub)+'"><div class="kind">\u2593 '+label+'</div><div class="body">'+
+    '<h3>'+esc(sub)+'</h3><div class="fid">'+esc(id)+'</div><div class="fstat">'+stat+'</div><div class="abs">'+esc(String(abs).slice(0,280))+'</div></div>'+
+    '<div class="foot"><span>'+foot+'</span><b class="take">TAKE ME THERE \u2192</b></div></a>';
+}
+function finderRun(){
+  var qi=document.getElementById("finderq"),box=document.getElementById("finderres");
+  var ws=finderWords(qi.value);
+  if(!ws.length){box.innerHTML='<div class="finder-none">Describe the file in a few plain words \u2014 e.g. "plasma propulsion drive" \u2014 and the Finder scans the whole archive.</div>';return;}
+  var sq=state.q,sf=state.f,sc=state.cat,sa=state.az;
+  state.f="all";state.cat="";state.az="";
+  var seen={},ranked=[];
+  ws.forEach(function(w){
+    state.q=w;
+    var res=currentResults();
+    for(var i=0;i<res.length;i++){
+      var it=res[i],kk=it.kind+":"+(it.kind==="bizarre"?it.d.id:it.kind==="drip"?it.br[0]:it.kind==="spec"?it.r[0]:it.p[0]);
+      if(!seen[kk]){seen[kk]={it:it,n:0};ranked.push(seen[kk]);}
+      seen[kk].n++;
+    }
+  });
+  state.q=sq;state.f=sf;state.cat=sc;state.az=sa;render();
+  ranked.sort(function(a,b){return b.n-a.n;});
+  var top=ranked.slice(0,5);
+  if(!top.length){box.innerHTML='<div class="finder-none">No files matched "'+esc(ws.join(" "))+'". Try fewer or different words, or browse A\u2013Z.</div>';return;}
+  box.innerHTML='<div class="finder-count">TOP '+top.length+' MATCH'+(top.length>1?"ES":"")+' FOR "'+esc(ws.join(" "))+'"</div>'+
+    top.map(function(e){return finderCardHTML(e.it);}).join("");
+}
+/* ================= FILE HELPER (additive, 2026-10-02) =================
+   Compact bubble on dossier views. Answers ONLY from the open file's own
+   sections/fields; says plainly when the file does not cover a question. */
+var FILE_HELPER_HTML='<div class="helper" id="helper"><div class="helper-h">\u9639 FILE HELPER \u2014 answers only from this file</div>'+
+  '<div class="helper-chips">'+
+  '<button type="button" class="hchip" data-hq="__what">What is it?</button>'+
+  '<button type="button" class="hchip" data-hq="__facts">Key facts</button>'+
+  '<button type="button" class="hchip" data-hq="__cover">What this file covers</button></div>'+
+  '<div class="helper-log" id="helperlog" aria-live="polite"></div>'+
+  '<div class="helper-row"><input class="helper-input" id="helperinput" maxlength="300" placeholder="Ask about this file\u2026" aria-label="Ask the file helper">'+
+  '<button class="helper-send" id="helpersend" type="button">ASK</button></div></div>';
+function helperPlain(sx){return String(sx==null?"":sx).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();}
+function helperSec(d,n){for(var i=0;i<d.sections.length;i++)if(d.sections[i][0]===n)return d.sections[i][1];return "";}
+function helperQuote(txt){txt=helperPlain(txt);return esc(txt.length>700?txt.slice(0,700)+"\u2026":txt);}
+function helperAnswer(d,q){
+  if(q==="__what")return "<b>What it is:</b> "+esc(d.kindLabel)+" <b>"+esc(d.id)+"</b> \u2014 "+esc(d.subject)+".<br><b>OVERVIEW:</b> "+helperQuote(helperSec(d,"OVERVIEW"));
+  if(q==="__facts")return "<b>Key facts:</b> file <b>"+esc(d.id)+"</b> \u00b7 "+esc(d.kindLabel)+" \u00b7 classification "+esc(d.classification)+(d.cat?" \u00b7 category "+esc(d.cat):"")+(d.date?" \u00b7 filed "+esc(d.date):"")+" \u00b7 dossier v"+(d.version||1)+".0.";
+  if(q==="__cover"){var nm=[];for(var i=0;i<d.sections.length;i++)nm.push(d.sections[i][0]);
+    return "<b>This file covers:</b> "+esc(nm.join(" \u00b7 "))+". I answer only from these sections \u2014 anything outside them is not in this file, and I will say so plainly.";}
+  var ws=finderWords(q),best=null,bn=0;
+  for(var i2=0;i2<d.sections.length;i2++){
+    var hay=helperPlain(d.sections[i2][1]).toLowerCase(),n=0;
+    for(var j=0;j<ws.length;j++)if(hay.indexOf(ws[j])>=0)n++;
+    if(n>bn){bn=n;best=d.sections[i2];}
+  }
+  if(best&&bn>0)return "<b>"+esc(best[0])+":</b> "+helperQuote(best[1]);
+  return "<b>Not in this file.</b> I answer only from this file\u2019s own sections \u2014 it doesn\u2019t cover that. Try: what it is, the assessment, the proofs, the panel, the conclusion, or the sign-off.";
+}
+function helperAsk(q){
+  var box=document.getElementById("helperlog");if(!box||!CUR)return;
+  box.innerHTML+='<div class="hmsg you"><b>YOU:</b> '+esc(q)+'</div>'+
+    '<div class="hmsg ai"><b>HELPER:</b> '+helperAnswer(CUR,q)+'</div>';
+  box.scrollTop=box.scrollHeight;
+}
+
 wireControls();buildAZ();
+document.getElementById("findergo").onclick=finderRun;
+document.getElementById("finderq").addEventListener("keydown",function(e){if(e.key==="Enter")finderRun();});
 loadAll().then(function(){
   specCount=SPECS.length;patentCount=PATENTS.length;
   renderStats();buildCats();render();
