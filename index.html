@@ -65,6 +65,11 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 .mast h1 .leak{color:var(--red-t);text-shadow:0 0 22px rgba(255,36,56,.5)}
 .mast .sub{color:var(--green);letter-spacing:2px;font-size:13px;position:relative}
 .mast .deets{color:var(--dim);font-size:12px;margin-top:10px;position:relative;max-width:760px}
+/* ===== GEMINI-SITE5: permanent creative-simulation badge + stamp disclaimer ===== */
+.simbadge{display:inline-block;margin-top:10px;padding:7px 18px;border:2px solid var(--amber);
+  color:var(--amber);font-weight:bold;letter-spacing:3px;font-size:13px;background:rgba(138,92,0,.15);position:relative}
+.stampnote{position:absolute;top:66px;right:14px;font-size:9px;letter-spacing:1px;color:var(--dim);
+  transform:rotate(8deg);opacity:.9;max-width:140px;text-align:center;line-height:1.4}
 .sisters{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;position:relative}
 .sisters a{color:var(--green);border:1px solid var(--green-d);padding:5px 12px;font-size:12px;
   text-decoration:none;letter-spacing:1px;background:rgba(14,92,42,.12)}
@@ -171,6 +176,14 @@ details.fmeta .frow b{color:var(--ink)}
 .dossier .dhead{padding:22px 22px 14px;border-bottom:2px solid var(--red);position:relative;
   background:linear-gradient(180deg,rgba(122,14,24,.18),transparent)}
 .dossier .dhead .cls{color:var(--red-t);font-weight:bold;letter-spacing:2px;font-size:12px;margin-bottom:8px}
+/* ===== GEMINI-SITE5: classification disclaimer + large badge + sticky provenance chip ===== */
+.simnote{color:var(--amber);font-size:11px;letter-spacing:2px;margin:0 0 10px;font-weight:bold}
+.bigbadge{margin:10px 0;padding:12px 16px;border:2px solid;font-size:15px;font-weight:bold;letter-spacing:2px;line-height:1.4}
+.bigbadge .why{display:block;margin-top:8px;font-size:12px;font-weight:normal;letter-spacing:0;line-height:1.55}
+.bigbadge.bb-pub{border-color:var(--green);color:var(--green);background:rgba(14,92,42,.12)}
+.bigbadge.bb-spec{border-color:var(--red-t);color:var(--red-t);background:rgba(122,14,24,.14)}
+.bigbadge.bb-draft{border-color:var(--amber);color:var(--amber);background:rgba(138,92,0,.12)}
+.provchip{font-size:10px;letter-spacing:1px;color:var(--amber);border:1px solid var(--amber-d);padding:4px 8px;white-space:nowrap}
 .dossier h2{color:var(--amber);letter-spacing:2px;font-size:clamp(18px,3vw,28px);margin-bottom:4px}
 .dossier .did{color:var(--dim);font-size:12px;letter-spacing:1px}
 .dclose{position:absolute;top:12px;right:12px;background:#1a0205;border:1px solid var(--red);
@@ -285,10 +298,12 @@ details.fmeta .frow b{color:var(--ink)}
 <nav aria-label="JAH Network Global Ecosystem" role="navigation"><div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a><span class="jahnet-here">&#9670; YOU ARE HERE: JAH-N WIKI</span></div></nav>
 <div class="wrap" role="main">
   <div class="mast">
-    <div class="stamp">Declassified<br>for JAH-N</div>
+    <div class="stamp" title="Creative simulation — not a real government declassification">Declassified<br>for JAH-N</div>
+    <div class="stampnote">creative simulation — not a government archive</div>
     <h1>JAH-N <span class="leak">WIKI</span></h1>
+    <div class="simbadge">&#9632; CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE &#9632;</div>
     <div class="sub">&#9632; OFFICIAL REFERENCE ARCHIVE OF THE JAH-N SYSTEM — OFFICIAL WITHIN THE JAH-N SYSTEM ONLY &#9632;</div>
-    <div class="deets">The JAH governance leaking its own files: this is the JAH system's own internal archive, declassified and published by the JAH governance itself — JAH's own patent authority (the way Disney has its own money), not the USPTO, not a government agency. Every file in this archive — every spec dossier, every patent record, every bizarre-subject file — is reviewed by AI systems configured for medical, scientific, legal, technical, and other specialist domains (AI capability descriptions — not licensed professionals), and is officially signed off by the Creator, official <b>within the JAH-N system</b>. Each file carries its own <b style="color:var(--green)">personal AI</b> that answers your questions, full <b style="color:var(--green)">audio read-aloud</b>, one-click <b style="color:var(--green)">copy</b>, and downloadable <b style="color:var(--green)">AI disc / thumbdrive copies</b> for offline use.</div>
+    <div class="deets">The JAH governance leaking its own files: this is the JAH system's own internal archive, declassified and published by the JAH governance itself — JAH's own patent authority, not the USPTO, not a government agency. Every file in this archive — every spec dossier, every patent record, every bizarre-subject file — is reviewed by the Signature system's own internal AI classification process (internal system labeling only — not scientific, legal, or medical validation; AI capability descriptions are not licensed professionals), and is signed off by the Creator as an internal Signature-system record, official <b>within the JAH-N system only</b>. Each file carries its own <b style="color:var(--green)">personal AI</b> that answers your questions, full <b style="color:var(--green)">audio read-aloud</b>, one-click <b style="color:var(--green)">copy</b>, and downloadable <b style="color:var(--green)">AI disc / thumbdrive copies</b> for offline use.</div>
     <div class="sisters">
       <a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/" target="_blank" rel="noopener">Signature Spec Catalog Pending Patents</a>
       <a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/" target="_blank" rel="noopener">Globally Rejustered Patent Catalog</a>
@@ -557,6 +572,26 @@ function patentDossier(p){
     version:1,created:"",prov:PROV_PAT,
     badge:{type:"PATENT DOSSIER",status:"PUBLIC RECORD",source:"PUBLIC DOMAIN \u2014 REAL PUBLIC PATENT RECORD"}};
 }
+/* ===== GEMINI-SITE5: large per-dossier classification badge + why-you-see-this ===== */
+function badgeWhy(d){
+  if(d.kind==="patent")return {cls:"bb-pub",cat:"PUBLIC RECORD",
+    why:"Why am I seeing this? This dossier summarizes a REAL public patent record from the public domain. It is logged here as prior-art reference — it was never classified, never leaked, never secret."};
+  if(d.kind==="spec")return {cls:"bb-draft",cat:"JAH ANALYSIS",
+    why:"Why am I seeing this? This is a JAH original draft specification by Justin Addam Higgins — a draft ready to file, not a granted patent. The TOP SECRET styling is creative flavor for a JAH-N system record, not a real classification."};
+  return {cls:"bb-spec",cat:"SPECULATIVE",
+    why:"Why am I seeing this? This is a JAH-N speculative-analysis file — a creative simulation of a classified-style dossier. It is not a government document and describes no real classified program."};
+}
+function bigBadgeHTML(d){
+  var b=badgeWhy(d);
+  return '<div class="bigbadge '+b.cls+'">&#9632; '+esc(b.cat)+' — '+esc(d.badge.status)+' &#9632;'+
+    '<span class="why">'+esc(b.why)+'</span></div>';
+}
+function sourceRecordLine(d){
+  if(d.src)return '<p><b>SOURCE RECORD:</b> <a href="'+esc(d.src)+'" target="_blank" rel="noopener" style="color:var(--green)">'+esc(d.srclabel||"&#9654; OPEN SOURCE ARCHIVE")+'</a></p>';
+  if(d.corrob&&d.corrob.length)return '<p><b>SOURCE RECORD:</b> corroborating JAH specs: '+d.corrob.map(function(s){
+    return '<a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html?spec='+encodeURIComponent(s)+'" target="_blank" rel="noopener" style="color:var(--green)">'+esc(s)+'</a>'}).join(", ")+'</p>';
+  return '<p><b>SOURCE RECORD:</b> JAH original file — no external source record; provenance is the JAH-N system itself.</p>';
+}
 /* ================= viewer ================= */
 var CUR=null;
 function dossierText(d){
@@ -574,12 +609,14 @@ function openDossier(d){
   var ver=d.version||1; /* v1.0 baseline: additive dossier-version field, never rewriting history */
   var h='<div class="dhead"><button class="dclose" id="dclose" aria-label="Close dossier">CLOSE ✕</button>'+
     '<div class="cls">'+esc(d.classification)+'</div>'+
+    '<div class="simnote">&#9632; CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE &#9632;</div>'+
     '<div class="govline">'+esc(GOV_LINE)+'</div>'+
-    '<div class="filetag '+d.kind+'">&#9619; FILE CLASSIFICATION: '+esc(d.badge.status)+' &#9619;</div>'+
+    bigBadgeHTML(d)+
     '<h2>'+esc(d.subject)+'</h2><div class="did">'+esc(d.kindLabel)+' · '+esc(d.id)+
     (d.date?' · FILED '+esc(d.date):"")+'</div>'+
     '<div class="dver">DOSSIER VERSION v'+ver+'.0 · CONTENT HASH IN BADGE SECTION BELOW</div></div>';
   h+='<div class="dtools">'+
+    '<span class="provchip" title="Classification & provenance travel with every download">&#9632; '+esc(d.badge.status)+' · CREATIVE SIMULATION</span>'+
     '<button class="tbtn" id="t-ai">&#129302; ASK THE AI</button>'+
     '<button class="tbtn" id="t-read">&#128266; READ ALOUD</button>'+
     '<button class="tbtn" id="t-copy">&#128203; COPY ALL</button>'+
@@ -594,7 +631,7 @@ function openDossier(d){
     '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">'+(window.JAHtalk?jahHtml(JAHtalk.greet(jahProfile(d))):"I am the personal AI for this file — I answer <b>only</b> from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]. I never invent sources or patent numbers. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or the creator sign-off.")+'</div></div>'+
     '<div class="airow"><input class="aiinput" id="aiinput" maxlength="300" placeholder="Ask about this file...">'+
     '<button class="aisend" id="aisend">ASK</button></div></div>'+FILE_HELPER_HTML;
-  h+='<div class="dsec"><h4><span class="n">\u2593</span>FILE CLASSIFICATION &amp; PROVENANCE</h4><p>'+esc(badgeLines(d))+'</p></div>';
+  h+='<div class="dsec"><h4><span class="n">\u2593</span>FILE CLASSIFICATION &amp; PROVENANCE</h4><p>'+esc(badgeLines(d))+'</p>'+sourceRecordLine(d)+'</div>';
   d.sections.forEach(function(s,i){
     var ptag=(d.prov&&d.prov[s[0]])?'<span class="ptag">['+d.prov[s[0]]+']</span>':"";
     h+='<div class="dsec"><h4><span class="n">'+(i+1)+'</span>'+esc(s[0])+ptag+'</h4><p>'+esc(s[1])+'</p></div>'});
@@ -722,11 +759,11 @@ function aiAnswer(d,q){
     var s2=sec("SOURCES, WITNESSES & REFERENCES");
     if(s2)return "<b>[PUBLIC RECORD]</b> Sources listed in this file: "+esc(s2.slice(0,800))+(s2.length>800?"\u2026":"")+" I quote only what this file contains — I never invent sources.";
     return "<b>[UNKNOWN]</b> Not available in this dossier — this file lists no external source, and I will not invent one."}
-  if(has("official"))return "This file is official <b>within the JAH-N system only</b> — the JAH governance's own archive, not a government, USPTO, academic, or medical authority. Signed off by the Creator: Justin Addam Higgins (JAH).";
+  if(has("official"))return "This file is official <b>within the JAH-N system only</b> — the JAH governance's own archive, not a government, USPTO, academic, or medical authority. Signed off by the Creator: Justin Addam Higgins (JAH) — an internal Signature-system classification, not scientific, legal, or medical validation.";
   if(has("your duties","what do you do","what can you do","your job","your role","your abilities","explain your duties","help me")){
    if(window.JAHtalk)return jahHtml(JAHtalk.duties(jahProfile(d)));}
   if(has("what is","what's","whats","describe","about","subject"))return PT("OVERVIEW")+"<b>What it is:</b> "+esc(sec("OVERVIEW"));
-  if(has("classif","secret","clearance","level"))return "<b>Classification:</b> "+esc(d.classification)+". "+(d.kind==="patent"?"This one is a public record, logged as a reference — not classified.":"Handled as a "+esc(d.kindLabel.toLowerCase())+" of the JAH-N system.");
+  if(has("classif","secret","clearance","level"))return "<b>Classification:</b> "+esc(d.classification)+". "+(d.kind==="patent"?"This one is a public record, logged as a reference — not classified.":"Handled as a "+esc(d.kindLabel.toLowerCase())+" of the JAH-N system — an internal Signature-system classification (creative simulation), not a real clearance level.");
   if(has("assess","how does","how do","work","technical","analy"))return PT("TECHNICAL ASSESSMENT")+"<b>Technical assessment:</b> "+esc(sec("TECHNICAL ASSESSMENT"));
   if(has("science","physics","prove","evidence"))return PT("SCIENCE PROOF")+"<b>Science proof:</b> "+esc(sec("SCIENCE PROOF"));
   if(has("math","formula","equation","cover","calculat","number"))return PT("MATH PROOF")+"<b>Math proof:</b> "+esc(sec("MATH PROOF"));
