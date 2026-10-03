@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>try{if(localStorage.getItem('jah-theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}</script>
+<style>
+html[data-theme="dark"]{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"] canvas,html[data-theme="dark"] svg{filter:invert(1) hue-rotate(180deg)}
+#jah-theme-toggle{position:fixed;bottom:12px;right:12px;z-index:99999;opacity:.55;font-size:15px;line-height:1;padding:9px 11px;border-radius:50%;border:1px solid #888;background:rgba(128,128,128,.18);color:inherit;cursor:pointer;font-family:inherit}
+#jah-theme-toggle:hover{opacity:1}
+</style>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JAH-N Wiki — Official Reference Archive of the JAH-N System</title>
 <link id="canon" rel="canonical" href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">
@@ -318,6 +326,13 @@ details.fmeta .frow b{color:var(--ink)}
 .helper-input:focus{outline:none;border-color:var(--green)}
 .helper-send{background:var(--green-d);border:1px solid var(--green);color:#04140a;font:inherit;font-weight:700;padding:8px 14px;cursor:pointer;white-space:nowrap}
 </style>
+<meta property="og:title" content="JAH-N Wiki — Official Reference Archive of the JAH-N System">
+<meta property="og:description" content="The JAH-N reference archive (official within the JAH-N system only): top-secret dossiers on the spec files, public patent records, and bizarre subjects — every file with its own personal AI, read-aloud, copy, and downloadable AI disc/thumbdrive copies.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">
+<meta name="twitter:card" content="summary_large_card">
+<meta name="twitter:title" content="JAH-N Wiki — Official Reference Archive of the JAH-N System">
+<meta name="twitter:description" content="The JAH-N reference archive (official within the JAH-N system only): top-secret dossiers on the spec files, public patent records, and bizarre subjects — every file with its own personal AI, read-aloud, copy, and downloadable AI disc/thumbdrive copies.">
 </head>
 <body>
 <a class="skip" href="#grid">SKIP TO FILES</a>
@@ -1342,7 +1357,33 @@ JAHTALK_SRC,
 'speechSynthesis.speak(u);return}',
 'stopAll();FXL=fxChunks(t);FXI=0;fxNext()}',
 'function stopAll(){try{speechSynthesis.cancel()}catch(e){}if(FXA){try{FXA.pause()}catch(e){}FXA=null}}',
-'<\/script></body></html>'];
+'<\/script>
+<button id="jah-theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">&#9681;</button>
+<script>
+(function(){try{var b=document.getElementById('jah-theme-toggle');if(!b)return;function upd(){b.textContent=document.documentElement.getAttribute('data-theme')==='dark'?'\u2600':'\u25d0';}upd();b.addEventListener('click',function(){var dark=document.documentElement.getAttribute('data-theme')!=='dark';document.documentElement.setAttribute('data-theme',dark?'dark':'');try{localStorage.setItem('jah-theme',dark?'dark':'');}catch(e){}upd();});}catch(e){}})();
+</script>
+<script>
+/* JAH session restore: scroll + tabs + last record. localStorage only, nothing leaves the device. */
+(function(){try{
+var path=location.pathname.replace(/\/$/,'')||'/';
+var KEY='jah-session:'+path;
+var state={};try{state=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){state={};}
+var deep=/[?&](spec|patent|dossier|w|id|dial|q|query|term|word)=/i.test(location.search||'')||location.hash.length>1;
+if(state.y&&!deep){addEventListener('load',function(){setTimeout(function(){try{window.scrollTo(0,state.y);}catch(e){}},60);});}
+var t=null;addEventListener('scroll',function(){if(t)return;t=setTimeout(function(){t=null;try{state.y=window.scrollY||window.pageYOffset;localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}},600);},{passive:true});
+var tabs=[],sels=['[role="tab"]','.tab-button','.tabbtn','button.tab','a.tab','.wikitabs button'];
+for(var si=0;si<sels.length;si++){var n=document.querySelectorAll(sels[si]);for(var i=0;i<n.length;i++){if(tabs.indexOf(n[i])<0)tabs.push(n[i]);}}
+if(tabs.length){if(state.tab!=null&&tabs[state.tab]){addEventListener('load',function(){setTimeout(function(){try{tabs[state.tab].click();}catch(e){}},150);});}
+for(var k=0;k<tabs.length;k++){(function(el,i){el.addEventListener('click',function(){try{state.tab=i;localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}});})(tabs[k],k);}}
+var RP=/[?&](spec|patent|dossier|w|id|dial)=([^&#]+)/i.exec(location.search||'');
+if(RP){try{localStorage.setItem('jah-last-record',decodeURIComponent(RP[2]));}catch(e){}}
+document.addEventListener('click',function(ev){var a=ev.target&&ev.target.closest?ev.target.closest('a[href]'):null;if(!a)return;var m=/[?&](spec|patent|dossier|w|id|dial)=([^&#]+)/i.exec(a.getAttribute('href')||'');if(m){try{localStorage.setItem('jah-last-record',decodeURIComponent(m[2]));}catch(e){}}},true);
+if(!deep){var last=null;try{last=localStorage.getItem('jah-last-record');}catch(e){}
+if(last){addEventListener('load',function(){setTimeout(function(){try{var el=document.querySelector('[data-id="'+last+'"],[id*="'+last+'"],a[href*="'+last+'"]');if(el)el.scrollIntoView({block:'center'});}catch(e){}},300);});}}
+}catch(e){}})();
+</script>
+
+</body></html>'];
   return parts.join("\n");
 }
 function thumbPy(d){
