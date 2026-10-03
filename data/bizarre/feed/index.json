@@ -1,38 +1,38 @@
 {
  "feed": "JAH-N Wiki incremental dossier feed",
  "generated": "2026-10-03",
- "total_bizarre": 43140,
+ "total_bizarre": 44140,
  "feed_chunks": [
   {
    "file": "feed-0001.json",
    "count": 250,
    "id_range": [
-    "JAH-LEAK-B043140",
-    "JAH-LEAK-B042891"
+    "JAH-LEAK-B044140",
+    "JAH-LEAK-B043891"
    ]
   },
   {
    "file": "feed-0002.json",
    "count": 250,
    "id_range": [
-    "JAH-LEAK-B042890",
-    "JAH-LEAK-B042641"
+    "JAH-LEAK-B043890",
+    "JAH-LEAK-B043641"
    ]
   },
   {
    "file": "feed-0003.json",
    "count": 250,
    "id_range": [
-    "JAH-LEAK-B042640",
-    "JAH-LEAK-B042391"
+    "JAH-LEAK-B043640",
+    "JAH-LEAK-B043391"
    ]
   },
   {
    "file": "feed-0004.json",
    "count": 250,
    "id_range": [
-    "JAH-LEAK-B042390",
-    "JAH-LEAK-B042141"
+    "JAH-LEAK-B043390",
+    "JAH-LEAK-B043141"
    ]
   }
  ],
