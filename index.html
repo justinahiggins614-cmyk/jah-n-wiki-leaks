@@ -124,6 +124,19 @@ details.stattoggle>.stattoggle-s{display:none}
 #catchoice{background:#02040a;border:1px solid var(--line);color:var(--ink);padding:8px;
   font-family:inherit;font-size:12px;max-width:100%}
 .hits{color:var(--dim);font-size:12px;letter-spacing:2px;margin:8px 2px}
+/* USABILITY WAVE SITE5: disclaimer pinned beside the TOP SECRET banner (item 2) */
+.classbar .cls-disc{display:block;margin:6px auto 0;font-size:10px;letter-spacing:2px;color:#ffd9a8;
+  background:transparent;border:none;padding:0;font-weight:normal;max-width:640px}
+/* USABILITY WAVE SITE5: archive pagination pager (item 6) */
+.pager{text-align:center;margin:14px 0}
+.pgrange{color:var(--dim);font-size:11px;letter-spacing:2px;margin-bottom:8px}
+/* USABILITY WAVE SITE5: random-file button (item 7) */
+.randbtn{background:#02040a;border:1px solid var(--amber);color:var(--amber);padding:7px 12px;
+  font-family:inherit;font-size:12px;letter-spacing:2px;cursor:pointer;white-space:nowrap}
+.randbtn:hover{background:rgba(255,176,0,.12)}
+/* USABILITY WAVE SITE5: point-of-use not-validated warning on dossier views (item 14) */
+.novalid{border:1px dashed var(--amber);color:#ffd9a8;font-size:11px;letter-spacing:1px;
+  padding:8px 10px;margin-top:10px}
 /* ===== file cards ===== */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
 .fcard{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel2),var(--panel));
@@ -338,7 +351,7 @@ details.fmeta .frow b{color:var(--ink)}
 <a class="skip" href="#grid">SKIP TO FILES</a>
 <canvas id="stars" aria-hidden="true"></canvas>
 <div class="govbar"><b>JAH GOVERNANCE — OWN DECLASSIFIED INTERNAL ARCHIVE</b> &nbsp;·&nbsp; CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE &nbsp;·&nbsp; NOT AFFILIATED WITH ANY GOVERNMENT AGENCY</div>
-<div class="classbar"><span class="blink">TOP SECRET &#8212; JAH-N EYES ONLY &#8212; NOFORN</span></div>
+<div class="classbar"><span class="blink">TOP SECRET &#8212; JAH-N EYES ONLY &#8212; NOFORN</span><span class="cls-disc">&#9632; CREATIVE FLAVOR — NOT A REAL CLASSIFICATION &#9632;</span></div>
 <nav aria-label="JAH Network Global Ecosystem" role="navigation"><div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><span class="sitekicker">SITE 5 OF 27</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Depository</a><span class="jahnet-here">&#9670; YOU ARE HERE: JAH-N WIKI</span></div></nav>
 <div class="wrap" role="main">
   <div class="mast">
@@ -367,7 +380,7 @@ details.fmeta .frow b{color:var(--ink)}
   </details>
 
   <div class="ctrl">
-    <div class="searchrow"><input id="q" type="text" aria-label="Search all files" placeholder="SEARCH ALL FILES — subjects, titles, specs, patents..." autocomplete="off"><button class="clrbtn" id="qclear" aria-label="Clear search">✕</button><button class="typebtn" id="typebtn" aria-pressed="false" title="Toggle between terminal monospace and readable sans-serif type">TYPE: TERMINAL</button></div>
+    <div class="searchrow"><input id="q" type="text" aria-label="Search all files" placeholder="SEARCH ALL FILES — subjects, titles, specs, patents..." autocomplete="off"><button class="clrbtn" id="qclear" aria-label="Clear search">✕</button><button class="randbtn" id="randbtn" title="Open a random dossier from the archive">RANDOM FILE</button><button class="typebtn" id="typebtn" aria-pressed="false" title="Toggle between terminal monospace and readable sans-serif type">TYPE: TERMINAL</button></div>
     <div class="pills" id="pills">
       <button class="pill active" data-f="all">ALL FILES</button>
       <button class="pill" data-f="bizarre">BIZARRE FILES</button>
@@ -389,6 +402,7 @@ details.fmeta .frow b{color:var(--ink)}
   </div>
 
   <div class="grid" id="grid"></div>
+  <div class="pager" id="pager"></div>
 
   <div class="honest">
     <b>OFFICIAL NOTICE.</b> JAH-N Wiki is the JAH governance's own declassified internal archive — the JAH governance leaking its own files. It is an official reference work of the JAH-N system and a creative simulation: dossiers are analytical reference files, not real classified government documents, and are not affiliated with any government agency, the USPTO, or any external institution. "Official" means official <b>within the JAH-N system only</b>. Bizarre-subject files are speculative analyses grounded in real patent and spec records. All spec files are original draft works by <b>Justin Addam Higgins (JAH)</b> — drafts ready to file, never granted patents. Public patent records shown here are real public records, summarized from the public domain.
@@ -449,7 +463,8 @@ function loadSpecShard(sh){
 /* spec index row: 0=id 1=title 2=abstract 3=category 4=cpc 5=era 6=date 11=letter 12=line 19=mix_from 20=chunk */
 var BIZ=[], SPECS=[], PATENTS=[], specCount=0, patentCount=0, SPECS_DONE=false;
 var BIZIDX=[], BIZSHARDS=[{base:"",index:"data/bizarre/bizarre.idx.json.gz"}], CHUNKCACHE={};
-var state={f:"all", az:"", cat:"", q:""};
+var state={f:"all", az:"", cat:"", q:"", page:1};
+var PAGE_SIZE=240; /* USABILITY WAVE SITE5 item 6: archive pagination page size */
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function toast(m){var t=document.getElementById("toast");t.textContent=m;t.style.display="block";
   clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none"},2200)}
@@ -467,8 +482,14 @@ function gunzip(ab){return new Promise(function(res,rej){
   var ds=new DecompressionStream("gzip"),w=ds.writable.getWriter(),r=ds.readable.getReader();
   w.write(ab);w.close();var ch=[];
   (function pump(){r.read().then(function(o){if(o.done){res(ch.join(""))}else{ch.push(new TextDecoder().decode(o.value));pump()}})})()})}
-function loadJSONgz(url){return fetch(url).then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(gunzip)}
-function loadJSON(url){return fetch(url).then(function(r){if(!r.ok)throw 0;return r.json()})}
+function loadJSONgz(url){return fetchT(url).then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(gunzip)}
+function loadJSON(url){return fetchT(url).then(function(r){if(!r.ok)throw 0;return r.json()})}
+/* USABILITY WAVE SITE5 (network-wide): every async fetch carries a timeout —
+   controls go loading -> success / empty / error+retry, never hang on "…" */
+function fetchT(url,ms,opts){ms=ms||25000;return new Promise(function(res,rej){
+  var done=false,to=setTimeout(function(){if(!done){done=true;rej(new Error("timeout"))}},ms);
+  fetch(url,opts).then(function(r){if(!done){done=true;clearTimeout(to);res(r)}},
+                 function(e){if(!done){done=true;clearTimeout(to);rej(e)}})})}
 function loadBizarreIdx(){
   return loadJSON("data/bizarre/shards.json").then(function(d){if(d&&d.shards)BIZSHARDS=d.shards}).catch(function(){})
   .then(function(){
@@ -739,7 +760,8 @@ function openDossier(d){
     '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">'+(window.JAHtalk?jahHtml(JAHtalk.greet(jahProfile(d))):"I am the personal AI for this file — I answer <b>only</b> from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]. I never invent sources or patent numbers. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or the creator sign-off.")+'</div></div>'+
     '<div class="airow"><input class="aiinput" id="aiinput" maxlength="300" placeholder="Ask about this file...">'+
     '<button class="aisend" id="aisend">ASK</button></div></div>'+FILE_HELPER_HTML;
-  h+='<div class="dsec"><h4><span class="n">\u2593</span>FILE CLASSIFICATION &amp; PROVENANCE</h4><p>'+esc(badgeLines(d))+'</p>'+sourceRecordLine(d)+'</div>';
+  h+='<div class="dsec"><h4><span class="n">\u2593</span>FILE CLASSIFICATION &amp; PROVENANCE</h4><p>'+esc(badgeLines(d))+'</p>'+sourceRecordLine(d)+
+    '<div class="novalid"><b>NOT LEGAL / SCIENTIFIC / MEDICAL VALIDATION.</b> The analyses, proofs, and AI-panel assessments in this file are creative-simulation reference material of the JAH-N system — not professional, legal, scientific, or medical validation, and not advice. AI expert panels are AI personas, not licensed professionals.</div></div>';
   d.sections.forEach(function(s,i){
     var ptag=(d.prov&&d.prov[s[0]])?'<span class="ptag">['+d.prov[s[0]]+']</span>':"";
     var body=(s[0]==="SOURCES, WITNESSES & REFERENCES")?sourcesHTML(s[1],d.id):esc(s[1]);
@@ -1560,6 +1582,13 @@ function currentResults(){
     if(!okLetter(p[1]))continue;
     if(q&&hayRow("patent",k,p).indexOf(q)<0)continue;
     out.push({kind:"patent",p:p})}
+  /* USABILITY WAVE SITE5 item 5: exact ID lookup — an exact dossier-ID match
+     (JAH-LEAK-B######, JAH-SPEC-######, patent pub number) always sorts first */
+  if(q){var qx=state.q.toUpperCase(),ex=[],rest=[];
+    for(var ei=0;ei<out.length;ei++){var it=out[ei];
+      var iid=it.kind==="bizarre"?it.d.id:it.kind==="drip"?it.br[0]:it.kind==="spec"?it.r[0]:it.p[0];
+      if(String(iid).toUpperCase()===qx)ex.push(it);else rest.push(it);}
+    if(ex.length)return ex.concat(rest);}
   return out;
 }
 function cardHTML(it,idx){
@@ -1584,9 +1613,24 @@ document.addEventListener("click",function(e){
       if(dt.open)dt.removeAttribute("open");else dt.setAttribute("open","");}
   }
 },true);
+/* USABILITY WAVE SITE5 item 7: random dossier — picks from every loaded record and
+   opens it through the normal dossier path, so the URL becomes a real ?dossier=<id> link */
+function randomDossier(){
+  var pool=[],i;
+  for(i=0;i<BIZ.length;i++)pool.push({k:"bizarre",d:BIZ[i]});
+  for(i=0;i<BIZIDX.length;i++)pool.push({k:"drip",br:BIZIDX[i]});
+  for(i=0;i<SPECS.length;i++)pool.push({k:"spec",r:SPECS[i]});
+  for(i=0;i<PATENTS.length;i++)pool.push({k:"patent",p:PATENTS[i]});
+  if(!pool.length){toast("The archive is still loading — try again in a moment.");return}
+  var it=pool[Math.floor(Math.random()*pool.length)];
+  if(it.k==="bizarre")openDossier(bizarreDossier(it.d));
+  else if(it.k==="drip")openDripDossier(it.br);
+  else if(it.k==="spec")openDossier(specDossier(it.r));
+  else openDossier(patentDossier(it.p));
+}
 function render(){
   RES=currentResults();
-  var shown=RES.slice(0,240),g=document.getElementById("grid");
+  var shown=RES.slice(0,PAGE_SIZE*state.page),g=document.getElementById("grid");
   g.innerHTML=shown.map(cardHTML).join("");
   var cards=g.querySelectorAll(".fcard");
   for(var i=0;i<cards.length;i++)cards[i].onclick=function(e){
@@ -1598,7 +1642,19 @@ function render(){
     else openDossier(patentDossier(it.p));
   };
   var h=document.getElementById("hits");
-  h.textContent=RES.length?RES.length.toLocaleString()+" FILES MATCH"+(RES.length>240?" — SHOWING FIRST 240, REFINE SEARCH":""):"0 FILES MATCH — try a title, dossier ID, patent number, or browse A–Z";
+  h.textContent=RES.length?RES.length.toLocaleString()+" FILES MATCH":"0 FILES MATCH — try a title, dossier ID, patent number, or browse A–Z";
+  /* USABILITY WAVE SITE5 item 6: archive pagination — page forward instead of a hard 240 cap */
+  var pg=document.getElementById("pager");
+  if(pg){
+    if(RES.length>shown.length){
+      pg.innerHTML='<div class="pgrange">SHOWING '+shown.length.toLocaleString()+' OF '+RES.length.toLocaleString()+' FILES</div>'+
+        '<button class="pill" id="morebtn">SHOW MORE FILES &#9662;</button>';
+      document.getElementById("morebtn").onclick=function(){state.page++;render();
+        var p2=document.getElementById("pager");if(p2)p2.scrollIntoView({block:"nearest"})};
+    }else{
+      pg.innerHTML=RES.length>PAGE_SIZE?'<div class="pgrange">SHOWING ALL '+RES.length.toLocaleString()+' FILES</div>':"";
+    }
+  }
 }
 function renderStats(){
   var biz=BIZ.length+BIZIDX.length,total=SPECS.length+PATENTS.length+biz;
@@ -1617,7 +1673,7 @@ function renderStats(){
    drip run) — data-derived, visually separate from the dossier-count chips. */
 function showUpdated(){
   var el=document.getElementById("upd");
-  fetch("data/bizarre/state.json",{method:"HEAD"}).then(function(r){
+  fetchT("data/bizarre/state.json",15000,{method:"HEAD"}).then(function(r){
     var lm=r.headers.get("last-modified");
     if(lm){
       var d=new Date(lm);
@@ -1645,7 +1701,7 @@ function buildAZ(){
     if(e&&e.preventDefault)e.preventDefault();
     for(var j=0;j<ls.length;j++)ls[j].classList.remove("active");
     this.classList.add("active");
-    state.az=this.getAttribute("data-a");
+    state.az=this.getAttribute("data-a");state.page=1;
     try{history.replaceState(null,"",state.az?"?az="+state.az:"./")}catch(x){}
     render();
   };
@@ -1659,21 +1715,26 @@ function buildCats(){
   BIZ.forEach(function(d){if(!seen[d.category]){seen[d.category]=1;h+='<option>'+esc(d.category)+'</option>'}});
   BIZIDX.forEach(function(r){if(!seen[r[2]]){seen[r[2]]=1;h+='<option>'+esc(r[2])+'</option>'}});
   sel.innerHTML=h;
-  sel.onchange=function(){state.cat=this.value;render()};
+  sel.onchange=function(){state.cat=this.value;state.page=1;render()};
 }
 function wireControls(){
   var pills=document.getElementById("pills").querySelectorAll(".pill");
   for(var i=0;i<pills.length;i++)pills[i].onclick=function(){
     for(var j=0;j<pills.length;j++){pills[j].classList.remove("active");pills[j].setAttribute("aria-pressed","false")}
     this.classList.add("active");this.setAttribute("aria-pressed","true");
-    state.f=this.getAttribute("data-f");render();
+    state.f=this.getAttribute("data-f");state.page=1;render();
   };
   for(var a=0;a<pills.length;a++)pills[a].setAttribute("aria-pressed",pills[a].classList.contains("active")?"true":"false");
   var q=document.getElementById("q"),tm=null;
-  q.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(function(){state.q=q.value.trim();render()},220)});
+  q.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(function(){state.q=q.value.trim();state.page=1;render()},220)});
+  /* USABILITY WAVE SITE5: keyboard operability — Enter submits the search immediately */
+  q.addEventListener("keydown",function(e){if(e.key==="Enter"){clearTimeout(tm);state.q=q.value.trim();state.page=1;render()}});
   /* FIX-SITE5-6: clear-search control — one tap empties the box and re-renders */
   var qc=document.getElementById("qclear");
-  if(qc)qc.onclick=function(){q.value="";state.q="";clearTimeout(tm);render();q.focus()};
+  if(qc)qc.onclick=function(){q.value="";state.q="";state.page=1;clearTimeout(tm);render();q.focus()};
+  /* USABILITY WAVE SITE5 item 7: random dossier — opens a real ?dossier=<id> deep link */
+  var rb=document.getElementById("randbtn");
+  if(rb)rb.onclick=randomDossier;
   /* FIX-SITE5-4: terminal-monospace <-> readable sans-serif toggle, persisted */
   var tb=document.getElementById("typebtn");
   function setType(sans){
