@@ -6,6 +6,12 @@ Re-runnable data/page consistency checkers. Run from the repo root:
     python3 code/qa/check_dupe_ids.py   # duplicate IDs within/across sources (idx<->chunks overlap is by design, not flagged)
     python3 code/qa/check_missing_ids.py# idx ID continuity + every chunk file exists and contains its IDs (~20s)
     python3 code/qa/check_links.py      # live HTTP audit of every link the page can emit (nav, sisters, deep-link targets, data files, canonical network bar)
+    python3 code/qa/check_provenance.py # every dossier carries id/subject/classification/category/date_filed + sources (bizarre); exit 1 on any gap
+
+The 2h bizarre drip (code/drip_bizarre.py) runs a BUILD GATE on every new
+batch before it touches the index/state: duplicate IDs, ID-sequence breaks,
+and missing provenance fields fail the run with exit 1 (chunk files stay
+orphaned but are rewritten by the next run; nothing partial is published).
 
 Exit 0 = pass, 1 = findings. Ground truth as of 2026-10-01: 120 base + 28,020
 drip bizarre dossiers (28,140 total bizarre), 12,748 patent dossiers, zero dupes,

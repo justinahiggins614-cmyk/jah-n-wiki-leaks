@@ -167,6 +167,7 @@ def main():
     print(f"  {len(subjects)} base subjects x {len(ASPECTS)} aspects", flush=True)
 
     chunk_name = None
+    written_chunks = []
     chunk, idx_rows = [], []
     made = 0
     for k in range(batch):
@@ -180,6 +181,7 @@ def main():
             with gzip.open(os.path.join(CHUNKDIR, chunk_name + ".json.gz"), "wt", encoding="utf-8") as fh:
                 json.dump(chunk, fh, ensure_ascii=False)
             print(f"  wrote {chunk_name}: {len(chunk)} dossiers", flush=True)
+            written_chunks.append(chunk_name)
             chunk = []
             st["next_chunk"] += 1
         made += 1
@@ -187,7 +189,50 @@ def main():
         with gzip.open(os.path.join(CHUNKDIR, chunk_name + ".json.gz"), "wt", encoding="utf-8") as fh:
             json.dump(chunk, fh, ensure_ascii=False)
         print(f"  wrote {chunk_name}: {len(chunk)} dossiers", flush=True)
+        written_chunks.append(chunk_name)
         st["next_chunk"] += 1
+
+    # ---- BUILD GATE: validate the new batch BEFORE it touches the index/state ----
+    # (fail here leaves chunk files orphaned but harmless: next_chunk is only
+    #  bumped in save_state(), so the next run rewrites the same chunk names)
+    import glob as _glob
+    gate_errors = []
+    seen_batch = set()
+    batch_all = []
+    for _cf in sorted(_glob.glob(os.path.join(CHUNKDIR, "biz-c*.json.gz"))):
+        _base = os.path.basename(_cf)
+        try:
+            _n = int(_base[5:11])
+        except ValueError:
+            continue
+        if _n < st["next_chunk"] - len(written_chunks) or _n >= st["next_chunk"]:
+            continue
+        with gzip.open(_cf, "rt", encoding="utf-8") as _fh:
+            for _ln in _fh:
+                _ln = _ln.strip()
+                if _ln:
+                    batch_all.extend(json.loads(_ln))
+    exp_id = st["next_id"]
+    for d in batch_all:
+        did = d.get("id", "")
+        if did in seen_batch:
+            gate_errors.append(f"gate: duplicate ID in new batch: {did}")
+        seen_batch.add(did)
+        want = f"JAH-LEAK-B{exp_id:06d}"
+        if did != want:
+            gate_errors.append(f"gate: ID sequence break: got {did}, want {want}")
+        exp_id += 1
+        for f in ("subject", "classification", "category", "date_filed", "sources"):
+            if not d.get(f):
+                gate_errors.append(f"gate: missing {f} on {did}")
+    if len(batch_all) != made:
+        gate_errors.append(f"gate: chunk rows {len(batch_all)} != made {made}")
+    if gate_errors:
+        print("BUILD GATE FAILED — index/state NOT updated:", flush=True)
+        for e in gate_errors[:20]:
+            print("  " + e, flush=True)
+        sys.exit(1)
+    print(f"  build gate passed: {len(batch_all)} new dossiers, IDs sequential, provenance complete", flush=True)
 
     # append to index (rewrite gz)
     existing = []

@@ -167,6 +167,21 @@ details.fmeta .frow b{color:var(--ink)}
 .method dd a{color:var(--green)}
 .method .disc{color:#fff;font-weight:bold;letter-spacing:1px}
 .redact{background:#000;color:transparent;border:1px solid #222;user-select:none}
+/* claim-level source citations + report panel (additive, dossier integrity pass) */
+.srcnum{font-family:Arial,sans-serif;font-size:.8em;font-weight:bold;color:#ffd75e;background:#2a2410;border:1px solid #6b5f2a;border-radius:3px;padding:0 4px;margin-right:4px;text-decoration:none;white-space:nowrap}
+.srcnum:hover{background:#4a4018}
+.srcnote{font-family:Arial,sans-serif;font-size:.78em;color:#8a8f7a;margin-top:8px}
+.rptpanel{border:1px solid #6b5f2a;background:#141310;border-radius:6px;padding:12px;margin:10px 0;font-family:Arial,sans-serif}
+.rptpanel h4{margin:0 0 6px}
+.rptnote{font-size:.82em;color:#b9b3a0;margin:0 0 10px}
+.rptlab{display:block;font-size:.8em;font-weight:bold;color:#ffd75e;margin:8px 0 4px}
+.rptin{display:block;width:100%;box-sizing:border-box;background:#0c0c0c;color:#e8e4d8;border:1px solid #444;border-radius:4px;padding:8px;font-size:.9em;font-family:Arial,sans-serif}
+.rptpriv{font-size:.82em;color:#ffb3a0;background:#2a1410;border:1px solid #6b3a2a;border-radius:4px;padding:8px;margin:8px 0}
+.rptout{margin-top:10px;font-size:.85em}
+.rptok{color:#9fe6a0}.rptbad{color:#ff9a8a}
+.rptlist{margin-top:10px;font-size:.82em}
+.rptitem{border-top:1px solid #333;padding:6px 0}
+.rptst{color:#8a8f7a}.rptnone{color:#8a8f7a;font-size:.85em}
 /* ===== dossier viewer ===== */
 #viewer{position:fixed;inset:0;z-index:9500;display:none;overflow-y:auto;background:rgba(0,0,0,0.8);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
   padding:18px 10px 90px}
@@ -371,6 +386,8 @@ details.fmeta .frow b{color:var(--ink)}
       <dd>Bizarre-subject dossiers carry permanent IDs of the form <b>JAH-LEAK-B######</b> (e.g. JAH-LEAK-B0001). IDs are sequential, permanent, and never re-used; every ID listed in the sitemap opens its dossier at <b>?dossier=&lt;id&gt;</b>. Spec dossiers use JAH-SPEC-###### IDs and open the same way; patent dossiers use the public patent publication number as their ID. Every ID is stable across versions.</dd>
       <dt>CLASSIFICATION SYSTEM</dt>
       <dd>Each dossier carries a <b>FILE CLASSIFICATION</b> tag and a classification banner. Dossier types: <b>BIZARRE FILE</b> (speculative analysis), <b>SPEC DOSSIER</b> (original draft by Justin Addam Higgins, JAH — draft, ready to file, not a granted patent), <b>PATENT DOSSIER</b> (real public record, summarized from the public domain). Classification labels are per-file and travel with the file in every download (dossier.txt, dossier.json, AI disc, AI thumbdrive).</dd>
+      <dt>NAME &amp; SCOPE — WHAT "WIKI LEAKS" MEANS HERE</dt>
+      <dd>The name <b>JAH-N Wiki Leaks</b> is this archive's own title — it does <b>not</b> mean every file is leaked or confidential material. <b>BIZARRE FILE</b> and <b>SPEC DOSSIER</b> records are the JAH system's own internally published files (creative simulation, declassified-by-the-system framing) — they were never secret government documents and were never "leaked" from anywhere. Only <b>PATENT DOSSIER</b> records summarize real public records, and they are labeled <b>PUBLIC RECORD</b> on the file itself, never presented as leaked or classified. If a file is publicly available, it is labeled public; the TOP SECRET styling on JAH-N internal files is creative flavor for a system record, not a real classification.</dd>
       <dt>SOURCE / PROVENANCE PER RECORD</dt>
       <dd>Every dossier carries a machine-readable <b>FILE CLASSIFICATION &amp; PROVENANCE</b> section and a per-section provenance tag — <b>[PUBLIC RECORD]</b>, <b>[JAH ANALYSIS]</b>, <b>[SPECULATIVE]</b>, <b>[JAH ORIGINAL]</b>, <b>[JAH OFFICIAL]</b>, or <b>[UNKNOWN]</b> — plus a SOURCES / WITNESSES / REFERENCES section where public-record material is used. The complete file package download includes dossier.json with full provenance and a content hash.</dd>
       <dt>STATIC INDEXES &amp; FEEDS</dt>
@@ -507,8 +524,22 @@ function panelHTML(pan,verdict){
   return pan.map(function(p,i){
     return "<p><b>"+esc(p[0])+"</b> — "+esc(p[1])+": "+esc(verdict[i%verdict.length])+"</p>"}).join("");
 }
+/* claim-level source anchors: every "•" bullet in the SOURCES section becomes a
+   numbered, linkable citation [S1]..[Sn] so a claim can point at its exact source block */
+function sourcesHTML(txt,did){
+  var n=0,lines=String(txt==null?"":txt).split("\n"),out=[];
+  for(var i=0;i<lines.length;i++){
+    var m=/^(\s*)[•·\-]\s?([\s\S]*)$/.exec(lines[i]);
+    if(m&&m[2].replace(/\s/g,"").length>3){
+      n++;
+      out.push(m[1]+'<a class="srcnum" id="SRC-'+esc(did)+'-'+n+'" href="#SRC-'+esc(did)+'-'+n+'" title="Source '+n+' of dossier '+esc(did)+' — copy this link to cite it">[S'+n+']</a> '+esc(m[2]));
+    }else{out.push(esc(lines[i]));}
+  }
+  if(n>0)out.push('<div class="srcnote">Each [Sn] marker is a permanent citation anchor for this dossier — link or quote it when citing this file.</div>');
+  return out.join("\n");
+}
 /* ================= dossier model ================= */
-/* dossier: {id,kind,subject,classification,sections:[[h,t]..],panel,corrob,src,badge,prov,version,created} */
+/* dossier: {id,kind,subject,classification,sections:[[h,t]..],panel,corrob,src,badge,prov,verif,version,created,updated} */
 /* JAH-N governance framing: every file carries its badge + provenance INSIDE the file,
    so classification survives sharing outside this site and AI ingestion. */
 var GOV_LINE="JAH GOVERNANCE \u2014 OWN DECLASSIFIED INTERNAL ARCHIVE \u00b7 CREATIVE SIMULATION \u00b7 NOT A GOVERNMENT ARCHIVE \u00b7 NOT AFFILIATED WITH ANY GOVERNMENT AGENCY";
@@ -530,6 +561,8 @@ function badgeLines(d){
    "OFFICIAL SCOPE: official within the JAH-N system only \u2014 not a government/USPTO/academic/medical authority",
    GOV_LINE,
    "VERSION: "+(d.version||1)+" \u00b7 PREVIOUS: "+(d.prev||"none (first version)")+" \u00b7 CREATED: "+(d.created||"unknown"),
+   "UPDATED: "+(d.updated||d.created||"unknown")+" (v1.0 baseline \u2014 corrections publish as new versions, never silent edits)",
+   "VERIFICATION: "+(d.verif||"UNVERIFIED"),
    "CONTENT HASH: "+dossierHash(d),
    "SECTION PROVENANCE: "+Object.keys(d.prov).map(function(k){return k+"=["+d.prov[k]+"]"}).join(" \u00b7 ")].join("\n");
 }
@@ -542,7 +575,8 @@ function bizarreDossier(d){
   secs.push(["CREATOR SIGN-OFF",d.creator_signoff]);
   return {id:d.id,kind:"bizarre",subject:d.subject,classification:d.classification,
     sections:secs,panel:d.panel,corrob:corrob,date:d.date_filed,
-    cat:d.category,kindLabel:"BIZARRE FILE",version:d.version||1,created:d.date_filed||"",
+    cat:d.category,kindLabel:"BIZARRE FILE",version:d.version||1,created:d.date_filed||"",updated:d.date_filed||"",
+    verif:d.sources?"PARTIALLY VERIFIED \u2014 public-record sources cited in the SOURCES section; analysis sections are JAH simulation, not established fact":"UNVERIFIED \u2014 SPECULATIVE (no public-record sources cited)",
     prov:PROV_BIZ,
     badge:{type:"BIZARRE FILE",status:"SPECULATIVE ANALYSIS",source:"JAH ORIGINAL + PUBLIC-RECORD MATERIAL (see SOURCES section)"}};
 }
@@ -563,7 +597,8 @@ function specDossier(r){
    ["CREATOR SIGN-OFF","REVIEWED, VERIFIED, AND OFFICIALLY SIGNED OFF BY THE CREATOR — Justin Addam Higgins (JAH), 2026-09-29. This file is an official reference file of the JAH-N system."]  ];
   return {id:id,kind:"spec",subject:title,classification:"TOP SECRET // JAH-N // "+letter+" // NOFORN",
     sections:secs,panel:pan,corrob:[],date:r[6]||"",cat:cat,kindLabel:"SPEC DOSSIER",
-    src:SPEC_SITE+"specs.html?spec="+encodeURIComponent(id),srclabel:"&#9654; OPEN IN SPEC ARCHIVE",chunk:r[20],version:1,created:r[6]||"",prov:PROV_SPEC,
+    src:SPEC_SITE+"specs.html?spec="+encodeURIComponent(id),srclabel:"&#9654; OPEN IN SPEC ARCHIVE",chunk:r[20],version:1,created:r[6]||"",updated:r[6]||"",
+    verif:"JAH ORIGINAL \u2014 self-attested draft by Justin Addam Higgins; not independently verified; not a granted patent",prov:PROV_SPEC,
     badge:{type:"SPEC DOSSIER",status:"ORIGINAL DRAFT \u2014 READY TO FILE",source:"JAH ORIGINAL"}};
 }
 function patentDossier(p){
@@ -583,7 +618,8 @@ function patentDossier(p){
   return {id:pub,kind:"patent",subject:title,classification:"UNCLASSIFIED // PUBLIC RECORD // JAH-N REF",
     sections:secs,panel:pan,corrob:[],date:"",cat:cpc,kindLabel:"PATENT DOSSIER",
     src:"https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/?patent="+encodeURIComponent(pub),srclabel:"&#9654; OPEN IN PATENT CATALOG",
-    version:1,created:"",prov:PROV_PAT,
+    version:1,created:"",updated:"",
+    verif:"PUBLIC RECORD \u2014 real public patent record summarized from the public domain; source available via the patent catalog",prov:PROV_PAT,
     badge:{type:"PATENT DOSSIER",status:"PUBLIC RECORD",source:"PUBLIC DOMAIN \u2014 REAL PUBLIC PATENT RECORD"}};
 }
 /* ===== GEMINI-SITE5: large per-dossier classification badge + why-you-see-this ===== */
@@ -654,6 +690,7 @@ function openDossier(d){
     '<button class="tbtn" id="t-read">&#128266; READ ALOUD</button>'+
     '<button class="tbtn" id="t-copy">&#128203; COPY ALL</button>'+
     '<button class="tbtn" id="t-copyid">\u29C9 COPY FILE ID</button>'+
+    '<button class="tbtn" id="t-report" title="Report an error, wrong classification, broken source, privacy concern, or copyright issue. You get a tracking ID; corrections publish as new dossier versions, never silent edits.">\u2691 REPORT ISSUE</button>'+
     '<button class="tbtn amber" id="t-zip" title="Complete file package (.zip): dossier.txt + dossier.json (machine-readable, version + content hash) + AI disc (.html) + AI thumbdrive (.py) + README with format, platform, and runtime details">&#11015; DOWNLOAD ALL</button>'+
     '<button class="tbtn amber" id="t-disc" title="AI Disc (.html): self-contained offline copy of this dossier — full text, personal AI, read-aloud. Runs in any modern browser; no internet needed.">&#128190; AI DISC (.html)</button>'+
     '<button class="tbtn amber" id="t-py" title="AI Thumbdrive (.py): offline terminal personal AI for this dossier. Run with Python 3 on Windows, macOS, or Linux.">&#128190; AI THUMBDRIVE (.py)</button>'+
@@ -669,6 +706,19 @@ function openDossier(d){
    '<div class="jahprov">PROVENANCE &middot; '+esc(d.badge.source||"JAH-N archive")+' &middot; dossier v'+ver+'.0 &middot; classification travels with every download</div></div>'+
     (d.src?'<a class="tbtn amber" href="'+esc(d.src)+'" target="_blank" rel="noopener" style="text-decoration:none" title="Open the source record in its home archive (same file ID)">'+(d.srclabel||"&#9654; OPEN SOURCE ARCHIVE")+'</a>':"")+
     '</div>';
+  h+='<div class="rptpanel" id="rptpanel" hidden><h4><span class="n">\u2691</span>REPORT AN ISSUE — '+esc(d.id)+'</h4>'+
+    '<p class="rptnote">Reports are logged on this device and queued for review. Corrections publish as <b>new dossier versions</b> — records are never silently edited. You will receive a tracking ID below.</p>'+
+    '<label class="rptlab" for="rptcat">Issue type</label>'+
+    '<select class="rptin" id="rptcat">'+
+    '<option>Incorrect fact or claim</option><option>Wrong classification / status</option>'+
+    '<option>Broken or wrong source link</option><option>Duplicate dossier</option>'+
+    '<option>Privacy concern \u2014 request redaction</option><option>Copyright concern</option><option>Other</option></select>'+
+    '<div class="rptpriv" id="rptpriv" hidden>Privacy requests: describe exactly which personal information should be redacted and why. Unnecessary private personal data (addresses, contact details, credentials, financial data) is redacted on review; legitimate public-record information is preserved. Do not include the sensitive data itself in this report unless required to identify it.</div>'+
+    '<label class="rptlab" for="rpttxt">Details</label>'+
+    '<textarea class="rptin" id="rpttxt" rows="3" maxlength="2000" placeholder="What is wrong, and what should it say instead?"></textarea>'+
+    '<button class="tbtn amber" id="rptsend">SUBMIT REPORT</button>'+
+    '<div class="rptout" id="rptout"></div>'+
+    '<div class="rptlist" id="rptlist"></div></div>';
   h+='<div class="aichat" id="aichat"><h5>PERSONAL AI — your '+esc(d.id)+' assistant</h5>'+
   '<div class="jah-aiid" role="note" aria-label="AI identity card"><b>AI IDENTITY</b> &middot; <b>Name:</b> Personal AI for '+esc(d.id)+' &middot; <b>Duties:</b> answers only from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]; never invents sources or patent numbers &middot; <b>Engine:</b> Signature Llama v2 (word-level, on-device) \u00B7 JAHtalk basic-LLM fallback (on-device)</div>'+
     '<div class="aimsgs" id="aimsgs"><div class="aimsg ai">'+(window.JAHtalk?jahHtml(JAHtalk.greet(jahProfile(d))):"I am the personal AI for this file — I answer <b>only</b> from this file, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN]. I never invent sources or patent numbers. Ask me what it is, how the assessment works, the science and math proofs, what the expert panel said, the officer conclusion, or the creator sign-off.")+'</div></div>'+
@@ -677,7 +727,8 @@ function openDossier(d){
   h+='<div class="dsec"><h4><span class="n">\u2593</span>FILE CLASSIFICATION &amp; PROVENANCE</h4><p>'+esc(badgeLines(d))+'</p>'+sourceRecordLine(d)+'</div>';
   d.sections.forEach(function(s,i){
     var ptag=(d.prov&&d.prov[s[0]])?'<span class="ptag">['+d.prov[s[0]]+']</span>':"";
-    h+='<div class="dsec"><h4><span class="n">'+(i+1)+'</span>'+esc(s[0])+ptag+'</h4><p>'+esc(s[1])+'</p></div>'});
+    var body=(s[0]==="SOURCES, WITNESSES & REFERENCES")?sourcesHTML(s[1],d.id):esc(s[1]);
+    h+='<div class="dsec"><h4><span class="n">'+(i+1)+'</span>'+esc(s[0])+ptag+'</h4><p>'+body+'</p></div>'});
   if(d.corrob&&d.corrob.length){
     h+='<div class="dsec corrob"><h4><span class="n">✚</span>CORROBORATING SPEC FILES</h4><p>'+
       d.corrob.map(function(c){return '<a class="corroblink" data-spec="'+esc(c)+'">'+esc(c)+'</a>'}).join("")+'</p></div>'}
@@ -729,6 +780,14 @@ function openDossier(d){
   document.getElementById("t-read").onclick=function(){auReadDossier()};
   document.getElementById("t-copy").onclick=function(){copyDossier()};
   document.getElementById("t-copyid").onclick=function(){copyFileId()};
+  /* REPORT ISSUE: local log + deterministic tracking ID; corrections land as new versions */
+  document.getElementById("t-report").onclick=function(){
+    var p=document.getElementById("rptpanel");p.hidden=!p.hidden;renderRptList();
+  };
+  document.getElementById("rptcat").onchange=function(){
+    document.getElementById("rptpriv").hidden=(this.value.indexOf("Privacy")!==0);
+  };
+  document.getElementById("rptsend").onclick=function(){submitReport()};
   document.getElementById("t-zip").onclick=function(){downloadAllZip()};
   document.getElementById("t-disc").onclick=function(){downloadDisc()};
   document.getElementById("t-py").onclick=function(){downloadThumb()};
@@ -845,6 +904,32 @@ function copyFileId(){
   function done(){toast("File ID copied: "+CUR.id)}
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,function(){toast("Copy failed \u2014 select the text manually.")})}
   else toast("Copy failed \u2014 select the text manually.");
+}
+/* ================= report issue (local log + tracking ID) ================= */
+function rptStore(){try{return JSON.parse(localStorage.getItem("jahn_reports")||"[]")}catch(e){return[]}}
+function rptSave(a){try{localStorage.setItem("jahn_reports",JSON.stringify(a))}catch(e){}}
+function submitReport(){
+  if(!CUR)return;
+  var cat=document.getElementById("rptcat").value;
+  var txt=document.getElementById("rpttxt").value.trim();
+  var out=document.getElementById("rptout");
+  if(!txt){out.innerHTML='<span class="rptbad">Describe the issue first.</span>';return}
+  var num=String(CUR.id).replace(/[^0-9]/g,"")||"000000";
+  var hx=("0000"+Math.floor(Math.random()*65536).toString(16)).slice(-4).toUpperCase();
+  var rid="JAH-RPT-"+num+"-"+hx;
+  var all=rptStore();
+  all.push({id:rid,dossier:CUR.id,subject:CUR.subject,cat:cat,text:txt.slice(0,2000),ts:new Date().toISOString(),status:"LOGGED — QUEUED FOR REVIEW"});
+  rptSave(all);
+  document.getElementById("rpttxt").value="";
+  out.innerHTML='<span class="rptok">Report logged. Tracking ID: <b>'+rid+'</b><br>Corrections publish as new dossier versions \u2014 records are never silently edited.</span>';
+  renderRptList();
+}
+function renderRptList(){
+  if(!CUR)return;var box=document.getElementById("rptlist");if(!box)return;
+  var mine=rptStore().filter(function(r){return r.dossier===CUR.id});
+  if(!mine.length){box.innerHTML='<div class="rptnone">No reports yet for this dossier on this device.</div>';return}
+  box.innerHTML='<b>Your reports for this dossier ('+mine.length+'):</b>'+mine.map(function(r){
+    return '<div class="rptitem"><b>'+esc(r.id)+'</b> \u00b7 '+esc(r.cat)+' \u00b7 '+esc(r.ts.slice(0,10))+'<br><span class="rptst">'+esc(r.status)+'</span></div>'}).join("");
 }
 /* ================= read aloud ================= */
 var AU={q:[],i:0,active:false,paused:false,rate:1,label:""};
@@ -1381,7 +1466,7 @@ function downloadAllZip(){
   if(!CUR)return;var d=CUR,base=d.id+"/";
   var files=[
     {name:base+"dossier.txt",data:dossierText(d)},
-    {name:base+"dossier.json",data:JSON.stringify({id:d.id,kind:d.kind,kindLabel:d.kindLabel,subject:d.subject,classification:d.classification,governance:GOV_LINE,badge:d.badge,provenance:d.prov,version:d.version||1,created:d.created||"",content_hash:dossierHash(d),sections:d.sections,corroborating:d.corrob||[]},null,2)+"\n"},
+    {name:base+"dossier.json",data:JSON.stringify({id:d.id,kind:d.kind,kindLabel:d.kindLabel,subject:d.subject,classification:d.classification,governance:GOV_LINE,badge:d.badge,provenance:d.prov,verification:d.verif||"UNVERIFIED",version:d.version||1,created:d.created||"",updated:d.updated||d.created||"",content_hash:dossierHash(d),canonical_url:"https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier="+encodeURIComponent(d.id),sections:d.sections,corroborating:d.corrob||[]},null,2)+"\n"},
     {name:base+d.id+"-AI-DISC.html",data:discHTML(d)},
     {name:base+d.id+"-AI-THUMBDRIVE.py",data:thumbPy(d)},
     {name:base+"README.txt",data:dossierReadme(d)}
