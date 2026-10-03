@@ -637,7 +637,7 @@ def build_dossier(i, cat, subject, overview, keywords, spec_rows):
     )
 
     return {
-        "id": f"JAH-LEAK-B{i:04d}",
+        "id": f"JAH-LEAK-B{i:06d}",
         "kind": "bizarre",
         "category": label,
         "cat_code": cat,
