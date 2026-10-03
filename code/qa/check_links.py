@@ -52,7 +52,7 @@ def main():
     # cross-site deep-link targets used by wikiURL()/patentDossier()
     urls.add("https://justinahiggins614-cmyk.github.io/jah-wiki/")
     urls.add("https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/")
-    # canonical JAH NETWORK destinations (all 25 sites)
+    # canonical JAH NETWORK destinations (all 27 sites)
     urls.update([
         "https://justinahiggins614-cmyk.github.io/jah-ai-models/",
         "https://justinahiggins614-cmyk.github.io/jah-calculator/",
