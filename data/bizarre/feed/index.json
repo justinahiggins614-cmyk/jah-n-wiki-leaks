@@ -1,0 +1,40 @@
+{
+ "feed": "JAH-N Wiki incremental dossier feed",
+ "generated": "2026-10-02",
+ "total_bizarre": 41140,
+ "feed_chunks": [
+  {
+   "file": "feed-0001.json",
+   "count": 250,
+   "id_range": [
+    "JAH-LEAK-B41140",
+    "JAH-LEAK-B40891"
+   ]
+  },
+  {
+   "file": "feed-0002.json",
+   "count": 250,
+   "id_range": [
+    "JAH-LEAK-B40890",
+    "JAH-LEAK-B40641"
+   ]
+  },
+  {
+   "file": "feed-0003.json",
+   "count": 250,
+   "id_range": [
+    "JAH-LEAK-B40640",
+    "JAH-LEAK-B40391"
+   ]
+  },
+  {
+   "file": "feed-0004.json",
+   "count": 250,
+   "id_range": [
+    "JAH-LEAK-B40390",
+    "JAH-LEAK-B40141"
+   ]
+  }
+ ],
+ "note": "Newest dossiers first, 250 per chunk. The 2h bizarre drip regenerates this feed, so scrapers can diff index.json against their last fetch to find new files."
+}
