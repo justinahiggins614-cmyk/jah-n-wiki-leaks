@@ -1,4 +1,4 @@
-# JAH-N Wiki QA checkers (TIER 2-8)
+# Wiki Leaks QA checkers (TIER 2-8)
 
 Re-runnable data/page consistency checkers. Run from the repo root:
 
