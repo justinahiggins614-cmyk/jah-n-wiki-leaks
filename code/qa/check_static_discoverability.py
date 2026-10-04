@@ -91,8 +91,8 @@ if not mm:
     note("#methodology section missing")
 else:
     sec = mm.group(0)
-    if "CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE" not in sec:
-        note("methodology lacks 'CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE'")
+    if "INTERNAL SIGNATURE ARCHIVE — NOT A GOVERNMENT ARCHIVE" not in sec:
+        note("methodology lacks 'INTERNAL SIGNATURE ARCHIVE — NOT A GOVERNMENT ARCHIVE'")
     if "NOT AFFILIATED WITH ANY GOVERNMENT AGENCY" not in sec:
         note("methodology lacks 'NOT AFFILIATED WITH ANY GOVERNMENT AGENCY'")
     for term in ("JAH-LEAK-B######", "FILE CLASSIFICATION", "PROVENANCE", "v1.0", "never re-used"):

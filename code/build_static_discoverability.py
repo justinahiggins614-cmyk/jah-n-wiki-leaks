@@ -110,7 +110,7 @@ def static_page(title, h1, body_html, note):
             "<h1>" + esc(h1) + "</h1>"
             "<div class=\"note\">" + note + "</div>"
             + body_html +
-            "<div class=\"note\">CREATIVE SIMULATION — NOT A GOVERNMENT ARCHIVE. "
+            "<div class=\"note\">INTERNAL SIGNATURE ARCHIVE — NOT A GOVERNMENT ARCHIVE. "
             "NOT AFFILIATED WITH ANY GOVERNMENT AGENCY. Official within the JAH-N system only.</div>"
             "</body></html>")
 

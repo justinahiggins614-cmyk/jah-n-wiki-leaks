@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate the Bizarre Files dossiers for the JAH-N Wiki Leaks site.
 
-Each dossier is a simulated classified file: overview, technical assessment
+Each dossier is an internal analysis file in classified-dossier style: overview, technical assessment
 grounded in ACTUAL specs from the JAH spec catalog (cross-referenced by
 keyword match), science proof, math sketch, AI specialist review panel,
 officer conclusion, and official creator sign-off.
@@ -27,8 +27,8 @@ TODAY = date.today().isoformat()
 # ------------------------------------------------- real-world sources DB ---
 # code/subject_sources.json: per-subject packs of REAL public-record material
 # (facts/measurements, named witnesses, public investigations, references).
-# Researched and verified; the ONLY simulated layer in a dossier is the
-# JAH-N assessment/panel/simulation framing, marked as such in the text.
+# Researched and verified; the ONLY internal-analysis layer in a dossier is the
+# JAH-N assessment/panel/analysis framing, marked as such in the text.
 SOURCES_PATH = os.path.join(HERE, "subject_sources.json")
 _SOURCES_DB = None
 def _load_sources():
@@ -51,7 +51,7 @@ def sources_text(subject):
     L = []
     L.append("The public-world record for this subject. Everything below is drawn from")
     L.append("published reports, named witnesses, and openly documented investigations —")
-    L.append("not from the simulation layer.")
+    L.append("not from the organization's internal analysis layer.")
     facts = pack.get("facts") or []
     if facts:
         L.append("")
@@ -82,7 +82,7 @@ def sources_text(subject):
         L.append("CAVEAT: " + cav)
     L.append("")
     L.append("SYSTEM NOTE: the JAH-N technical assessment, AI review panel, and divergence")
-    L.append("simulation elsewhere in this file are the system's simulation layer. The")
+    L.append("analysis elsewhere in this file are the organization's own internal analysis layer. The")
     L.append("records above are the public-world sources they are checked against.")
     return "\n".join(L)
 
