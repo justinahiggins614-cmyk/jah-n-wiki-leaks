@@ -296,6 +296,33 @@ details.fmeta .frow b{color:var(--ink)}
   border:1px solid var(--green);color:var(--green);padding:10px 20px;z-index:9700;display:none;
   letter-spacing:1px;font-size:13px}
 @media(max-width:640px){.stamp{display:none}.dossier .dhead{padding-right:70px}}
+/* ============ FIRST-TIME GUIDE + SPOTLIGHT TOUR (guide backfill, 2026-10-03; themed only, no look change) ============ */
+#jah-guide-btn{position:fixed;bottom:14px;left:14px;z-index:99990;min-width:44px;min-height:44px;border-radius:22px;border:1px solid var(--green);background:rgba(2,6,12,.94);color:var(--green);font-weight:700;font-size:14px;letter-spacing:1px;padding:10px 16px;cursor:pointer;font-family:inherit}
+#jah-guide-btn:hover{background:var(--green);color:#02140a}
+#jah-tour{position:fixed;inset:0;z-index:99995;pointer-events:none}
+.jah-tour-tip{pointer-events:auto;position:fixed;left:50%;transform:translateX(-50%);bottom:16px;width:min(580px,calc(100vw - 28px));max-height:44vh;overflow:auto;background:var(--panel);border:2px solid var(--amber);border-radius:6px;padding:14px 16px;box-shadow:0 8px 40px rgba(0,0,0,.7)}
+.jah-tour-tip h3{margin:0 0 6px;color:var(--amber2,#ffcf6e);font-size:16px;letter-spacing:1px}
+.jah-tour-k{font-size:11px;color:var(--dim);letter-spacing:2px;margin-bottom:4px}
+.jah-tour-tip p{margin:6px 0;font-size:14px;color:var(--ink);line-height:1.5}
+.jah-tour-nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.jah-tour-nav button{min-height:44px;min-width:44px;padding:10px 16px;background:#02040a;border:1px solid var(--amber);color:var(--amber);font-family:inherit;font-weight:700;letter-spacing:1px;cursor:pointer;font-size:14px;border-radius:4px}
+.jah-tour-nav button:hover{background:rgba(255,176,0,.12)}
+.jah-tour-nav button:disabled{opacity:.35;cursor:default}
+.jah-tour-nav button.t-primary{background:var(--amber);color:#0a0e14}
+.jah-tour-hl{outline:3px solid var(--amber)!important;outline-offset:3px}
+#jah-tour-inv{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:99990;width:min(420px,calc(100vw - 28px));background:var(--panel);border:2px solid var(--amber);border-radius:6px;padding:14px 16px;box-shadow:0 8px 40px rgba(0,0,0,.7)}
+#jah-tour-inv h3{margin:0 0 6px;color:var(--amber2,#ffcf6e);font-size:15px;letter-spacing:1px}
+#jah-tour-inv p{margin:6px 0 10px;font-size:13px;color:var(--ink);line-height:1.5}
+#jah-tour-inv .jah-tour-nav button{font-size:13px;padding:10px 14px}
+#jah-guide{position:fixed;inset:0;z-index:99996;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:16px}
+#jah-guide[hidden]{display:none}
+.jah-guide-card{background:var(--panel);border:2px solid var(--amber);border-radius:8px;max-width:700px;width:100%;max-height:86vh;overflow:auto;padding:20px 22px}
+.jah-guide-card h2{margin:0 0 8px;color:var(--amber2,#ffcf6e);font-size:18px;letter-spacing:1px}
+.jah-guide-card h3{margin:16px 0 4px;color:var(--amber2,#ffcf6e);font-size:15px;letter-spacing:.5px}
+.jah-guide-card p,.jah-guide-card li{font-size:14px;color:var(--ink);line-height:1.55}
+.jah-guide-card ul{margin:4px 0;padding-left:20px}
+.jah-guide-card .gclose,.jah-guide-card .greplay{margin-top:14px;min-height:44px;padding:10px 18px;background:#02040a;border:1px solid var(--amber);color:var(--amber);font-family:inherit;font-weight:700;letter-spacing:1px;cursor:pointer;font-size:14px;border-radius:4px}
+.jah-guide-card .greplay:hover,.jah-guide-card .gclose:hover{background:rgba(255,176,0,.12)}
 </style>
 <style>.jahnet{background:#0a0a0a;border-bottom:1px solid #3a0d0d;color:#8a8f7a;font-size:.76em;padding:6px 10px;text-align:center;line-height:2;letter-spacing:.02em}.jahnet-t{color:#ff4444;font-weight:700;letter-spacing:.25em;margin-right:10px}.jahnet a{color:#7aaa7a;text-decoration:none;margin:0 7px;white-space:nowrap}.jahnet a:hover{text-decoration:underline}.jahnet-here{color:#ff4444;font-weight:700;letter-spacing:.2em;border:1px solid #ff4444;padding:1px 8px;margin-left:10px;white-space:nowrap;display:inline-block}
 .sitekicker{color:#ff4444;font-weight:700;letter-spacing:.2em;font-size:.85em;border:1px solid #ff4444;padding:1px 8px;margin-right:10px;white-space:nowrap;display:inline-block}
@@ -1852,6 +1879,164 @@ loadAll().then(function(){
   document.getElementById("hits").innerHTML='ARCHIVE FAILED TO LOAD — <button class="pill" onclick="location.reload()">RETRY</button>';});
 /* FIX-03 (2026-10-02): collapse stat tickers on small screens so titles and search stay instantly reachable */
 (function(){try{if(window.matchMedia&&window.matchMedia("(max-width:767px)").matches){var d=document.querySelector("details.stattoggle");if(d)d.removeAttribute("open");}}catch(e){}})();
+</script>
+<!-- ============ FIRST-TIME GUIDE + SPOTLIGHT TOUR (guide backfill, 2026-10-03) ============ -->
+<button id="jah-guide-btn" aria-label="Open the site guide" title="How to use this site — every feature, in plain language">&#10067; GUIDE</button>
+<div id="jah-tour-inv" hidden>
+  <h3>&#9630; NEW HERE? — DECLASSIFIED BRIEFING</h3>
+  <p>Take the 1-minute tour of the archive: search, filters, file cards, and everything inside a dossier.</p>
+  <div class="jah-tour-nav">
+    <button id="jah-tour-inv-start" class="t-primary">&#9654; START TOUR</button>
+    <button id="jah-tour-inv-skip">SKIP</button>
+  </div>
+</div>
+<div id="jah-tour" hidden>
+  <div class="jah-tour-tip" role="dialog" aria-live="polite" aria-label="Site tour">
+    <div class="jah-tour-k" id="jah-tour-k"></div>
+    <h3 id="jah-tour-t"></h3>
+    <div id="jah-tour-b"></div>
+    <div class="jah-tour-nav">
+      <button id="jah-tour-back">&#8592; BACK</button>
+      <button id="jah-tour-skip">SKIP TOUR</button>
+      <button id="jah-tour-next" class="t-primary">NEXT &#8594;</button>
+    </div>
+  </div>
+</div>
+<div id="jah-guide" hidden>
+  <div class="jah-guide-card" role="dialog" aria-label="Site guide — how to use this site">
+    <h2>&#9630; HOW TO USE THIS SITE</h2>
+    <p style="color:var(--dim)">The JAH governance leaking its own files — the JAH system's own internal archive, declassified and published by itself. Official <b>within the JAH-N system only</b> (creative simulation — not a government archive). Three kinds of files: bizarre-subject dossiers, spec dossiers, and public-patent dossiers.</p>
+    <h3>&#128269; SEARCH ALL FILES</h3>
+    <p>Type subjects, titles, specs, or patent text. Type an exact ID — <b>JAH-LEAK-B######</b>, <b>JAH-SPEC-######</b>, or a patent publication number — and that file sorts to the very top of the results. The &#10005; clears the search.</p>
+    <h3>&#127922; RANDOM FILE</h3>
+    <p>Opens one random dossier from the whole archive — every tap resolves to a real file, never an empty or invented one.</p>
+    <h3>&#9630; FILE FILTERS</h3>
+    <p><b>ALL FILES / BIZARRE FILES / SPEC DOSSIERS / PATENT DOSSIERS</b> narrow the archive by file kind. The <b>A&#8211;Z</b> bar browses by first letter; the category dropdown filters bizarre files by subject category.</p>
+    <h3>&#9672; FILE FINDER</h3>
+    <p>Describe what you want in plain words (&ldquo;time travel patents&rdquo;, &ldquo;quantum engine spec&rdquo;) and press <b>FIND IT</b>.</p>
+    <h3>&#128196; FILE CARDS</h3>
+    <p>Each card shows its kind (BIZARRE FILE / SPEC DOSSIER / PATENT DOSSIER), subject, ID, and status line. Click a card to open the full dossier. Every file has a permanent deep link — <b>?dossier=&lt;file ID&gt;</b>. <b>SHOW MORE FILES</b> pages through results.</p>
+    <h3>&#9630; TRUST LABELS</h3>
+    <p>Every claim is tagged: <b>PUBLIC RECORD</b> (real public record), <b>JAH ANALYSIS</b> (the system's simulation layer), <b>SPECULATIVE</b>, <b>CREATIVE SIMULATION</b>, <b>UNKNOWN</b>. The personal AI tags every answer the same way.</p>
+    <h3>&#129302; ASK THE AI (inside a dossier)</h3>
+    <p>A personal AI for that file only. It answers <b>only from the file</b> and tags answers [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN] — it never invents sources or patent numbers.</p>
+    <h3>&#128266; READ ALOUD &#183; &#128203; COPY ALL</h3>
+    <p>Reads the dossier through the tiered voice engine; the floating bar at the bottom gives Pause, Stop, and speed. <b>COPY ALL</b> copies the full dossier text; <b>COPY FILE ID</b> copies the permanent file ID.</p>
+    <h3>&#11015; DOWNLOAD ALL (.zip)</h3>
+    <p>The complete file package: <b>dossier.txt</b> + <b>dossier.json</b> (machine-readable, version + content hash) + <b>AI disc (.html)</b> + <b>AI thumbdrive (.py)</b> + README with format and runtime details.</p>
+    <h3>&#128190; AI DISC (.html) &#183; AI THUMBDRIVE (.py)</h3>
+    <p>The AI Disc is a self-contained offline copy of the dossier — full text, personal AI, read-aloud — that runs in any modern browser with no internet. The AI Thumbdrive is an offline terminal personal AI for the dossier, run with Python 3 on Windows, macOS, or Linux.</p>
+    <h3>&#9873; REPORT ISSUE</h3>
+    <p>Report an error, wrong classification, broken source, privacy concern, or copyright issue. Reports are logged on your device and you get a <b>tracking ID</b>. Corrections publish as <b>new dossier versions</b> — records are never silently edited.</p>
+    <h3>&#8599; SOURCE RECORD &#183; CITATIONS &#183; JAH WIKI</h3>
+    <p>The <b>source record</b> link opens the file in its home archive; claims carry citable <b>[S1]&#8211;[Sn]</b> source anchors; corroborating spec links open the matching spec dossier. <b>JAH WIKI ARTICLE</b> opens the file's JAH Wiki article (official within the Signature/JAH system).</p>
+    <h3>&#9681; &#183; TYPE &#183; SHARE</h3>
+    <p>The <b>&#9681;</b> button toggles dark mode. <b>TYPE: TERMINAL / READABLE</b> switches between terminal monospace and readable sans-serif type. <b>SHARE</b> copies the file's deep link; <b>OPEN</b> opens it.</p>
+    <h3>&#9630; DATA &amp; METHODOLOGY</h3>
+    <p>How the archive works: ID schemes (<b>JAH-LEAK-B######</b>, <b>JAH-SPEC-######</b>, patent pub numbers — permanent, sequential, never re-used), plus the static category index, the newest-100 page, and the machine-readable feed / api.json.</p>
+    <p style="color:var(--dim);margin-top:14px">To take this tour again, open this guide (&#10067; GUIDE, bottom-left) and press &#9654; REPLAY THE 1-MINUTE TOUR.</p>
+    <button class="gclose" id="jah-guide-close">CLOSE</button>
+    <button class="greplay" id="jah-guide-tour">&#9654; REPLAY THE 1-MINUTE TOUR</button>
+  </div>
+</div>
+<script>
+"use strict";
+/* FIRST-TIME USER GUIDE + SPOTLIGHT TOUR (site 5 of 27 guide backfill).
+   Themed to the classified-dossier archive; overlays never block content:
+   the tour scrim passes clicks through (only the tip card takes clicks),
+   Esc / Skip always dismiss, 44px+ touch buttons. */
+(function(){
+var TOUR_SEEN="jah-tour-seen-leaks";
+var TOUR=[
+ {sel:".mast",t:"\u25A0 WELCOME \u2014 THE LEAKED ARCHIVE",b:"<p><b>WHAT:</b> the JAH governance leaking its own files \u2014 the JAH system's own internal archive, declassified and published by itself, official within the JAH-N system only.</p><p><b>WHAT IT DOES:</b> every spec dossier, public-patent dossier, and bizarre-subject file lives here, each signed off by the Creator.</p><p><b>HOW:</b> this 1-minute tour walks you through it. Next / Back (or arrow keys); Esc or Skip ends it any time.</p>"},
+ {sel:"#q",t:"\u25A0 SEARCH ALL FILES",b:"<p><b>WHAT:</b> the search box.</p><p><b>WHAT IT DOES:</b> searches subjects, titles, specs, and patents across every file.</p><p><b>HOW:</b> type words \u2014 or type an exact ID like <b>JAH-LEAK-B000123</b>, <b>JAH-SPEC-000123</b>, or a patent publication number to jump that file to the very top.</p>"},
+ {sel:"#randbtn",t:"\uD83C\uDFB2 RANDOM FILE",b:"<p><b>WHAT:</b> the dice button beside the search box.</p><p><b>WHAT IT DOES:</b> opens one real dossier at random \u2014 bizarre file, spec dossier, or patent dossier.</p><p><b>HOW:</b> tap it. Every tap resolves to a genuine file.</p>"},
+ {sel:"#pills",t:"\u25A0 FILE FILTERS",b:"<p><b>WHAT:</b> the file-kind filter pills.</p><p><b>WHAT IT DOES:</b> narrows the archive to <b>ALL FILES</b>, <b>BIZARRE FILES</b>, <b>SPEC DOSSIERS</b>, or <b>PATENT DOSSIERS</b>.</p><p><b>HOW:</b> tap a pill.</p>"},
+ {sel:"#finder",t:"\u25C7 FILE FINDER",b:"<p><b>WHAT:</b> the plain-words finder.</p><p><b>WHAT IT DOES:</b> describes what you are after in ordinary words and finds the matching files.</p><p><b>HOW:</b> type what you want (\"quantum engine spec\") and press <b>FIND IT</b>.</p>"},
+ {sel:"#az",t:"\u25A0 A\u2013Z + CATEGORIES",b:"<p><b>WHAT:</b> the letter bar and the category dropdown beside it.</p><p><b>WHAT IT DOES:</b> browses files by first letter; the dropdown filters bizarre files by subject category.</p><p><b>HOW:</b> tap a letter or pick a category.</p>"},
+ {sel:"#grid",t:"\uD83D\uDCC4 THE FILES",b:"<p><b>WHAT:</b> the file cards.</p><p><b>WHAT IT DOES:</b> each card shows kind, subject, ID, and status. Every file has a permanent deep link (<b>?dossier=&lt;file ID&gt;</b>).</p><p><b>HOW:</b> tap a card to open the dossier; <b>SHOW MORE FILES</b> pages through results.</p>"},
+ {sel:".legend",t:"\u25A0 TRUST LABELS",b:"<p><b>WHAT:</b> the trust legend.</p><p><b>WHAT IT DOES:</b> every claim in the archive is tagged \u2014 PUBLIC RECORD, JAH ANALYSIS, SPECULATIVE, CREATIVE SIMULATION, or UNKNOWN.</p><p><b>HOW:</b> check the tag on any claim or AI answer to know what kind of statement it is.</p>"},
+ {sel:"#t-ai",openRandom:true,t:"\uD83E\uDD16 ASK THE AI",b:"<p><b>WHAT:</b> the file's personal AI (we opened a real dossier together).</p><p><b>WHAT IT DOES:</b> answers questions <b>only from this file</b>, tagging every answer [PUBLIC RECORD] / [JAH ANALYSIS] / [SPECULATIVE] / [UNKNOWN].</p><p><b>HOW:</b> press the button, type your question, press ASK.</p>"},
+ {sel:"#t-read",t:"\uD83D\uDD0A READ ALOUD + COPY",b:"<p><b>WHAT:</b> the read-aloud and copy buttons.</p><p><b>WHAT IT DOES:</b> reads the whole dossier through the tiered voice engine (the floating bar gives Pause, Stop, speed); COPY ALL copies the full text, COPY FILE ID copies the permanent ID.</p><p><b>HOW:</b> press READ ALOUD, or COPY ALL / COPY FILE ID.</p>"},
+ {sel:"#t-zip",t:"\u2B07 DOWNLOAD ALL",b:"<p><b>WHAT:</b> the download buttons.</p><p><b>WHAT IT DOES:</b> <b>DOWNLOAD ALL</b> packs dossier.txt + dossier.json (version + content hash) + <b>AI DISC (.html)</b> + <b>AI THUMBDRIVE (.py)</b> + README into one .zip. The AI Disc is an offline copy that runs in any browser; the AI Thumbdrive is a terminal AI run with Python 3.</p><p><b>HOW:</b> press DOWNLOAD ALL, or grab just the disc or thumbdrive.</p>"},
+ {sel:"#t-report",t:"\u2691 REPORT ISSUE",b:"<p><b>WHAT:</b> the issue reporter.</p><p><b>WHAT IT DOES:</b> reports an error, wrong classification, broken source, privacy concern, or copyright issue. You get a tracking ID; corrections publish as new dossier versions \u2014 never silent edits.</p><p><b>HOW:</b> press REPORT ISSUE, pick a category, describe it, submit.</p>"},
+ {sel:"#jah-guide-btn",t:"\u2753 THE GUIDE",b:"<p><b>WHAT:</b> this button, always bottom-left.</p><p><b>WHAT IT DOES:</b> opens a plain-language manual of every feature on the site, and can replay this tour.</p><p><b>HOW:</b> tap it any time you\u2019re unsure. That\u2019s the whole tour \u2014 the dossier stays open for you to explore.</p>"}
+];
+var tourIdx=-1;
+function el(id){return document.getElementById(id);}
+function tourEl(){return el("jah-tour");}
+function viewerOpen(){var v=el("viewer");return v&&v.classList.contains("open");}
+function tourClearHl(){var hs=document.querySelectorAll(".jah-tour-hl");for(var i=0;i<hs.length;i++)hs[i].classList.remove("jah-tour-hl");}
+function tourEnd(save){
+  tourClearHl();
+  var t=tourEl();if(t)t.hidden=true;
+  tourIdx=-1;
+  document.removeEventListener("keydown",tourKeys,true);
+  if(save!==false){try{localStorage.setItem(TOUR_SEEN,"1");}catch(e){}}
+}
+function tourKeys(e){
+  if(tourIdx<0)return;
+  if(e.key==="Escape"){e.preventDefault();tourEnd();}
+  else if(e.key==="ArrowRight"){e.preventDefault();tourNext();}
+  else if(e.key==="ArrowLeft"){e.preventDefault();tourBack();}
+}
+function tourShow(i){
+  var guard=0;
+  while(guard++<TOUR.length){
+    var s=TOUR[i];
+    if(s.openRandom&&!viewerOpen()){try{randomDossier();}catch(e){}}
+    if(s.sel&&!document.querySelector(s.sel)){i=(i+1)%TOUR.length;continue;}
+    break;
+  }
+  tourIdx=i;var s2=TOUR[i];
+  tourClearHl();
+  var box=tourEl();if(box)box.hidden=false;
+  el("jah-tour-k").textContent="STEP "+(i+1)+" OF "+TOUR.length+" \u00B7 JAH-N WIKI TOUR";
+  el("jah-tour-t").textContent=s2.t;
+  el("jah-tour-b").innerHTML=s2.b;
+  el("jah-tour-back").disabled=(i===0);
+  el("jah-tour-next").textContent=(i===TOUR.length-1?"FINISH \u2713":"NEXT \u2192");
+  var tgt=s2.sel?document.querySelector(s2.sel):null;
+  if(tgt){tgt.classList.add("jah-tour-hl");try{tgt.scrollIntoView({block:"center"});}catch(e){}}
+}
+function tourNext(){if(tourIdx>=TOUR.length-1){tourEnd();return;}tourShow(tourIdx+1);}
+function tourBack(){if(tourIdx>0)tourShow(tourIdx-1);}
+function tourStart(i){
+  document.addEventListener("keydown",tourKeys,true);
+  el("jah-tour-back").onclick=tourBack;
+  el("jah-tour-skip").onclick=function(){tourEnd();};
+  el("jah-tour-next").onclick=tourNext;
+  tourShow(i||0);
+}
+function dismissInv(save){var inv=el("jah-tour-inv");if(inv)inv.hidden=true;if(save!==false){try{localStorage.setItem(TOUR_SEEN,"1");}catch(e){}}}
+function tourBoot(){
+  var seen=false;
+  try{seen=!!localStorage.getItem(TOUR_SEEN);}catch(e){}
+  if(seen)return;
+  if(/[?&](spec|patent|dossier|w|id|dial)=/i.test(location.search||"")){dismissInv(true);return;}
+  var inv=el("jah-tour-inv");
+  if(inv)inv.hidden=false;
+  el("jah-tour-inv-start").onclick=function(){dismissInv(false);tourStart(0);};
+  el("jah-tour-inv-skip").onclick=function(){dismissInv(true);};
+  document.addEventListener("keydown",function invKeys(e){
+    var v=el("jah-tour-inv");
+    if(v&&!v.hidden&&e.key==="Escape"){e.preventDefault();dismissInv(true);document.removeEventListener("keydown",invKeys,true);}
+  },true);
+}
+/* boot only after the archive has rendered (random dossier needs loaded data) */
+(function waitReady(n){
+  var g=el("grid");
+  if(g&&g.children.length>0){tourBoot();return;}
+  if(n>100)return; /* ~30s; archive may have failed to load */
+  setTimeout(function(){waitReady(n+1);},300);
+})(0);
+/* guide modal */
+el("jah-guide-btn").onclick=function(){el("jah-guide").hidden=false;};
+el("jah-guide-close").onclick=function(){el("jah-guide").hidden=true;};
+el("jah-guide-tour").onclick=function(){el("jah-guide").hidden=true;tourStart(0);};
+el("jah-guide").addEventListener("click",function(e){if(e.target===this)this.hidden=true;});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!el("jah-guide").hidden)el("jah-guide").hidden=true;});
+})();
 </script>
 </body>
 </html>
