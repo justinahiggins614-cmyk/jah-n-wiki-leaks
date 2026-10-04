@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>try{if(localStorage.getItem('jah-theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}</script>
+<script>try{if(localStorage.getItem('jah-theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 <style>
-html[data-theme="dark"]{filter:invert(1) hue-rotate(180deg)}
-html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"] canvas,html[data-theme="dark"] svg{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="light"]{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="light"] img,html[data-theme="light"] video,html[data-theme="light"] canvas,html[data-theme="light"] svg{filter:invert(1) hue-rotate(180deg)}
 #jah-theme-toggle{position:fixed;bottom:12px;right:12px;z-index:99999;opacity:.55;font-size:15px;line-height:1;padding:9px 11px;border-radius:50%;border:1px solid #888;background:rgba(128,128,128,.18);color:inherit;cursor:pointer;font-family:inherit}
 #jah-theme-toggle:hover{opacity:1}
 </style>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>Wiki Leaks — Official Reference Archive of the JAH-N System</title>
 <link id="canon" rel="canonical" href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">
 <meta name="description" content="The JAH-N reference archive (official within the JAH-N system only): top-secret dossiers on the spec files, public patent records, and bizarre subjects — every file with its own personal AI, read-aloud, copy, and downloadable AI disc/thumbdrive copies.">
@@ -25,6 +26,7 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 </script>
 <style>
 :root{
+  color-scheme:dark;
   --bg:#0e1626; --bg2:#131e33; --panel:#182642; --panel2:#1d2c4c;
   --amber:#ffb000; --amber-d:#8a5c00; --green:#3dff78; --green-d:#0e5c2a;
   --red:#ff2438; --red-d:#7a0e18; --red-t:#ff95a0; /* FIX-SITE5-4: AAA-safe text red (7.2:1+ on bg/panel) */
@@ -32,7 +34,9 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
   --paper:#141f36;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--bg)}
+html{background:var(--bg);width:100%}
+img,canvas,video,svg{max-width:100%}
+body{overflow-x:clip}
 body{
   background:
     radial-gradient(1200px 600px at 80% -10%, rgba(53,255,120,.045), transparent 60%),
@@ -44,12 +48,12 @@ body{
   padding-bottom:120px;
 }
 /* scanlines + vignette */
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9000;
+body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:9000;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);
   mix-blend-mode:multiply;}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
+body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:8999;
   background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%);}
-#stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+#stars{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;opacity:.5}
 .wrap{max-width:1180px;margin:0 auto;padding:0 14px;position:relative;z-index:2}
 /* ===== classification banner ===== */
 .classbar{background:repeating-linear-gradient(45deg,var(--red) 0 26px,#4a0208 26px 52px);
@@ -61,7 +65,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8999;
 /* ===== masthead ===== */
 .mast{border:1px solid var(--line);background:linear-gradient(180deg,#0c1428,#131e33);
   margin:18px 0 0;padding:26px 22px;position:relative;overflow:hidden}
-.mast::before{content:"";position:absolute;inset:0;pointer-events:none;
+.mast::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;
   background-image:linear-gradient(rgba(53,255,120,.05) 1px,transparent 1px),
                    linear-gradient(90deg,rgba(53,255,120,.05) 1px,transparent 1px);
   background-size:34px 34px;}
@@ -97,7 +101,7 @@ details.stattoggle>.stattoggle-s{display:none}
 /* ===== milestone ===== */
 .milestone{border:1px solid var(--amber-d);background:linear-gradient(180deg,rgba(138,92,0,.14),rgba(138,92,0,.04));
   padding:16px 18px;margin:0 0 16px;position:relative;overflow:hidden}
-.milestone::before{content:"";position:absolute;inset:0;pointer-events:none;
+.milestone::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;
   background:repeating-linear-gradient(45deg,transparent 0 18px,rgba(255,176,0,.05) 18px 36px)}
 .ms-head{color:var(--amber);letter-spacing:3px;font-size:14px;font-weight:bold;text-align:center;margin-bottom:10px;
   text-shadow:0 0 14px rgba(255,176,0,.4)}
@@ -204,7 +208,7 @@ details.fmeta .frow b{color:var(--ink)}
 .rptitem{border-top:1px solid #333;padding:6px 0}
 .rptst{color:#8a8f7a}.rptnone{color:#8a8f7a;font-size:.85em}
 /* ===== dossier viewer ===== */
-#viewer{position:fixed;inset:0;z-index:9500;display:none;overflow-y:auto;background:rgba(0,0,0,0.8);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+#viewer{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9500;display:none;overflow-y:auto;background:rgba(0,0,0,0.8);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
   padding:18px 10px 90px}
 #viewer.open{display:block}
 .dossier{max-width:900px;margin:0 auto;background:var(--paper);border:1px solid var(--amber-d);
@@ -300,7 +304,7 @@ details.fmeta .frow b{color:var(--ink)}
 #jah-guide-btn{position:fixed;bottom:14px;left:14px;z-index:99990;min-width:44px;min-height:44px;border-radius:22px;border:1px solid var(--green);background:rgba(2,6,12,.94);color:var(--green);font-weight:700;font-size:14px;letter-spacing:1px;padding:10px 16px;cursor:pointer;font-family:inherit}
 #jah-guide-btn:hover{background:var(--green);color:#02140a}
 /* TOUR FIX 2026-10-04: centered welcome overlay. No page scrolling, no spotlight, no auto-jump. One "GOT IT" button. */
-#jah-wel{position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:14px}
+#jah-wel{position:fixed;top:0;left:0;right:0;bottom:0;z-index:99998;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:14px}
 #jah-wel[hidden]{display:none}
 #jah-wel .wcard{width:min(560px,96vw);max-height:92vh;overflow:auto;background:var(--panel);border:2px solid var(--amber);border-radius:8px;padding:18px 18px 16px;box-shadow:0 10px 50px rgba(0,0,0,.8)}
 #jah-wel .wkick{font-size:11px;color:var(--dim);letter-spacing:3px;margin-bottom:6px}
@@ -312,7 +316,7 @@ details.fmeta .frow b{color:var(--ink)}
 #jah-wok{display:block;width:100%;min-height:56px;margin-top:14px;font-size:18px;font-weight:700;letter-spacing:1px;background:var(--amber);color:#0a0e14;border:0;border-radius:6px;cursor:pointer;font-family:inherit}
 #jah-wel .wfine{font-size:12px;color:var(--dim);margin:10px 0 0;line-height:1.5}
 #jah-wel .wfine a{color:var(--amber2,#ffcf6e)}
-#jah-guide{position:fixed;inset:0;z-index:99996;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:16px}
+#jah-guide{position:fixed;top:0;left:0;right:0;bottom:0;z-index:99996;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:16px}
 #jah-guide[hidden]{display:none}
 .jah-guide-card{background:var(--panel);border:2px solid var(--amber);border-radius:8px;max-width:700px;width:100%;max-height:86vh;overflow:auto;padding:20px 22px}
 .jah-guide-card h2{margin:0 0 8px;color:var(--amber2,#ffcf6e);font-size:18px;letter-spacing:1px}
@@ -1453,9 +1457,9 @@ JAHTALK_SRC,
 'stopAll();FXL=fxChunks(t);FXI=0;fxNext()}',
 'function stopAll(){try{speechSynthesis.cancel()}catch(e){}if(FXA){try{FXA.pause()}catch(e){}FXA=null}}',
 '<\/script>',
-'<button id="jah-theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">&#9681;</button>',
+'<button id="jah-theme-toggle" title="Toggle light mode" aria-label="Toggle light mode">&#9681;</button>',
 '<script>',
-'(function(){try{var b=document.getElementById(\'jah-theme-toggle\');if(!b)return;function upd(){b.textContent=document.documentElement.getAttribute(\'data-theme\')===\'dark\'?\'\\u2600\':\'\\u25d0\';}upd();b.addEventListener(\'click\',function(){var dark=document.documentElement.getAttribute(\'data-theme\')!==\'dark\';document.documentElement.setAttribute(\'data-theme\',dark?\'dark\':\'\');try{localStorage.setItem(\'jah-theme\',dark?\'dark\':\'\');}catch(e){}upd();});}catch(e){}})();',
+'(function(){try{var b=document.getElementById(\'jah-theme-toggle\');if(!b)return;function upd(){b.textContent=document.documentElement.getAttribute(\'data-theme\')===\'light\'?\'\\u2600\':\'\\u25d0\';}upd();b.addEventListener(\'click\',function(){var light=document.documentElement.getAttribute(\'data-theme\')!==\'light\';document.documentElement.setAttribute(\'data-theme\',light?\'light\':\'\');try{localStorage.setItem(\'jah-theme\',light?\'light\':\'\');}catch(e){}upd();});}catch(e){}})();',
 '<\/script>',
 '<script>',
 '/* JAH session restore: scroll + tabs + last record. localStorage only, nothing leaves the device. */',
@@ -1972,7 +1976,7 @@ loadAll().then(function(){
     <h3>&#8599; SOURCE RECORD &#183; CITATIONS &#183; JAH WIKI</h3>
     <p>The <b>source record</b> link opens the file in its home archive; claims carry citable <b>[S1]&#8211;[Sn]</b> source anchors; corroborating spec links open the matching spec dossier. <b>JAH WIKI ARTICLE</b> opens the file's JAH Wiki article (official within the Signature/JAH system).</p>
     <h3>&#9681; &#183; TYPE &#183; SHARE</h3>
-    <p>The <b>&#9681;</b> button toggles dark mode. <b>TYPE: TERMINAL / READABLE</b> switches between terminal monospace and readable sans-serif type. <b>SHARE</b> copies the file's deep link; <b>OPEN</b> opens it.</p>
+    <p>The <b>&#9681;</b> button toggles light mode. <b>TYPE: TERMINAL / READABLE</b> switches between terminal monospace and readable sans-serif type. <b>SHARE</b> copies the file's deep link; <b>OPEN</b> opens it.</p>
     <h3>&#9630; DATA &amp; METHODOLOGY</h3>
     <p>How the archive works: ID schemes (<b>JAH-LEAK-B######</b>, <b>JAH-SPEC-######</b>, patent pub numbers — permanent, sequential, never re-used), plus the static category index, the newest-100 page, and the machine-readable feed / api.json.</p>
     <p style="color:var(--dim);margin-top:14px">To see the welcome guide again, press &#9654; REPLAY THE WELCOME GUIDE.</p>
@@ -2025,7 +2029,7 @@ function deep(){return /[?&](spec|patent|dossier|w|id|dial)=/i.test(location.sea
 </script>
 
 <!-- JAH NETWORK: site list moved to page bottom, above footer -->
-<nav aria-label="JAH Network Global Ecosystem" role="navigation"><div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><span class="sitekicker">SITE 5 OF 27</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olympics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Mega Mall</a><span class="jahnet-here">5 JAH-N Wiki — YOU ARE HERE</span></div></nav>
+<nav aria-label="JAH Network Global Ecosystem" role="navigation"><div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><span class="sitekicker">SITE 5 OF 27</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olympics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Mega Mall</a><span class="jahnet-here">5 JAH-N Wiki Leaks — YOU ARE HERE</span></div></nav>
 <div class="jah-stamp" style="margin-top:10px;text-align:center;"><img src="assets/signature-stamp.jpg" alt="Official Signature stamp" style="height:64px;width:auto;border-radius:4px;"><div style="font-size:.72em;opacity:.75;margin-top:4px;">Official Signature stamp</div></div>
 </body>
 </html>
