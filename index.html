@@ -855,7 +855,7 @@ function openDossier(d){
     if(md)md.setAttribute("content",(d.kindLabel+" "+d.id+": "+d.subject+" — "+d.classification+". Internal Signature archive, official within the JAH-N system only.").slice(0,300));
   })();
   document.getElementById("dclose").onclick=closeDossier;
-  try{document.getElementById("dclose").focus()}catch(e){}
+  try{document.getElementById("dclose").focus({preventScroll:true})}catch(e){}
   document.getElementById("t-ai").onclick=function(){document.getElementById("aichat").classList.toggle("open")};
   document.getElementById("t-read").onclick=function(){auReadDossier()};
   document.getElementById("t-copy").onclick=function(){copyDossier()};
@@ -1990,7 +1990,7 @@ loadAll().then(function(){
 var SEEN="jah-tour-seen-leaks";
 var wel=document.getElementById("jah-wel");
 function isSeen(){try{return localStorage.getItem(SEEN)==="1";}catch(e){return true;}}
-function openWel(){if(wel){wel.hidden=false;var b=document.getElementById("jah-wok");try{if(b)b.focus();}catch(e){}}}
+function openWel(){if(wel){wel.hidden=false;var b=document.getElementById("jah-wok");try{if(b)b.focus({preventScroll:true});}catch(e){}}}
 function closeWel(){if(wel)wel.hidden=true;try{localStorage.setItem(SEEN,"1");}catch(e){}}
 var ok=document.getElementById("jah-wok");
 if(ok)ok.onclick=function(){closeWel();};
