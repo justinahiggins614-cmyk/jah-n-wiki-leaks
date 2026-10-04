@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/index.html</loc><changefreq>daily</changefreq></url>
+  <url><loc>https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/browse.html</loc><changefreq>daily</changefreq></url>
   <!-- Bizarre dossiers (every JAH-LEAK-B######): sitemap-records-1.xml (see sitemap-index.xml). -->
   <!-- Incremental JSON feed of newest dossiers (for AI indexers/crawlers): data/bizarre/feed/index.json (newest-first chunks feed-0001.json ...). Also listed in robots.txt. -->
   <!-- Spec dossiers (JAH-SPEC-######): covered by the Signature Spec Catalog sitemap (signature-one-archive). -->

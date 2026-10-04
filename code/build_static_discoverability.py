@@ -256,10 +256,16 @@ def main():
     api["records_approx"] = total
     api["records_as_of"] = today
     api["incremental_feed"] = SITE + "data/bizarre/feed/index.json"
-    api["static_fallbacks"] = [SITE + "categories.html", SITE + "recent.html"]
+    api["static_fallbacks"] = [SITE + "categories.html", SITE + "recent.html", SITE + "browse.html"]
     json.dump(api, open(API, "w", encoding="utf-8"), indent=2)
     open(API, "a", encoding="utf-8").write("\n")
     print(f"api.json: records_approx={fmt(total)} as_of={today}")
+
+    # ---- A-Z archive: per-letter lazy chunks + browse.html (count stamped) ----
+    # Runs AFTER the index/state flush in the drip, so the A-Z counts are always
+    # current with this run — never one run behind.
+    import build_az_archive as baz
+    baz.main()
 
 
 if __name__ == "__main__":

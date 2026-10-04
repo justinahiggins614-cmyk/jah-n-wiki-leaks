@@ -62,6 +62,7 @@
   "incremental_feed": "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/data/bizarre/feed/index.json",
   "static_fallbacks": [
     "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/categories.html",
-    "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/recent.html"
+    "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/recent.html",
+    "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/browse.html"
   ]
 }

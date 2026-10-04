@@ -1,0 +1,256 @@
+#!/usr/bin/env python3
+"""Build the browse.html A-Z dossier archive + per-letter lazy chunk indexes.
+
+Single source of truth: data/bizarre.json (base 120) + data/bizarre/bizarre.idx.json.gz
+(the drip-fed rows) — the same rows the sitemap lists, so the A-Z archive can
+never drift one run behind the index.
+
+Outputs:
+  data/bizarre/az/az-<L>.json.gz  one compact chunk per letter bucket
+                                  ({"letter":L,"count":n,"rows":[[id,subject,category]...]})
+  data/bizarre/az/index.json      manifest {generated,total,letters:{L:{count,file}}}
+  browse.html                     A-Z <details> archive page; JS lazy-loads each
+                                  letter chunk on first expand, never all at once.
+
+browse.html's count header is re-stamped between the AZ-COUNT markers on every
+run. Called at the end of build_static_discoverability.main(), which the
+bizarre drip runs AFTER the index/state flush — so counts are always current.
+"""
+import gzip
+import json
+import os
+import re
+import datetime
+
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_FILE = os.path.join(REPO, "data", "bizarre.json")
+IDX = os.path.join(REPO, "data", "bizarre", "bizarre.idx.json.gz")
+AZ_DIR = os.path.join(REPO, "data", "bizarre", "az")
+AZ_INDEX = os.path.join(AZ_DIR, "index.json")
+BROWSE = os.path.join(REPO, "browse.html")
+SITE = "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/"
+
+STATIC_CSS = """
+body{background:#0e1626;color:#e9effc;font-family:"Courier New",ui-monospace,Menlo,Consolas,monospace;
+font-size:14px;line-height:1.6;max-width:1000px;margin:0 auto;padding:24px 16px}
+a{color:#3dff78}a:hover{color:#ffb000}
+h1{color:#ffb000;letter-spacing:3px;font-size:22px}
+h2{color:#ff95a0;letter-spacing:2px;font-size:16px;margin-top:28px;border-bottom:1px solid #2c3f66;padding-bottom:6px}
+.c{color:#a9bce4;font-size:12px}.n{color:#ffb000;font-weight:bold}
+ul{list-style:none;padding:0}li{margin:6px 0}.id{color:#ffb000;font-size:12px}
+.note{border:1px solid #2c3f66;background:#182642;padding:12px 16px;margin:16px 0;font-size:12px;color:#a9bce4}
+.govbar{background:#04140a;border-bottom:2px solid #1d5c2e;color:#3dff78;text-align:center;
+font-size:11px;letter-spacing:1px;padding:8px 10px;margin:-24px -16px 16px}
+.simbadge{display:inline-block;border:1px solid #ffb000;color:#ffb000;font-size:11px;
+letter-spacing:2px;padding:4px 10px;margin:4px 4px 4px 0}
+details{border:1px solid #2c3f66;background:#101c34;margin:8px 0}
+summary{cursor:pointer;padding:10px 12px;color:#ffb000;font-weight:bold;letter-spacing:1px;
+font-size:14px;touch-action:manipulation}
+summary .n{color:#3dff78}
+.dlist{padding:0 12px 12px;font-size:13px}
+.dlist li{margin:5px 0;word-break:break-word}
+.searchrow{display:flex;gap:8px;margin:14px 0}
+.searchrow input{flex:1;background:#0a1224;border:1px solid #2c3f66;color:#e9effc;
+padding:10px 12px;font-size:14px;font-family:inherit}
+.searchrow button{background:#182642;border:1px solid #ffb000;color:#ffb000;
+padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit}
+#hits{margin:10px 0}
+.loading{color:#ffb000}
+"""
+
+
+def esc(s):
+    return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+
+
+def fmt(n):
+    return "{:,}".format(n)
+
+
+def letter_of(subject):
+    s = (subject or "").strip()
+    if not s:
+        return "#"
+    ch = s[0].upper()
+    return ch if "A" <= ch <= "Z" else "#"
+
+
+def collect():
+    rows = []
+    with open(BASE_FILE, encoding="utf-8") as fh:
+        for r in json.load(fh):
+            rows.append((r["id"], r.get("subject", ""), r.get("category", "")))
+    with gzip.open(IDX, "rt", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            r = json.loads(ln)
+            rows.append((r[0], r[1], r[2]))
+    return rows
+
+
+def browse_template(count_line, today):
+    # Note: this template is regenerated wholesale on every run (never edited by
+    # hand), so there is no drift between the builder and the shipped page.
+    js = r"""
+(function(){
+"use strict";
+var SITE="__SITE__";
+var idx=null, cache={}, searchTimer=null;
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function fetchT(url,ms){ms=ms||25000;return new Promise(function(res,rej){
+  var done=false,to=setTimeout(function(){if(!done){done=true;rej(new Error("timeout"))}},ms);
+  fetch(url).then(function(r){if(!done){done=true;clearTimeout(to);res(r)}},
+                 function(e){if(!done){done=true;clearTimeout(to);rej(e)}})})}
+function gunzip(ab){return new Promise(function(res,rej){
+  if(!window.DecompressionStream){rej(new Error("no ds"));return}
+  var ds=new DecompressionStream("gzip"),w=ds.writable.getWriter(),r=ds.readable.getReader();
+  w.write(ab);w.close();var ch=[],total=0;
+  (function pump(){r.read().then(function(o){
+    if(o.done){
+      var all=new Uint8Array(total),off=0;
+      for(var i=0;i<ch.length;i++){all.set(ch[i],off);off+=ch[i].length}
+      res(new TextDecoder().decode(all))}
+    else{ch.push(o.value);total+=o.value.length;pump()}},rej)})()})}
+function loadLetter(L){
+  if(cache[L])return Promise.resolve(cache[L]);
+  var info=idx.letters[L];
+  return fetchT("data/bizarre/az/"+info.file).then(function(r){
+    if(!r.ok)throw new Error("http "+r.status);return r.arrayBuffer()})
+    .then(gunzip).then(function(t){
+      var d=JSON.parse(t);cache[L]=d.rows;return d.rows})}
+function renderRows(rows,box){
+  var h="<ul class=\"dlist\">";
+  for(var i=0;i<rows.length;i++){var r=rows[i];
+    h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\""+SITE+"?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
+  h+="</ul>";
+  box.innerHTML=h}
+function bindDetails(det,L){
+  var box=$("box-"+L);
+  det.addEventListener("toggle",function(){
+    if(!det.open||box.dataset.done)return;
+    box.innerHTML="<p class=\"loading\">LOADING "+esc(L)+" FILES…</p>";
+    loadLetter(L).then(function(rows){
+      renderRows(rows,box);box.dataset.done="1";
+      var sum=det.querySelector("summary");sum.querySelector(".n").textContent=rows.length.toLocaleString()+" dossiers — loaded"})
+      .catch(function(){box.innerHTML="<p class=\"loading\">COULD NOT LOAD — <a href=\"#\" onclick=\"return false\">tap to retry</a></p>";box.innerHTML="<p class=\"loading\">LOAD FAILED — close and reopen to retry.</p>"})})}
+function boot(){
+  fetchT("data/bizarre/az/index.json").then(function(r){
+    if(!r.ok)throw 0;return r.json()}).then(function(d){
+    idx=d;
+    $("count-n").textContent=d.total.toLocaleString();
+    var wrap=$("letters"),order=Object.keys(d.letters).sort(function(a,b){
+      if(a==="#")return 1;if(b==="#")return -1;return a<b?-1:1});
+    var h="";
+    for(var i=0;i<order.length;i++){var L=order[i];
+      h+="<details id=\"det-"+L+"\"><summary>LETTER "+esc(L)+" — <span class=\"n\">"+d.letters[L].count.toLocaleString()+" dossiers — tap to load</span></summary><div id=\"box-"+L+"\"></div></details>"}
+    wrap.innerHTML=h;
+    for(var j=0;j<order.length;j++){bindDetails($("det-"+order[j]),order[j])}
+    $("hits").textContent="ARCHIVE READY — tap a letter to open its files."})
+    .catch(function(){$("hits").textContent="COULD NOT LOAD THE ARCHIVE INDEX — check your connection and reload."})}
+function doSearch(){
+  var q=$("q").value.trim();
+  var hits=$("hits");
+  if(q.length<2){hits.textContent="Type at least 2 letters to search the whole archive.";return}
+  hits.innerHTML="<span class=\"loading\">SEARCHING THE ARCHIVE…</span>";
+  var qu=q.toUpperCase();
+  if(!idx){hits.textContent="Index still loading — try again in a moment.";return}
+  var letters=Object.keys(idx.letters);
+  Promise.all(letters.map(loadLetter)).then(function(all){
+    var out=[],i,j;
+    for(i=0;i<all.length;i++){var rows=all[i];
+      for(j=0;j<rows.length;j++){var r=rows[j];
+        if(r[0].toUpperCase().indexOf(qu)>=0||r[1].toUpperCase().indexOf(qu)>=0)out.push(r)}}
+    out.sort(function(a,b){return a[1].toLowerCase()<b[1].toLowerCase()?-1:1});
+    var cap=out.slice(0,200);
+    if(!out.length){hits.innerHTML="NO FILES MATCHED “"+esc(q)+"”. Try the letter sections above.";return}
+    var h="<p class=\"c\">"+out.length.toLocaleString()+" matching file"+(out.length===1?"":"s")+(out.length>200?" — first 200 shown":"")+"</p><ul class=\"dlist\">";
+    for(i=0;i<cap.length;i++){var r=cap[i];
+      h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\""+SITE+"?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
+    hits.innerHTML=h+"</ul>"})
+    .catch(function(){hits.textContent="SEARCH FAILED — check your connection and try again."})}
+$("q").addEventListener("input",function(){clearTimeout(searchTimer);searchTimer=setTimeout(doSearch,400)});
+$("qclear").addEventListener("click",function(){$("q").value="";$("hits").textContent="ARCHIVE READY — tap a letter to open its files."});
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
+})();
+""".replace("__SITE__", SITE)
+
+    html = ("<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\">"
+            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+            "<title>Wiki Leaks — Full Dossier Archive A–Z</title>"
+            "<meta name=\"description\" content=\"The full Wiki Leaks dossier archive, browsable A–Z: every bizarre-subject file with its permanent JAH-LEAK-B ID. The Signature organization's own declassified internal archive — not a government archive.\">"
+            "<style>" + STATIC_CSS + "</style></head><body>"
+            "<div class=\"govbar\"><b>JAH GOVERNANCE — OWN DECLASSIFIED INTERNAL ARCHIVE</b> &nbsp;·&nbsp; "
+            "INTERNAL SIGNATURE ARCHIVE — NOT A GOVERNMENT ARCHIVE &nbsp;·&nbsp; "
+            "NOT AFFILIATED WITH ANY GOVERNMENT AGENCY &nbsp;·&nbsp; NOT A NON-SIGNATURE GOVERNMENT ARCHIVE</div>"
+            "<p class=\"c\"><a href=\"index.html\">← Back to the Wiki Leaks main archive</a></p>"
+            "<h1>▓ WIKI LEAKS — FULL DOSSIER ARCHIVE (A–Z)</h1>"
+            "<div class=\"simbadge\">&#9632; INTERNAL SIGNATURE ARCHIVE — NOT A GOVERNMENT ARCHIVE &#9632;</div>"
+            "<div class=\"simbadge\">&#9632; NOT A NON-SIGNATURE GOVERNMENT ARCHIVE &#9632;</div>"
+            "<!-- AZ-COUNT-START -->" + count_line + "<!-- AZ-COUNT-END -->"
+            "<div class=\"note\">The JAH governance leaking its own files — this is the Signature organization's own "
+            "internal archive, declassified and published by the JAH governance itself. Every bizarre-subject dossier "
+            "below is the organization's own internal file, official within the JAH-N system only. "
+            "Spec dossiers and public-patent dossiers live in their home catalogs: "
+            "<a href=\"https://justinahiggins614-cmyk.github.io/signature-one-archive/\">Signature Spec Catalog Pending Patents</a> and "
+            "<a href=\"https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/\">Globally Rejustered Patent Catalog</a>.</div>"
+            "<div class=\"searchrow\"><input id=\"q\" type=\"text\" aria-label=\"Search the full archive\" "
+            "placeholder=\"SEARCH THE FULL ARCHIVE — type 2+ letters…\" autocomplete=\"off\">"
+            "<button id=\"qclear\" aria-label=\"Clear search\">CLEAR</button></div>"
+            "<div id=\"hits\" role=\"status\" aria-live=\"polite\">LOADING THE ARCHIVE…</div>"
+            "<div id=\"letters\"></div>"
+            "<div class=\"note\">INTERNAL SIGNATURE ARCHIVE — NOT A GOVERNMENT ARCHIVE. "
+            "NOT AFFILIATED WITH ANY GOVERNMENT AGENCY. NOT A NON-SIGNATURE GOVERNMENT ARCHIVE. "
+            "Official within the JAH-N system only. Bizarre-subject files are internal analyses, not established facts. "
+            "Nothing here is a real classified government document.</div>"
+            "<script>" + js + "</script></body></html>")
+    return html
+
+
+def main():
+    today = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=-4))).date().isoformat()
+    rows = collect()
+    total = len(rows)
+
+    buckets = {}
+    for did, subject, category in rows:
+        buckets.setdefault(letter_of(subject), []).append([did, subject, category])
+    for L in buckets:
+        buckets[L].sort(key=lambda r: (r[1].lower(), r[0]))
+
+    os.makedirs(AZ_DIR, exist_ok=True)
+    # wipe stale letter chunks (buckets shift as the archive grows)
+    for fn in os.listdir(AZ_DIR):
+        if fn.startswith("az-") and fn.endswith(".json.gz"):
+            os.remove(os.path.join(AZ_DIR, fn))
+    letters = {}
+    for L in sorted(buckets):
+        fname = "az-%s.json.gz" % L
+        payload = json.dumps({"letter": L, "count": len(buckets[L]), "rows": buckets[L]},
+                             ensure_ascii=False)
+        with gzip.open(os.path.join(AZ_DIR, fname), "wt", encoding="utf-8", compresslevel=6) as fh:
+            fh.write(payload)
+        letters[L] = {"count": len(buckets[L]), "file": fname}
+    with open(AZ_INDEX, "w", encoding="utf-8") as fh:
+        json.dump({"generated": today, "total": total, "letters": letters}, fh, ensure_ascii=False)
+    print(f"az chunks: {len(letters)} letter buckets, {fmt(total)} dossiers")
+
+    count_line = ("\n<p class=\"c\"><span class=\"n\" id=\"count-n\">" + fmt(total) + "</span> "
+                  "bizarre dossiers in the A–Z archive, as of " + today + ". "
+                  "Tap a letter to load its files — the archive loads letter by letter, never all at once. "
+                  "The live count refreshes from the archive index on every visit; the static count is re-stamped "
+                  "by the 2h bizarre drip.</p>\n")
+    page = browse_template(count_line, today)
+    with open(BROWSE, "w", encoding="utf-8") as fh:
+        fh.write(page)
+    # sanity: marker pair must exist exactly once
+    check = open(BROWSE, encoding="utf-8").read()
+    assert check.count("<!-- AZ-COUNT-START -->") == 1 and check.count("<!-- AZ-COUNT-END -->") == 1
+    print(f"browse.html: {fmt(total)} dossiers stamped as of {today}")
+    return total
+
+
+if __name__ == "__main__":
+    main()
