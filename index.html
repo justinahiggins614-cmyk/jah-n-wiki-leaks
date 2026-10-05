@@ -413,6 +413,14 @@ details.fmeta .frow b{color:var(--ink)}
     <div class="stamp" title="Internal Signature archive — declassified by the Signature organization itself">Declassified<br>for JAH-N</div>
     <div class="stampnote">internal Signature archive — not a government archive</div>
     <h1>JAH-N Wiki <span class="leak">Leaks</span></h1>
+<div style="margin:8px 0"><button type="button" onclick="readPageAloud()" style="background:#7a0e18;color:#fff;border:1px solid #c00;padding:8px 16px;cursor:pointer;font:inherit">🔊 Read page aloud</button> <button type="button" onclick="if(window.speechSynthesis)window.speechSynthesis.cancel()" style="background:#333;color:#fff;border:1px solid #666;padding:8px 16px;cursor:pointer;font:inherit">⏹ Stop</button></div>
+<script>
+function readPageAloud(){
+  var txt=(document.body.innerText||'').replace(/\s+/g,' ').trim().slice(0,5000);
+  if(!txt)return;
+  try{if(window.speechSynthesis){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(txt);u.rate=1;u.lang='en-US';window.speechSynthesis.speak(u);}}catch(e){}
+}
+</script>
     <div class="simbadge">&#9632; INTERNAL SIGNATURE ARCHIVE — NOT A GOVERNMENT ARCHIVE &#9632;</div>
     <div class="simbadge">&#9632; NOT A NON-SIGNATURE GOVERNMENT ARCHIVE &#9632;</div>
     <div class="sub">&#9632; OFFICIAL REFERENCE ARCHIVE OF THE JAH-N SYSTEM — OFFICIAL WITHIN THE JAH-N SYSTEM ONLY &#9632;</div>
