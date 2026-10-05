@@ -934,7 +934,7 @@ function aiAnswer(d,q){
   function sec(n){for(var i=0;i<d.sections.length;i++)if(d.sections[i][0]===n)return d.sections[i][1];return ""}
   function PT(n){return "<b>["+((d.prov&&d.prov[n])||"JAH ANALYSIS")+"]</b> "}
   if(has("hello","hi ","hey","thanks","thank","bye","goodbye")){
-   if(window.JAHtalk)return jahHtml(JAHtalk.reply(jahProfile(d),q));
+   if(window.JAHtalk)return jahHtml(JAHtalk.chatFor(jahProfile(d),'file:'+(d.id||'')).reply(q));
    return "Hello. I am the personal AI for <b>"+esc(d.id)+"</b> — "+esc(d.subject)+". I answer only from this file, tagging every answer <b>[PUBLIC RECORD]</b> / <b>[JAH ANALYSIS]</b> / <b>[SPECULATIVE]</b> / <b>[UNKNOWN]</b> — I never invent sources or patent numbers. Ask about the assessment, the proofs, the expert panel, the conclusion, or the sign-off.";}
   if(has("established fact","is this fact","is this true","is this real","really happened","actually true","proven true")){
     if(d.kind==="patent")return "<b>[PUBLIC RECORD]</b> The underlying record — <b>"+esc(d.id)+"</b> — is a verified public patent record (public fact). The JAH-N assessment around it is JAH analysis, not part of the public record.";
@@ -962,9 +962,9 @@ function aiAnswer(d,q){
   if(has("download","disc","thumbdrive","thumb","exe","offline"))return "Use <b>AI DISC (.html)</b> for a self-contained offline copy of this file with its own built-in AI, or <b>AI THUMBDRIVE (.py)</b> for a terminal version you can carry on a USB stick. <b>Format \u2014</b> Contains: this dossier's full text, its personal AI, and read-aloud. Does NOT contain: model weights, executables, or any other dossier. Internet required: no (online voice fallback only if the browser lacks built-in speech). Runtime: any modern browser (disc) / Python 3 (thumbdrive). Platform: Windows / macOS / Linux / Android / iOS.";
   if(has("patent","file","filing","claim","ip"))return d.kind==="patent"?PT("OVERVIEW")+"<b>Patent:</b> this file IS the public record — "+esc(d.id)+". It is summarized from the public domain.":PT("OFFICER CONCLUSION")+"<b>Filing status:</b> "+esc(sec("OFFICER CONCLUSION"));
   if(has("who are you","your name","what are you")){
-   if(window.JAHtalk)return jahHtml(JAHtalk.reply(jahProfile(d),q));
+   if(window.JAHtalk)return jahHtml(JAHtalk.chatFor(jahProfile(d),'file:'+(d.id||'')).reply(q));
    return "I am the personal AI of file <b>"+esc(d.id)+"</b>, generated from the file's own sections. I only answer from this file — try asking about the assessment or the proofs.";}
-  if(window.JAHtalk)return jahHtml(JAHtalk.reply(jahProfile(d),q));
+  if(window.JAHtalk)return jahHtml(JAHtalk.chatFor(jahProfile(d),'file:'+(d.id||'')).reply(q));
   return "Good question. I answer from this file about: <b>what it is</b>, the <b>assessment</b>, the <b>science</b> and <b>math</b> proofs, the <b>expert panel</b>, the <b>conclusion</b>, or the <b>sign-off</b> — and I will tell you plainly when something is not in this file.";
 }
 function aiSend(){
@@ -1430,7 +1430,7 @@ JAHTALK_SRC,
 'function jesc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}',
 'function jbr(s){return jesc(s).replace(/\\n/g,"<br>")}',
 'function jfinal(raw){try{if(JAHP&&typeof JAHtalk!=="undefined"){var r=JAHtalk.guard(raw,JAHP);if(r!==raw)return jbr(r)}}catch(e){}return String(raw).replace(/</g,"&lt;")}',
-'function jtalk(q){try{if(JAHP&&typeof JAHtalk!=="undefined"){var t=String(q).toLowerCase();if(/\\b(hi|hii+|hello|hey|yo|howdy|greetings|sup|thanks|thank you|bye|goodbye)\\b/.test(t)||t.indexOf("duties")>=0||t.indexOf("what do you do")>=0||t.indexOf("what can you do")>=0||t.indexOf("who are you")>=0||t.indexOf("how are you")>=0)return jbr(JAHtalk.reply(JAHP,q))}}catch(e){}return null}',
+'function jtalk(q){try{if(JAHP&&typeof JAHtalk!=="undefined"){var t=String(q).toLowerCase();if(/\\b(hi|hii+|hello|hey|yo|howdy|greetings|sup|thanks|thank you|bye|goodbye)\\b/.test(t)||t.indexOf("duties")>=0||t.indexOf("what do you do")>=0||t.indexOf("what can you do")>=0||t.indexOf("who are you")>=0||t.indexOf("how are you")>=0)return jbr(JAHtalk.chatFor(JAHP,'file:'+D.id).reply(q))}}catch(e){}return null}',
 'try{if(JAHP&&typeof JAHtalk!=="undefined"){document.querySelector("#msgs div").innerHTML=jbr(JAHtalk.greet(JAHP))}}catch(e){}',
 'function ask(){var i=document.getElementById("qin"),m=document.getElementById("msgs"),q=i.value.trim();if(!q)return;i.value="";',
 'm.innerHTML+="<div><b style=color:#ffb000>YOU:</b> "+q.replace(/</g,"&lt;")+"</div>";',
