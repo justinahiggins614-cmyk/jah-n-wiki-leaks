@@ -90,6 +90,12 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;pointer-eve
 .sisters a{color:var(--green);border:1px solid var(--green-d);padding:5px 12px;font-size:12px;
   text-decoration:none;letter-spacing:1px;background:rgba(14,92,42,.12)}
 .sisters a:hover{background:rgba(14,92,42,.3)}
+/* ARCHIVE ENTRY CARD (2026-10-05): the front page's door into the A–Z archive tab page */
+.archive-entry{margin:18px 0;padding:18px;border:1px solid var(--amber-d);border-radius:8px;background:rgba(138,92,0,.08);text-align:center}
+.archive-card{display:inline-block;color:#0a0002;background:var(--amber);font-weight:bold;letter-spacing:2px;font-size:15px;padding:12px 26px;border-radius:6px;text-decoration:none}
+.archive-card:hover{filter:brightness(1.1)}
+.archive-sub{color:var(--dim);font-size:12px;letter-spacing:1px;margin:10px 0 0}
+.archive-entry .typebtn{margin-top:10px}
 /* ===== stat chips ===== */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
 /* FIX-03 (2026-10-02): stat tickers collapse on small screens; desktop renders open, identical to before */
@@ -430,30 +436,13 @@ details.fmeta .frow b{color:var(--ink)}
   <div class="milestone" id="milestone"></div>
   </details>
 
-  <div class="ctrl">
-    <div class="searchrow"><input id="q" type="text" aria-label="Search all files" placeholder="SEARCH ALL FILES — subjects, titles, specs, patents..." autocomplete="off"><button class="clrbtn" id="qclear" aria-label="Clear search">✕</button><button class="randbtn" id="randbtn" title="Open a random dossier from the archive">RANDOM FILE</button><button class="typebtn" id="typebtn" aria-pressed="false" title="Toggle between terminal monospace and readable sans-serif type">TYPE: TERMINAL</button></div>
-    <div class="pills" id="pills">
-      <button class="pill active" data-f="all">ALL FILES</button>
-      <button class="pill" data-f="bizarre">BIZARRE FILES</button>
-      <button class="pill" data-f="spec">SPEC DOSSIERS</button>
-      <button class="pill" data-f="patent">PATENT DOSSIERS</button>
-    </div>
-    <div class="finder" id="finder">
-      <div class="finder-h">&#9670; FILE FINDER &mdash; describe what you are after in plain words</div>
-      <div class="finder-row">
-        <input id="finderq" type="text" aria-label="Describe what you are looking for" placeholder="Describe what you're looking for&hellip;" autocomplete="off">
-        <button id="findergo" type="button">FIND IT</button>
-      </div>
-      <div class="finder-res" id="finderres" aria-live="polite"></div>
-    </div>
-    <div class="az" id="az"></div>
-    <div><label for="catchoice" class="sr-only" style="position:absolute;left:-9999px">Filter bizarre files by category</label><select id="catchoice" aria-label="Filter bizarre files by category"><option value="">ALL BIZARRE CATEGORIES</option></select></div>
-    <div class="legend"><span class="lg-pub">&#9632; PUBLIC RECORD</span><span class="lg-ana">&#9632; JAH ANALYSIS</span><span class="lg-spec">&#9632; SPECULATIVE</span><span class="lg-sim">&#9632; INTERNAL ANALYSIS</span><span class="lg-unk">&#9632; UNKNOWN</span></div>
-    <div class="hits" id="hits" role="status" aria-live="polite">LOADING THE ARCHIVE&#8230;</div>
+  <!-- ARCHIVE ENTRY (2026-10-05): the million-file A-Z dossier lists live ONLY on the
+       archive tab page (browse.html) — never inline on the front page. -->
+  <div class="archive-entry">
+    <a class="archive-card" href="browse.html">&#9632; BROWSE THE FULL DOSSIER ARCHIVE (A&ndash;Z)</a>
+    <p class="archive-sub">Every bizarre-subject dossier, A&ndash;Z with search and the AI helper — on the archive page.</p>
+    <button class="typebtn" id="typebtn" aria-pressed="false" title="Toggle between terminal monospace and readable sans-serif type">TYPE: TERMINAL</button>
   </div>
-
-  <div class="grid" id="grid"></div>
-  <div class="pager" id="pager"></div>
 
   <div class="honest">
     <b>OFFICIAL NOTICE.</b> Wiki Leaks is the Signature organization's own declassified internal archive — the JAH governance leaking its own files. It is an official reference work of the JAH-N system and the organization's own internal archive: dossiers are the organization's own internal files — analytical reference records, not real classified government documents — and are not affiliated with any government agency, the USPTO, or any external institution. "Official" means official <b>within the JAH-N system only</b>. Bizarre-subject files are the organization's own internal analyses, grounded in real patent and spec records. All spec files are original draft works by <b>Justin Addam Higgins (JAH)</b> — drafts ready to file, never granted patents. Public patent records shown here are real public records, summarized from the public domain. <b>NOT A NON-SIGNATURE GOVERNMENT ARCHIVE.</b>
@@ -514,8 +503,6 @@ function loadSpecShard(sh){
 /* spec index row: 0=id 1=title 2=abstract 3=category 4=cpc 5=era 6=date 11=letter 12=line 19=mix_from 20=chunk */
 var BIZ=[], SPECS=[], PATENTS=[], specCount=0, patentCount=0, SPECS_DONE=false;
 var BIZIDX=[], BIZSHARDS=[{base:"",index:"data/bizarre/bizarre.idx.json.gz"}], CHUNKCACHE={};
-var state={f:"all", az:"", cat:"", q:"", page:1};
-var PAGE_SIZE=240; /* USABILITY WAVE SITE5 item 6: archive pagination page size */
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function toast(m){var t=document.getElementById("toast");t.textContent=m;t.style.display="block";
   clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none"},2200)}
@@ -573,12 +560,12 @@ function loadAll(){
       var chain=Promise.resolve();
       rest.forEach(function(sh){chain=chain.then(function(){return loadSpecShard(sh)})});
       return chain.then(function(){
-        specCount=SPECS.length;SPECS_DONE=true;buildHay();renderStats();render();
+        specCount=SPECS.length;SPECS_DONE=true;renderStats();
         if(!document.getElementById("viewer").classList.contains("open"))deepLink();
       });
     }
     return loadSpecShard(first).then(function(){return Promise.all(p)}).then(function(){
-      buildHay();renderStats();buildCats();render();showUpdated();
+      renderStats();showUpdated();
       if(!document.getElementById("viewer").classList.contains("open"))deepLink();
       return wave2();
     });
@@ -1620,124 +1607,9 @@ function downloadAllZip(){
   setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u)},800);
   toast("Complete file package downloaded (.zip).");
 }
-/* FIX-SITE5-6: precomputed lowercase search blobs — one pass after data loads,
-   so every keystroke scans cached strings instead of re-lowercasing every row */
-var HAY={biz:[],bidx:[],spec:[],pat:[]};
-function buildHay(){
-  var i;
-  HAY.biz=[];for(i=0;i<BIZ.length;i++){var d=BIZ[i];HAY.biz.push((d.id+" "+d.subject+" "+d.overview+" "+d.assessment+" "+d.category).toLowerCase())}
-  HAY.bidx=[];for(i=0;i<BIZIDX.length;i++){var br=BIZIDX[i];HAY.bidx.push((br[0]+" "+br[1]+" "+br[2]).toLowerCase())}
-  HAY.spec=[];for(i=0;i<SPECS.length;i++){var r=SPECS[i];HAY.spec.push(matchBlob("spec",r))}
-  HAY.pat=[];for(i=0;i<PATENTS.length;i++){var p=PATENTS[i];HAY.pat.push(matchBlob("patent",p))}
-}
-function matchBlob(kind,row){
-  var id=row[0],ti=row[1]||"",ab=row[2]||"",cat=kind==="spec"?row[3]:(kind==="patent"?row[3]:"");
-  return (id+" "+ti+" "+ab+" "+cat).toLowerCase();
-}
-function hayBiz(i){var d=BIZ[i];return i<HAY.biz.length?HAY.biz[i]:(d.id+" "+d.subject+" "+d.overview+" "+d.assessment+" "+d.category).toLowerCase()}
-function hayBidx(i){var br=BIZIDX[i];return i<HAY.bidx.length?HAY.bidx[i]:(br[0]+" "+br[1]+" "+br[2]).toLowerCase()}
-function hayRow(kind,i,row){var H=kind==="spec"?HAY.spec:HAY.pat;return i<H.length?H[i]:matchBlob(kind,row)}
-/* ================= search / filter / render ================= */
-var RES=[];
-function matchRow(kind,row,q){
-  return matchBlob(kind,row).indexOf(q)>=0;
-}
-function firstLetter(s){s=String(s||"").trim();return s?s[0].toUpperCase():""}
-function currentResults(){
-  var out=[],q=state.q.toLowerCase(),f=state.f,az=state.az;
-  function okLetter(s){return !az||firstLetter(s)===az}
-  if(f==="all"||f==="bizarre")for(var i=0;i<BIZ.length;i++){var d=BIZ[i];
-    if(state.cat&&d.category!==state.cat)continue;
-    if(!okLetter(d.subject))continue;
-    if(q&&hayBiz(i).indexOf(q)<0)continue;
-    out.push({kind:"bizarre",d:d})}
-  if(f==="all"||f==="bizarre")for(var bi=0;bi<BIZIDX.length;bi++){var br=BIZIDX[bi];
-    if(state.cat&&br[2]!==state.cat)continue;
-    if(!okLetter(br[1]))continue;
-    if(q&&hayBidx(bi).indexOf(q)<0)continue;
-    out.push({kind:"drip",br:br})}
-  if(f==="all"||f==="spec")for(var j=0;j<SPECS.length;j++){var r=SPECS[j];
-    if(!okLetter(r[1]))continue;
-    if(q&&hayRow("spec",j,r).indexOf(q)<0)continue;
-    out.push({kind:"spec",r:r})}
-  if(f==="all"||f==="patent")for(var k=0;k<PATENTS.length;k++){var p=PATENTS[k];
-    if(!okLetter(p[1]))continue;
-    if(q&&hayRow("patent",k,p).indexOf(q)<0)continue;
-    out.push({kind:"patent",p:p})}
-  /* USABILITY WAVE SITE5 item 5: exact ID lookup — an exact dossier-ID match
-     (JAH-LEAK-B######, JAH-SPEC-######, patent pub number) always sorts first */
-  if(q){var qx=state.q.toUpperCase(),ex=[],rest=[];
-    for(var ei=0;ei<out.length;ei++){var it=out[ei];
-      var iid=it.kind==="bizarre"?it.d.id:it.kind==="drip"?it.br[0]:it.kind==="spec"?it.r[0]:it.p[0];
-      if(String(iid).toUpperCase()===qx)ex.push(it);else rest.push(it);}
-    if(ex.length)return ex.concat(rest);}
-  return out;
-}
-function cardHTML(it,idx){
-  var k=it.kind,cc=(k==="drip"?"bizarre":k),label,sub,id,abs,foot,stat;
-  if(k==="bizarre"){label="BIZARRE FILE";sub=it.d.subject;id=it.d.id;abs=it.d.overview;foot=esc(it.d.category);stat="SPECULATIVE ANALYSIS"}
-  else if(k==="drip"){label="BIZARRE FILE";sub=it.br[1];id=it.br[0];abs="Classified dossier — open the file for the full briefing: overview, technical assessment, science and math proofs, AI review panel, officer conclusion.";foot=esc(it.br[2]);stat="SPECULATIVE ANALYSIS"}
-  else if(k==="spec"){label="SPEC DOSSIER";sub=it.r[1];id=it.r[0];abs=it.r[2]||"";foot=esc(it.r[3]||"")+" · "+esc(it.r[12]||"");stat="DRAFT \u00b7 JAH ORIGINAL"}
-  else{label="PATENT DOSSIER";sub=it.p[1];id=it.p[0];abs=it.p[2]||"";foot=esc(it.p[3]||"");stat="PUBLIC RECORD"}
-  return '<a class="fcard k-'+cc+'" data-i="'+idx+'" href="?dossier='+esc(encodeURIComponent(id))+'" aria-label="Open file '+esc(id)+': '+esc(sub)+'"><div class="kind">▓ '+label+'</div><div class="body">'+
-    '<h3>'+esc(sub)+'</h3><div class="fid">'+esc(id)+'</div><div class="fstat">'+stat+'</div><div class="abs">'+esc(abs)+'</div></div>'+
-    '<div class="foot"><span class="fstatic">'+foot+'</span><b>OPEN FILE ▸</b></div>'+
-    '<details class="fmeta"><summary>FILE DATA</summary><div class="frow"><b>CATEGORY</b> '+foot+'</div><div class="frow"><b>STATUS</b> '+stat+'</div></details></a>';
-}
-/* FIX-SITE5-5: the mobile FILE DATA accordion lives inside the card anchor —
-   intercept summary taps in capture phase so expanding it never opens the file */
-document.addEventListener("click",function(e){
-  var t=e&&e.target;
-  if(t&&t.closest){
-    var sm=t.closest("details.fmeta > summary");
-    if(sm){e.preventDefault();e.stopPropagation();
-      var dt=sm.parentNode;
-      if(dt.open)dt.removeAttribute("open");else dt.setAttribute("open","");}
-  }
-},true);
-/* USABILITY WAVE SITE5 item 7: random dossier — picks from every loaded record and
-   opens it through the normal dossier path, so the URL becomes a real ?dossier=<id> link */
-function randomDossier(){
-  var pool=[],i;
-  for(i=0;i<BIZ.length;i++)pool.push({k:"bizarre",d:BIZ[i]});
-  for(i=0;i<BIZIDX.length;i++)pool.push({k:"drip",br:BIZIDX[i]});
-  for(i=0;i<SPECS.length;i++)pool.push({k:"spec",r:SPECS[i]});
-  for(i=0;i<PATENTS.length;i++)pool.push({k:"patent",p:PATENTS[i]});
-  if(!pool.length){toast("The archive is still loading — try again in a moment.");return}
-  var it=pool[Math.floor(Math.random()*pool.length)];
-  if(it.k==="bizarre")openDossier(bizarreDossier(it.d));
-  else if(it.k==="drip")openDripDossier(it.br);
-  else if(it.k==="spec")openDossier(specDossier(it.r));
-  else openDossier(patentDossier(it.p));
-}
-function render(){
-  RES=currentResults();
-  var shown=RES.slice(0,PAGE_SIZE*state.page),g=document.getElementById("grid");
-  g.innerHTML=shown.map(cardHTML).join("");
-  var cards=g.querySelectorAll(".fcard");
-  for(var i=0;i<cards.length;i++)cards[i].onclick=function(e){
-    if(e&&e.preventDefault)e.preventDefault(); /* links work without JS; with JS open the viewer in place */
-    var it=RES[Number(this.getAttribute("data-i"))];if(!it)return;
-    if(it.kind==="bizarre")openDossier(bizarreDossier(it.d));
-    else if(it.kind==="drip")openDripDossier(it.br);
-    else if(it.kind==="spec")openDossier(specDossier(it.r));
-    else openDossier(patentDossier(it.p));
-  };
-  var h=document.getElementById("hits");
-  h.textContent=RES.length?RES.length.toLocaleString()+" FILES MATCH":"0 FILES MATCH — try a title, dossier ID, patent number, or browse A–Z";
-  /* USABILITY WAVE SITE5 item 6: archive pagination — page forward instead of a hard 240 cap */
-  var pg=document.getElementById("pager");
-  if(pg){
-    if(RES.length>shown.length){
-      pg.innerHTML='<div class="pgrange">SHOWING '+shown.length.toLocaleString()+' OF '+RES.length.toLocaleString()+' FILES</div>'+
-        '<button class="pill" id="morebtn">SHOW MORE FILES &#9662;</button>';
-      document.getElementById("morebtn").onclick=function(){state.page++;render();
-        var p2=document.getElementById("pager");if(p2)p2.scrollIntoView({block:"nearest"})};
-    }else{
-      pg.innerHTML=RES.length>PAGE_SIZE?'<div class="pgrange">SHOWING ALL '+RES.length.toLocaleString()+' FILES</div>':"";
-    }
-  }
-}
+/* ARCHIVE BROWSER REMOVED (2026-10-05): the A-Z/filter/grid browser moved off the
+   front page — the dossier archive lives ONLY on the archive tab page
+   (browse.html). The dossier viewer (?dossier= deep links) below is untouched. */
 function renderStats(){
   var biz=BIZ.length+BIZIDX.length,total=SPECS.length+PATENTS.length+biz;
   document.getElementById("stats").innerHTML=
@@ -1773,63 +1645,22 @@ function renderMilestone(total,biz){
     '<div class="ms-count">'+Number(total).toLocaleString()+' / 1,000,000 FILES — '+pct.toFixed(1)+'%</div>'+
     '<div class="ms-sub">SPEC DOSSIERS '+SPECS.length.toLocaleString()+' · PATENT DOSSIERS '+PATENTS.length.toLocaleString()+' · BIZARRE FILES '+Number(biz).toLocaleString()+' — the archive grows automatically, around the clock</div>';
 }
-function buildAZ(){
-  var az=document.getElementById("az"),h='<a data-a="" class="active" href="./" aria-label="Browse all files">ALL</a>';
-  for(var c=65;c<=90;c++){var L=String.fromCharCode(c);
-    h+='<a data-a="'+L+'" href="?az='+L+'" aria-label="Browse files starting with '+L+'">'+L+'</a>'}
-  az.innerHTML=h;
-  var ls=az.querySelectorAll("a");
-  for(var i=0;i<ls.length;i++)ls[i].onclick=function(e){
-    if(e&&e.preventDefault)e.preventDefault();
-    for(var j=0;j<ls.length;j++)ls[j].classList.remove("active");
-    this.classList.add("active");
-    state.az=this.getAttribute("data-a");state.page=1;
-    try{history.replaceState(null,"",state.az?"?az="+state.az:"./")}catch(x){}
-    render();
-  };
-  /* reflect ?az= when arriving on a deep link */
-  var m=/[?&]az=([A-Za-z]?)/.exec(location.search);
-  if(m&&m[1]){state.az=m[1].toUpperCase();
-    for(var k=0;k<ls.length;k++)ls[k].classList.toggle("active",ls[k].getAttribute("data-a")===state.az)}
-}
-function buildCats(){
-  var sel=document.getElementById("catchoice"),seen={},h='<option value="">ALL BIZARRE CATEGORIES</option>';
-  BIZ.forEach(function(d){if(!seen[d.category]){seen[d.category]=1;h+='<option>'+esc(d.category)+'</option>'}});
-  BIZIDX.forEach(function(r){if(!seen[r[2]]){seen[r[2]]=1;h+='<option>'+esc(r[2])+'</option>'}});
-  sel.innerHTML=h;
-  sel.onchange=function(){state.cat=this.value;state.page=1;render()};
-}
-function wireControls(){
-  var pills=document.getElementById("pills").querySelectorAll(".pill");
-  for(var i=0;i<pills.length;i++)pills[i].onclick=function(){
-    for(var j=0;j<pills.length;j++){pills[j].classList.remove("active");pills[j].setAttribute("aria-pressed","false")}
-    this.classList.add("active");this.setAttribute("aria-pressed","true");
-    state.f=this.getAttribute("data-f");state.page=1;render();
-  };
-  for(var a=0;a<pills.length;a++)pills[a].setAttribute("aria-pressed",pills[a].classList.contains("active")?"true":"false");
-  var q=document.getElementById("q"),tm=null;
-  q.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(function(){state.q=q.value.trim();state.page=1;render()},220)});
-  /* USABILITY WAVE SITE5: keyboard operability — Enter submits the search immediately */
-  q.addEventListener("keydown",function(e){if(e.key==="Enter"){clearTimeout(tm);state.q=q.value.trim();state.page=1;render()}});
-  /* FIX-SITE5-6: clear-search control — one tap empties the box and re-renders */
-  var qc=document.getElementById("qclear");
-  if(qc)qc.onclick=function(){q.value="";state.q="";state.page=1;clearTimeout(tm);render();q.focus()};
-  /* USABILITY WAVE SITE5 item 7: random dossier — opens a real ?dossier=<id> deep link */
-  var rb=document.getElementById("randbtn");
-  if(rb)rb.onclick=randomDossier;
+/* ARCHIVE BROWSER REMOVED (2026-10-05): the pills/search/A-Z/category browser
+   moved off the front page to the archive tab page (browse.html). The readable-type
+   toggle stays — it is a site-wide accessibility control, not archive clutter. */
+function wireTypeToggle(){
   /* FIX-SITE5-4: terminal-monospace <-> readable sans-serif toggle, persisted */
   var tb=document.getElementById("typebtn");
+  if(!tb)return;
   function setType(sans){
     document.body.classList.toggle("sans",!!sans);
     tb.setAttribute("aria-pressed",sans?"true":"false");
     tb.textContent=sans?"TYPE: READABLE":"TYPE: TERMINAL";
     try{PS.set("jahN-type",sans?"sans":"mono")}catch(e){}
   }
-  if(tb){
-    var saved=null;try{saved=PS.get("jahN-type")}catch(e){}
-    setType(saved==="sans");
-    tb.onclick=function(){setType(!document.body.classList.contains("sans"))};
-  }
+  var saved=null;try{saved=PS.get("jahN-type")}catch(e){}
+  setType(saved==="sans");
+  tb.onclick=function(){setType(!document.body.classList.contains("sans"))};
 }
 function deepLink(){
   var m=/[?&]dossier=([^&]+)/.exec(location.search);if(!m)return;
@@ -1842,9 +1673,8 @@ function deepLink(){
 }
 document.getElementById("viewer").addEventListener("click",function(e){if(e.target.id==="viewer")closeDossier()});
 
-/* ================= FILE FINDER (additive, 2026-10-02) =================
-   Keyword extraction -> the archive's EXISTING search (currentResults) ->
-   top 5 as deep-link cards. Deterministic, no backend calls. */
+/* FILE FINDER browser UI removed (2026-10-05) — archive browsing lives on
+   browse.html. finderWords() stays: the dossier FILE HELPER answers from it. */
 var FINDER_STOP={a:1,an:1,the:1,of:1,to:1,is:1,it:1,in:1,and:1,what:1,how:1,does:1,do:1,
 for:1,with:1,on:1,by:1,i:1,you:1,me:1,my:1,this:1,that:1,tell:1,about:1,please:1,can:1,
 are:1,was:1,were:1,be:1,or:1,as:1,at:1,from:1,find:1,looking:1,want:1,need:1,show:1,
@@ -1853,40 +1683,6 @@ will:1,would:1,could:1,should:1,they:1,we:1,our:1,us:1,if:1,not:1,no:1,but:1,so:
 very:1,more:1,many:1,other:1,than:1,just:1,like:1,also:1,over:1,through:1,before:1,
 after:1,each:1,these:1,those:1,then:1,now:1};
 function finderWords(sx){return String(sx==null?"":sx).toLowerCase().replace(/[^a-z0-9\s]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!FINDER_STOP[w];});}
-function finderCardHTML(it){
-  var k=it.kind,cc=(k==="drip"?"bizarre":k),label,sub,id,abs,foot,stat;
-  if(k==="bizarre"){label="BIZARRE FILE";sub=it.d.subject;id=it.d.id;abs=it.d.overview;foot=esc(it.d.category);stat="SPECULATIVE ANALYSIS";}
-  else if(k==="drip"){label="BIZARRE FILE";sub=it.br[1];id=it.br[0];abs="Classified dossier — open the file for the full briefing: overview, technical assessment, science and math proofs, AI review panel, officer conclusion.";foot=esc(it.br[2]);stat="SPECULATIVE ANALYSIS";}
-  else if(k==="spec"){label="SPEC DOSSIER";sub=it.r[1];id=it.r[0];abs=it.r[2]||"";foot=esc(it.r[3]||"");stat="DRAFT · JAH ORIGINAL";}
-  else{label="PATENT DOSSIER";sub=it.p[1];id=it.p[0];abs=it.p[2]||"";foot=esc(it.p[3]||"");stat="PUBLIC RECORD";}
-  return '<a class="fcard k-'+cc+'" href="?dossier='+esc(encodeURIComponent(id))+'" aria-label="Open file '+esc(id)+': '+esc(sub)+'"><div class="kind">\u2593 '+label+'</div><div class="body">'+
-    '<h3>'+esc(sub)+'</h3><div class="fid">'+esc(id)+'</div><div class="fstat">'+stat+'</div><div class="abs">'+esc(String(abs).slice(0,280))+'</div></div>'+
-    '<div class="foot"><span class="fstatic">'+foot+'</span><b class="take">TAKE ME THERE \u2192</b></div>'+
-    '<details class="fmeta"><summary>FILE DATA</summary><div class="frow"><b>CATEGORY</b> '+foot+'</div><div class="frow"><b>STATUS</b> '+stat+'</div></details></a>';
-}
-function finderRun(){
-  var qi=document.getElementById("finderq"),box=document.getElementById("finderres");
-  var ws=finderWords(qi.value);
-  if(!ws.length){box.innerHTML='<div class="finder-none">Describe the file in a few plain words \u2014 e.g. "plasma propulsion drive" \u2014 and the Finder scans the whole archive.</div>';return;}
-  var sq=state.q,sf=state.f,sc=state.cat,sa=state.az;
-  state.f="all";state.cat="";state.az="";
-  var seen={},ranked=[];
-  ws.forEach(function(w){
-    state.q=w;
-    var res=currentResults();
-    for(var i=0;i<res.length;i++){
-      var it=res[i],kk=it.kind+":"+(it.kind==="bizarre"?it.d.id:it.kind==="drip"?it.br[0]:it.kind==="spec"?it.r[0]:it.p[0]);
-      if(!seen[kk]){seen[kk]={it:it,n:0};ranked.push(seen[kk]);}
-      seen[kk].n++;
-    }
-  });
-  state.q=sq;state.f=sf;state.cat=sc;state.az=sa;render();
-  ranked.sort(function(a,b){return b.n-a.n;});
-  var top=ranked.slice(0,5);
-  if(!top.length){box.innerHTML='<div class="finder-none">No files matched "'+esc(ws.join(" "))+'". Try fewer or different words, or browse A\u2013Z.</div>';return;}
-  box.innerHTML='<div class="finder-count">TOP '+top.length+' MATCH'+(top.length>1?"ES":"")+' FOR "'+esc(ws.join(" "))+'"</div>'+
-    top.map(function(e){return finderCardHTML(e.it);}).join("");
-}
 /* ================= FILE HELPER (additive, 2026-10-02) =================
    Compact bubble on dossier views. Answers ONLY from the open file's own
    sections/fields; says plainly when the file does not cover a question. */
@@ -1922,16 +1718,13 @@ function helperAsk(q){
   box.scrollTop=box.scrollHeight;
 }
 
-wireControls();buildAZ();
-document.getElementById("findergo").onclick=finderRun;
-document.getElementById("finderq").addEventListener("keydown",function(e){if(e.key==="Enter")finderRun();});
+wireTypeToggle();
 loadAll().then(function(){
   specCount=SPECS.length;patentCount=PATENTS.length;
-  buildHay();renderStats();buildCats();render();
+  renderStats();
   if(!document.getElementById("viewer").classList.contains("open"))deepLink();
   toast("Archive online — "+(SPECS.length+PATENTS.length+BIZ.length+BIZIDX.length).toLocaleString()+" files.");
-}).catch(function(){renderStats();render();
-  document.getElementById("hits").innerHTML='ARCHIVE FAILED TO LOAD — <button class="pill" onclick="location.reload()">RETRY</button>';});
+}).catch(function(){renderStats();toast("Archive failed to load — reload to retry.");});
 /* FIX-03 (2026-10-02): collapse stat tickers on small screens so titles and search stay instantly reachable */
 (function(){try{if(window.matchMedia&&window.matchMedia("(max-width:767px)").matches){var d=document.querySelector("details.stattoggle");if(d)d.removeAttribute("open");}}catch(e){}})();
 </script>
@@ -1943,8 +1736,8 @@ loadAll().then(function(){
     <h2>&#9630; JAH-N WIKI LEAKS</h2>
     <p class="wlead">The JAH governance leaking its own files — the JAH system&#8217;s own internal archive, declassified and published by itself. Three kinds of files: bizarre-subject dossiers, spec dossiers, and public-patent dossiers. The page never moves during this guide — it stays right where it is.</p>
     <ol>
-      <li><b>Search every file.</b> The search box takes words, or an exact ID — <b>JAH-LEAK-B######</b>, <b>JAH-SPEC-######</b>, or a patent publication number — and sorts that file to the very top.</li>
-      <li><b>Browse and filter.</b> The pills narrow to <b>ALL FILES / BIZARRE / SPEC / PATENT</b>; the A&#8211;Z bar browses by letter. Tap any card to open the full dossier.</li>
+      <li><b>Browse the archive.</b> Tap <b>&#9632; BROWSE THE FULL DOSSIER ARCHIVE (A&ndash;Z)</b> — the full A&ndash;Z dossier archive lives on its own page, with search, letter browsing, and the AI helper.</li>
+      <li><b>Open a dossier.</b> Every file has a permanent deep link — <b>?dossier=&lt;file ID&gt;</b> — tap any file to open it.</li>
       <li><b>Inside a dossier:</b> ask the personal AI (answers only from that file, trust-tagged), press <b>READ ALOUD</b>, <b>COPY ALL</b>, or <b>DOWNLOAD ALL</b> (.zip with an offline AI disc + thumbdrive).</li>
       <li><b>Trust labels.</b> Every claim is tagged <b>PUBLIC RECORD</b>, <b>JAH ANALYSIS</b>, <b>SPECULATIVE</b>, or <b>UNKNOWN</b> — check the tag to know what kind of statement it is.</li>
     </ol>
@@ -1956,16 +1749,10 @@ loadAll().then(function(){
   <div class="jah-guide-card" role="dialog" aria-label="Site guide — how to use this site">
     <h2>&#9630; HOW TO USE THIS SITE</h2>
     <p style="color:var(--dim)">The JAH governance leaking its own files — the JAH system's own internal archive, declassified and published by itself. Official <b>within the JAH-N system only</b> (internal Signature archive — not a government archive). Three kinds of files: bizarre-subject dossiers, spec dossiers, and public-patent dossiers.</p>
-    <h3>&#128269; SEARCH ALL FILES</h3>
-    <p>Type subjects, titles, specs, or patent text. Type an exact ID — <b>JAH-LEAK-B######</b>, <b>JAH-SPEC-######</b>, or a patent publication number — and that file sorts to the very top of the results. The &#10005; clears the search.</p>
-    <h3>&#127922; RANDOM FILE</h3>
-    <p>Opens one random dossier from the whole archive — every tap resolves to a real file, never an empty or invented one.</p>
-    <h3>&#9630; FILE FILTERS</h3>
-    <p><b>ALL FILES / BIZARRE FILES / SPEC DOSSIERS / PATENT DOSSIERS</b> narrow the archive by file kind. The <b>A&#8211;Z</b> bar browses by first letter; the category dropdown filters bizarre files by subject category.</p>
-    <h3>&#9672; FILE FINDER</h3>
-    <p>Describe what you want in plain words (&ldquo;time travel patents&rdquo;, &ldquo;quantum engine spec&rdquo;) and press <b>FIND IT</b>.</p>
-    <h3>&#128196; FILE CARDS</h3>
-    <p>Each card shows its kind (BIZARRE FILE / SPEC DOSSIER / PATENT DOSSIER), subject, ID, and status line. Click a card to open the full dossier. Every file has a permanent deep link — <b>?dossier=&lt;file ID&gt;</b>. <b>SHOW MORE FILES</b> pages through results.</p>
+    <h3>&#9632; BROWSE THE DOSSIER ARCHIVE</h3>
+    <p>The full dossier archive lives on its own page — tap <b>&#9632; BROWSE THE FULL DOSSIER ARCHIVE (A&ndash;Z)</b>. Search the archive by words or exact ID (<b>JAH-LEAK-B######</b>, <b>JAH-SPEC-######</b>, patent publication number), browse A&ndash;Z by letter, and ask the archive AI. Tap any file to open the full dossier.</p>
+    <h3>&#128196; DOSSIER DEEP LINKS</h3>
+    <p>Every file has a permanent deep link — <b>?dossier=&lt;file ID&gt;</b>. Open it from the archive page or paste it anywhere.</p>
     <h3>&#9630; TRUST LABELS</h3>
     <p>Every claim is tagged: <b>PUBLIC RECORD</b> (real public record), <b>JAH ANALYSIS</b> (the organization's own internal analysis layer), <b>SPECULATIVE</b>, <b>INTERNAL ANALYSIS</b>, <b>UNKNOWN</b>. The personal AI tags every answer the same way.</p>
     <h3>&#129302; ASK THE AI (inside a dossier)</h3>
@@ -2019,10 +1806,10 @@ if(gtour)gtour.onclick=function(){document.getElementById("jah-guide").hidden=tr
 var gbox=document.getElementById("jah-guide");
 if(gbox)gbox.addEventListener("click",function(e){if(e.target===this)this.hidden=true;});
 document.addEventListener("keydown",function(e){var g=document.getElementById("jah-guide");if(e.key==="Escape"&&g&&!g.hidden)g.hidden=true;});
-/* first-visit offer only after the archive has rendered; never on deep links */
+/* first-visit offer only after the stats have rendered; never on deep links */
 function deep(){return /[?&](spec|patent|dossier|w|id|dial)=/i.test(location.search||"");}
 (function waitReady(n){
-  var g=document.getElementById("grid");
+  var g=document.getElementById("stats");
   if(g&&g.children.length>0){
     if(!isSeen()&&!deep()){setTimeout(function(){if(!isSeen()&&!deep())openWel();},800);}
     return;
