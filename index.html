@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>try{if(localStorage.getItem('jah-theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
+<script src="js/signin.js"></script>
+<script>/* profile-aware storage wrapper: signed out = plain localStorage (unchanged); signed in = per-profile namespace */
+var PS=(typeof JAHProfile!=="undefined"&&JAHProfile)?JAHProfile.store:{get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}},remove:function(k){try{localStorage.removeItem(k)}catch(e){}}};
+function jahChatKey(base){return (typeof JAHProfile!=="undefined"&&JAHProfile)?JAHProfile.chatKey(base):base;}</script>
+<script>try{if(PS.get('jah-theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 <style>
 html[data-theme="light"]{filter:invert(1) hue-rotate(180deg)}
 html[data-theme="light"] img,html[data-theme="light"] video,html[data-theme="light"] canvas,html[data-theme="light"] svg{filter:invert(1) hue-rotate(180deg)}
@@ -934,7 +938,7 @@ function aiAnswer(d,q){
   function sec(n){for(var i=0;i<d.sections.length;i++)if(d.sections[i][0]===n)return d.sections[i][1];return ""}
   function PT(n){return "<b>["+((d.prov&&d.prov[n])||"JAH ANALYSIS")+"]</b> "}
   if(has("hello","hi ","hey","thanks","thank","bye","goodbye")){
-   if(window.JAHtalk)return jahHtml(JAHtalk.chatFor(jahProfile(d),'file:'+(d.id||'')).reply(q));
+   if(window.JAHtalk)return jahHtml(JAHtalk.chatFor(jahProfile(d),jahChatKey('file:'+(d.id||''))).reply(q));
    return "Hello. I am the personal AI for <b>"+esc(d.id)+"</b> — "+esc(d.subject)+". I answer only from this file, tagging every answer <b>[PUBLIC RECORD]</b> / <b>[JAH ANALYSIS]</b> / <b>[SPECULATIVE]</b> / <b>[UNKNOWN]</b> — I never invent sources or patent numbers. Ask about the assessment, the proofs, the expert panel, the conclusion, or the sign-off.";}
   if(has("established fact","is this fact","is this true","is this real","really happened","actually true","proven true")){
     if(d.kind==="patent")return "<b>[PUBLIC RECORD]</b> The underlying record — <b>"+esc(d.id)+"</b> — is a verified public patent record (public fact). The JAH-N assessment around it is JAH analysis, not part of the public record.";
@@ -962,9 +966,9 @@ function aiAnswer(d,q){
   if(has("download","disc","thumbdrive","thumb","exe","offline"))return "Use <b>AI DISC (.html)</b> for a self-contained offline copy of this file with its own built-in AI, or <b>AI THUMBDRIVE (.py)</b> for a terminal version you can carry on a USB stick. <b>Format \u2014</b> Contains: this dossier's full text, its personal AI, and read-aloud. Does NOT contain: model weights, executables, or any other dossier. Internet required: no (online voice fallback only if the browser lacks built-in speech). Runtime: any modern browser (disc) / Python 3 (thumbdrive). Platform: Windows / macOS / Linux / Android / iOS.";
   if(has("patent","file","filing","claim","ip"))return d.kind==="patent"?PT("OVERVIEW")+"<b>Patent:</b> this file IS the public record — "+esc(d.id)+". It is summarized from the public domain.":PT("OFFICER CONCLUSION")+"<b>Filing status:</b> "+esc(sec("OFFICER CONCLUSION"));
   if(has("who are you","your name","what are you")){
-   if(window.JAHtalk)return jahHtml(JAHtalk.chatFor(jahProfile(d),'file:'+(d.id||'')).reply(q));
+   if(window.JAHtalk)return jahHtml(JAHtalk.chatFor(jahProfile(d),jahChatKey('file:'+(d.id||''))).reply(q));
    return "I am the personal AI of file <b>"+esc(d.id)+"</b>, generated from the file's own sections. I only answer from this file — try asking about the assessment or the proofs.";}
-  if(window.JAHtalk)return jahHtml(JAHtalk.chatFor(jahProfile(d),'file:'+(d.id||'')).reply(q));
+  if(window.JAHtalk)return jahHtml(JAHtalk.chatFor(jahProfile(d),jahChatKey('file:'+(d.id||''))).reply(q));
   return "Good question. I answer from this file about: <b>what it is</b>, the <b>assessment</b>, the <b>science</b> and <b>math</b> proofs, the <b>expert panel</b>, the <b>conclusion</b>, or the <b>sign-off</b> — and I will tell you plainly when something is not in this file.";
 }
 function aiSend(){
@@ -990,8 +994,8 @@ function copyFileId(){
   else toast("Copy failed \u2014 select the text manually.");
 }
 /* ================= report issue (local log + tracking ID) ================= */
-function rptStore(){try{return JSON.parse(localStorage.getItem("jahn_reports")||"[]")}catch(e){return[]}}
-function rptSave(a){try{localStorage.setItem("jahn_reports",JSON.stringify(a))}catch(e){}}
+function rptStore(){try{return JSON.parse(PS.get("jahn_reports")||"[]")}catch(e){return[]}}
+function rptSave(a){try{PS.set("jahn_reports",JSON.stringify(a))}catch(e){}}
 function submitReport(){
   if(!CUR)return;
   var cat=document.getElementById("rptcat").value;
@@ -1388,6 +1392,7 @@ function discHTML(d){
   ].join("\n");
   var parts=[
 '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
+'<script>var PS=(typeof JAHProfile!=="undefined"&&JAHProfile)?JAHProfile.store:{get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}},remove:function(k){try{localStorage.removeItem(k)}catch(e){}}}<\/script>',
 '<title>AI DISC — '+d.id+'</title><style>',
 'body{background:#0e1626;color:#e9effc;font-family:"Courier New",monospace;padding:20px;max-width:860px;margin:0 auto;line-height:1.6}',
 'h1{color:#ffb000;letter-spacing:2px;font-size:22px}h4{color:#3dff78;letter-spacing:2px;margin-top:18px}',
@@ -1430,7 +1435,7 @@ JAHTALK_SRC,
 'function jesc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}',
 'function jbr(s){return jesc(s).replace(/\\n/g,"<br>")}',
 'function jfinal(raw){try{if(JAHP&&typeof JAHtalk!=="undefined"){var r=JAHtalk.guard(raw,JAHP);if(r!==raw)return jbr(r)}}catch(e){}return String(raw).replace(/</g,"&lt;")}',
-'function jtalk(q){try{if(JAHP&&typeof JAHtalk!=="undefined"){var t=String(q).toLowerCase();if(/\\b(hi|hii+|hello|hey|yo|howdy|greetings|sup|thanks|thank you|bye|goodbye)\\b/.test(t)||t.indexOf("duties")>=0||t.indexOf("what do you do")>=0||t.indexOf("what can you do")>=0||t.indexOf("who are you")>=0||t.indexOf("how are you")>=0)return jbr(JAHtalk.chatFor(JAHP,'file:'+D.id).reply(q))}}catch(e){}return null}',
+'function jtalk(q){try{if(JAHP&&typeof JAHtalk!=="undefined"){var t=String(q).toLowerCase();if(/\\b(hi|hii+|hello|hey|yo|howdy|greetings|sup|thanks|thank you|bye|goodbye)\\b/.test(t)||t.indexOf("duties")>=0||t.indexOf("what do you do")>=0||t.indexOf("what can you do")>=0||t.indexOf("who are you")>=0||t.indexOf("how are you")>=0)return jbr(JAHtalk.chatFor(JAHP,(typeof JAHProfile!=="undefined"&&JAHProfile)?JAHProfile.chatKey(\'file:\'+D.id):(\'file:\'+D.id)).reply(q))}}catch(e){}return null}',
 'try{if(JAHP&&typeof JAHtalk!=="undefined"){document.querySelector("#msgs div").innerHTML=jbr(JAHtalk.greet(JAHP))}}catch(e){}',
 'function ask(){var i=document.getElementById("qin"),m=document.getElementById("msgs"),q=i.value.trim();if(!q)return;i.value="";',
 'm.innerHTML+="<div><b style=color:#ffb000>YOU:</b> "+q.replace(/</g,"&lt;")+"</div>";',
@@ -1459,25 +1464,25 @@ JAHTALK_SRC,
 '<\/script>',
 '<button id="jah-theme-toggle" title="Toggle light mode" aria-label="Toggle light mode">&#9681;</button>',
 '<script>',
-'(function(){try{var b=document.getElementById(\'jah-theme-toggle\');if(!b)return;function upd(){b.textContent=document.documentElement.getAttribute(\'data-theme\')===\'light\'?\'\\u2600\':\'\\u25d0\';}upd();b.addEventListener(\'click\',function(){var light=document.documentElement.getAttribute(\'data-theme\')!==\'light\';document.documentElement.setAttribute(\'data-theme\',light?\'light\':\'\');try{localStorage.setItem(\'jah-theme\',light?\'light\':\'\');}catch(e){}upd();});}catch(e){}})();',
+'(function(){try{var b=document.getElementById(\'jah-theme-toggle\');if(!b)return;function upd(){b.textContent=document.documentElement.getAttribute(\'data-theme\')===\'light\'?\'\\u2600\':\'\\u25d0\';}upd();b.addEventListener(\'click\',function(){var light=document.documentElement.getAttribute(\'data-theme\')!==\'light\';document.documentElement.setAttribute(\'data-theme\',light?\'light\':\'\');try{PS.set(\'jah-theme\',light?\'light\':\'\');}catch(e){}upd();});}catch(e){}})();',
 '<\/script>',
 '<script>',
 '/* JAH session restore: scroll + tabs + last record. localStorage only, nothing leaves the device. */',
 '(function(){try{',
 'var path=location.pathname.replace(/\\/$/,\'\')||\'/\';',
 'var KEY=\'jah-session:\'+path;',
-'var state={};try{state=JSON.parse(localStorage.getItem(KEY)||\'{}\');}catch(e){state={};}',
+'var state={};try{state=JSON.parse(PS.get(KEY)||\'{}\');}catch(e){state={};}',
 'var deep=/[?&](spec|patent|dossier|w|id|dial|q|query|term|word)=/i.test(location.search||\'\')||location.hash.length>1;',
 'if(state.y&&!deep){addEventListener(\'load\',function(){setTimeout(function(){try{window.scrollTo(0,state.y);}catch(e){}},60);});}',
-'var t=null;addEventListener(\'scroll\',function(){if(t)return;t=setTimeout(function(){t=null;try{state.y=window.scrollY||window.pageYOffset;localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}},600);},{passive:true});',
+'var t=null;addEventListener(\'scroll\',function(){if(t)return;t=setTimeout(function(){t=null;try{state.y=window.scrollY||window.pageYOffset;PS.set(KEY,JSON.stringify(state));}catch(e){}},600);},{passive:true});',
 'var tabs=[],sels=[\'[role="tab"]\',\'.tab-button\',\'.tabbtn\',\'button.tab\',\'a.tab\',\'.wikitabs button\'];',
 'for(var si=0;si<sels.length;si++){var n=document.querySelectorAll(sels[si]);for(var i=0;i<n.length;i++){if(tabs.indexOf(n[i])<0)tabs.push(n[i]);}}',
 'if(tabs.length){if(state.tab!=null&&tabs[state.tab]){addEventListener(\'load\',function(){setTimeout(function(){try{tabs[state.tab].click();}catch(e){}},150);});}',
-'for(var k=0;k<tabs.length;k++){(function(el,i){el.addEventListener(\'click\',function(){try{state.tab=i;localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}});})(tabs[k],k);}}',
+'for(var k=0;k<tabs.length;k++){(function(el,i){el.addEventListener(\'click\',function(){try{state.tab=i;PS.set(KEY,JSON.stringify(state));}catch(e){}});})(tabs[k],k);}}',
 'var RP=/[?&](spec|patent|dossier|w|id|dial)=([^&#]+)/i.exec(location.search||\'\');',
-'if(RP){try{localStorage.setItem(\'jah-last-record\',decodeURIComponent(RP[2]));}catch(e){}}',
-'document.addEventListener(\'click\',function(ev){var a=ev.target&&ev.target.closest?ev.target.closest(\'a[href]\'):null;if(!a)return;var m=/[?&](spec|patent|dossier|w|id|dial)=([^&#]+)/i.exec(a.getAttribute(\'href\')||\'\');if(m){try{localStorage.setItem(\'jah-last-record\',decodeURIComponent(m[2]));}catch(e){}}},true);',
-'if(!deep){var last=null;try{last=localStorage.getItem(\'jah-last-record\');}catch(e){}',
+'if(RP){try{PS.set(\'jah-last-record\',decodeURIComponent(RP[2]));}catch(e){}}',
+'document.addEventListener(\'click\',function(ev){var a=ev.target&&ev.target.closest?ev.target.closest(\'a[href]\'):null;if(!a)return;var m=/[?&](spec|patent|dossier|w|id|dial)=([^&#]+)/i.exec(a.getAttribute(\'href\')||\'\');if(m){try{PS.set(\'jah-last-record\',decodeURIComponent(m[2]));}catch(e){}}},true);',
+'if(!deep){var last=null;try{last=PS.get(\'jah-last-record\');}catch(e){}',
 'if(last){addEventListener(\'load\',function(){setTimeout(function(){try{var el=document.querySelector(\'[data-id="\'+last+\'"],[id*="\'+last+\'"],a[href*="\'+last+\'"]\');if(el)el.scrollIntoView({block:\'center\'});}catch(e){}},300);});}}',
 '}catch(e){}})();',
 '<\/script>',
@@ -1818,10 +1823,10 @@ function wireControls(){
     document.body.classList.toggle("sans",!!sans);
     tb.setAttribute("aria-pressed",sans?"true":"false");
     tb.textContent=sans?"TYPE: READABLE":"TYPE: TERMINAL";
-    try{localStorage.setItem("jahN-type",sans?"sans":"mono")}catch(e){}
+    try{PS.set("jahN-type",sans?"sans":"mono")}catch(e){}
   }
   if(tb){
-    var saved=null;try{saved=localStorage.getItem("jahN-type")}catch(e){}
+    var saved=null;try{saved=PS.get("jahN-type")}catch(e){}
     setType(saved==="sans");
     tb.onclick=function(){setType(!document.body.classList.contains("sans"))};
   }
@@ -1993,9 +1998,9 @@ loadAll().then(function(){
 (function(){
 var SEEN="jah-tour-seen-leaks";
 var wel=document.getElementById("jah-wel");
-function isSeen(){try{return localStorage.getItem(SEEN)==="1";}catch(e){return true;}}
+function isSeen(){try{return PS.get(SEEN)==="1";}catch(e){return true;}}
 function openWel(){if(wel){wel.hidden=false;var b=document.getElementById("jah-wok");try{if(b)b.focus({preventScroll:true});}catch(e){}}}
-function closeWel(){if(wel)wel.hidden=true;try{localStorage.setItem(SEEN,"1");}catch(e){}}
+function closeWel(){if(wel)wel.hidden=true;try{PS.set(SEEN,"1");}catch(e){}}
 var ok=document.getElementById("jah-wok");
 if(ok)ok.onclick=function(){closeWel();};
 if(wel)wel.addEventListener("click",function(e){if(e.target===wel)closeWel();});
@@ -2031,5 +2036,15 @@ function deep(){return /[?&](spec|patent|dossier|w|id|dial)=/i.test(location.sea
 <!-- JAH NETWORK: site list moved to page bottom, above footer -->
 <nav aria-label="JAH Network Global Ecosystem" role="navigation"><div class="jahnet"><span class="jahnet-t">THE JAH NETWORK</span><span class="sitekicker">SITE 5 OF 31</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mix and Match Generator</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olympics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Mega Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-earth/">28 Signature Earth</a><a href="https://justinahiggins614-cmyk.github.io/signature-flight-school/">29 The Signature Flight School</a><a href="https://justinahiggins614-cmyk.github.io/signature-game-store/">30 The Signature Game Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-website-creator/">31 The Signature Website Creator</a><span class="jahnet-here">5 JAH-N Wiki Leaks — YOU ARE HERE</span></div></nav>
 <div class="jah-stamp" style="margin-top:10px;text-align:center;"><img src="assets/signature-stamp.jpg" alt="Official Signature stamp" style="height:64px;width:auto;border-radius:4px;"><div style="font-size:.72em;opacity:.75;margin-top:4px;">Official Signature stamp</div></div>
+<script>
+(function () {
+  var mount = document.querySelector("header .booksearch") ||
+              document.querySelector("nav.jtabbar") ||
+              document.querySelector("header nav") ||
+              document.querySelector("header") ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
+})();
+</script>
 </body>
 </html>
