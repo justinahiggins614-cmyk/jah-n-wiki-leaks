@@ -140,12 +140,7 @@ function ask(){
     function show(t){
       if(done) return; done=true;
       t=String(t||"").trim().replace(/^Helper\s*:\s*/i,"");
-      // Garbage filter: reject word-salad (excessive parens, repetition, fragments)
-      var parens=(t.match(/[()]/g)||[]).length;
-      var words=t.toLowerCase().split(/\s+/);
-      var rep=false;for(var i=2;i<words.length;i++){if(words[i]===words[i-1]&&words[i]===words[i-2]&&words[i].length>2)rep=true;}
-      if(t.length<8||/User\s*:/.test(t)||parens>t.length*0.25||rep)
-        t="I searched the archive for you — the matching records are listed above.";
+      if(t.length<8||/User\s*:/.test(t)) t="I searched the archive for you — the matching records are listed above.";
       think.outerHTML='<p class="jah-askai-ans">🤖 '+esc(t)+"</p>";
     }
     try{
@@ -191,7 +186,7 @@ function loadLetter(L){
 function renderRows(rows,box){
   var h="<ul class=\"dlist\">";
   for(var i=0;i<rows.length;i++){var r=rows[i];
-    h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\""+SITE+"?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
+    h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\""index.html?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
   h+="</ul>";
   box.innerHTML=h}
 function bindDetails(det,L){
@@ -235,7 +230,7 @@ function doSearch(){
     if(!out.length){hits.innerHTML="NO FILES MATCHED “"+esc(q)+"”. Try the letter sections above.";return}
     var h="<p class=\"c\">"+out.length.toLocaleString()+" matching file"+(out.length===1?"":"s")+(out.length>200?" — first 200 shown":"")+"</p><ul class=\"dlist\">";
     for(i=0;i<cap.length;i++){var r=cap[i];
-      h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\""+SITE+"?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
+      h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\""index.html?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
     hits.innerHTML=h+"</ul>"})
     .catch(function(){hits.textContent="SEARCH FAILED — check your connection and try again."})}
 $("q").addEventListener("input",function(){clearTimeout(searchTimer);searchTimer=setTimeout(doSearch,400)});
