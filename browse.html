@@ -47,7 +47,7 @@ padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit}
 </nav>
 
 <p class="c"><a href="index.html">← Back to the Wiki Leaks main archive</a></p><h1>▓ WIKI LEAKS — FULL DOSSIER ARCHIVE (A–Z)</h1><div class="simbadge">&#9632; INTERNAL SIGNATURE ARCHIVE — NOT A GOVERNMENT ARCHIVE &#9632;</div><div class="simbadge">&#9632; NOT A NON-SIGNATURE GOVERNMENT ARCHIVE &#9632;</div><!-- AZ-COUNT-START -->
-<p class="c"><span class="n" id="count-n">73,140</span> bizarre dossiers in the A–Z archive, as of 2026-10-05. Tap a letter to load its files — the archive loads letter by letter, never all at once. The live count refreshes from the archive index on every visit; the static count is re-stamped by the 2h bizarre drip.</p>
+<p class="c"><span class="n" id="count-n">74,140</span> bizarre dossiers in the A–Z archive, as of 2026-10-05. Tap a letter to load its files — the archive loads letter by letter, never all at once. The live count refreshes from the archive index on every visit; the static count is re-stamped by the 2h bizarre drip.</p>
 <!-- AZ-COUNT-END --><div class="note">The JAH governance leaking its own files — this is the Signature organization's own internal archive, declassified and published by the JAH governance itself. Every bizarre-subject dossier below is the organization's own internal file, official within the JAH-N system only. Spec dossiers and public-patent dossiers live in their home catalogs: <a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/">Signature Spec Catalog Pending Patents</a> and <a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a>.</div><div class="searchrow"><input id="q" type="text" aria-label="Search the full archive" placeholder="SEARCH THE FULL ARCHIVE — type 2+ letters…" autocomplete="off"><button id="qclear" aria-label="Clear search">CLEAR</button></div>
 <!-- ASK THE AI — Manon's 2026-10-04 order. Paste on the archive page, directly under the
      search/filter area (or at the top of the archive section if there is no search box).
@@ -140,7 +140,12 @@ function ask(){
     function show(t){
       if(done) return; done=true;
       t=String(t||"").trim().replace(/^Helper\s*:\s*/i,"");
-      if(t.length<8||/User\s*:/.test(t)) t="I searched the archive for you — the matching records are listed above.";
+      // Garbage filter: reject word-salad (excessive parens, repetition, fragments)
+      var parens=(t.match(/[()]/g)||[]).length;
+      var words=t.toLowerCase().split(/\s+/);
+      var rep=false;for(var i=2;i<words.length;i++){if(words[i]===words[i-1]&&words[i]===words[i-2]&&words[i].length>2)rep=true;}
+      if(t.length<8||/User\s*:/.test(t)||parens>t.length*0.25||rep)
+        t="I searched the archive for you — the matching records are listed above.";
       think.outerHTML='<p class="jah-askai-ans">🤖 '+esc(t)+"</p>";
     }
     try{
@@ -186,7 +191,7 @@ function loadLetter(L){
 function renderRows(rows,box){
   var h="<ul class=\"dlist\">";
   for(var i=0;i<rows.length;i++){var r=rows[i];
-    h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\"index.html?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
+    h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\""+SITE+"?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
   h+="</ul>";
   box.innerHTML=h}
 function bindDetails(det,L){
@@ -230,7 +235,7 @@ function doSearch(){
     if(!out.length){hits.innerHTML="NO FILES MATCHED “"+esc(q)+"”. Try the letter sections above.";return}
     var h="<p class=\"c\">"+out.length.toLocaleString()+" matching file"+(out.length===1?"":"s")+(out.length>200?" — first 200 shown":"")+"</p><ul class=\"dlist\">";
     for(i=0;i<cap.length;i++){var r=cap[i];
-      h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\"index.html?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
+      h+="<li><span class=\"id\">"+esc(r[0])+"</span> <a href=\""+SITE+"?dossier="+encodeURIComponent(r[0])+"\">"+esc(r[1])+"</a> <span class=\"c\">— "+esc(r[2])+"</span></li>"}
     hits.innerHTML=h+"</ul>"})
     .catch(function(){hits.textContent="SEARCH FAILED — check your connection and try again."})}
 $("q").addEventListener("input",function(){clearTimeout(searchTimer);searchTimer=setTimeout(doSearch,400)});
