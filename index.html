@@ -413,12 +413,17 @@ details.fmeta .frow b{color:var(--ink)}
     <div class="stamp" title="Internal Signature archive — declassified by the Signature organization itself">Declassified<br>for JAH-N</div>
     <div class="stampnote">internal Signature archive — not a government archive</div>
     <h1>JAH-N Wiki <span class="leak">Leaks</span></h1>
-<div style="margin:8px 0"><button type="button" onclick="readPageAloud()" style="background:#7a0e18;color:#fff;border:1px solid #c00;padding:8px 16px;cursor:pointer;font:inherit">🔊 Read page aloud</button> <button type="button" onclick="if(window.speechSynthesis)window.speechSynthesis.cancel()" style="background:#333;color:#fff;border:1px solid #666;padding:8px 16px;cursor:pointer;font:inherit">⏹ Stop</button></div>
+<div style="margin:8px 0"><button type="button" onclick="readPageAloud()" style="background:#7a0e18;color:#fff;border:1px solid #c00;padding:8px 16px;cursor:pointer;font:inherit">🔊 Read page aloud</button> <button type="button" onclick="auStop()" style="background:#333;color:#fff;border:1px solid #666;padding:8px 16px;cursor:pointer;font:inherit">⏹ Stop</button></div>
 <script>
+/* Audio-only read-aloud: speechSynthesis is dead in Android/FB WebView, so the
+   front-door reader uses the tiered online voice (ResponsiveVoice -> Google TTS). */
 function readPageAloud(){
+  if(window.__JAHREAD&&!window.__JAHREAD.playGuard("readPageAloud"))return;
   var txt=(document.body.innerText||'').replace(/\s+/g,' ').trim().slice(0,5000);
   if(!txt)return;
-  try{if(window.speechSynthesis){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(txt);u.rate=1;u.lang='en-US';window.speechSynthesis.speak(u);}}catch(e){}
+  try{auStop()}catch(e){}
+  AU.label="This page";AU.q=fxChunks(txt);AU.i=0;AU.active=true;AU.paused=false;
+  auShowBar(true);auPaint();fxStart(txt);toast("Reading the page aloud.");
 }
 </script>
     <div class="simbadge">&#9632; INTERNAL SIGNATURE ARCHIVE — NOT A GOVERNMENT ARCHIVE &#9632;</div>
@@ -1104,8 +1109,7 @@ function auReadDossier(){
   if(!CUR)return;
   var t=CUR.subject+". "+CUR.sections.map(function(s){return s[0]+". "+s[1]}).join(" ");
   AU.label=CUR.id+" — "+CUR.subject;AU.q=auChunks(t);AU.i=0;AU.active=true;AU.paused=false;
-  if(hasSpeech()){try{window.speechSynthesis.cancel()}catch(e){}auNext();toast("Reading the file aloud.")}
-  else{auShowBar(true);auPaint();fxStart(t);toast("This browser has no built-in voice — reading with the online voice instead.")}
+  auShowBar(true);auPaint();fxStart(t);toast("Reading the file aloud.");
 }
 function auPauseToggle(){if(!AU.active)return;
   if(FX.active){var a=FX.audio;try{if(AU.paused){if(a)a.play()}else{if(a)a.pause()}}catch(e){}AU.paused=!AU.paused;auPaint();return}
