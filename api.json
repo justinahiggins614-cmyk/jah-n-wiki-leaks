@@ -4,7 +4,7 @@
   "creator": "Justin Addam Higgins (JAH)",
   "description": "The JAH governance's own declassified internal archive: every spec, patent, and bizarre subject as a top-secret file with sources, panels, and officer conclusions. JAH's own patent authority \u2014 official within the JAH-N system only; not a government archive, not affiliated with any government agency or the USPTO.",
   "for_bots": "Machine-readable manifest. Humans use the site above; bots, scrapers, and AI assistants should use the endpoints below \u2014 plain JSON/JSONL over HTTPS, no JavaScript needed.",
-  "records_approx": 113140,
+  "records_approx": 114140,
   "records_as_of": "2026-10-09",
   "note": "Counts grow on automated schedules; re-read this file for the latest shape of the data. Spec and patent dossiers mirrored on this site are counted separately in their home catalogs.",
   "endpoints": [
