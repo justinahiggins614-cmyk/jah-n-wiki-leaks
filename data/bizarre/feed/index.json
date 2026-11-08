@@ -1,38 +1,38 @@
 {
  "feed": "Wiki Leaks incremental dossier feed",
- "generated": "2026-11-07",
- "total_bizarre": 612140,
+ "generated": "2026-11-08",
+ "total_bizarre": 614140,
  "feed_chunks": [
   {
    "file": "feed-0001.json",
    "count": 250,
    "id_range": [
-    "JAH-LEAK-B612140",
-    "JAH-LEAK-B611891"
+    "JAH-LEAK-B614140",
+    "JAH-LEAK-B613891"
    ]
   },
   {
    "file": "feed-0002.json",
    "count": 250,
    "id_range": [
-    "JAH-LEAK-B611890",
-    "JAH-LEAK-B611641"
+    "JAH-LEAK-B613890",
+    "JAH-LEAK-B613641"
    ]
   },
   {
    "file": "feed-0003.json",
    "count": 250,
    "id_range": [
-    "JAH-LEAK-B611640",
-    "JAH-LEAK-B611391"
+    "JAH-LEAK-B613640",
+    "JAH-LEAK-B613391"
    ]
   },
   {
    "file": "feed-0004.json",
    "count": 250,
    "id_range": [
-    "JAH-LEAK-B611390",
-    "JAH-LEAK-B611141"
+    "JAH-LEAK-B613390",
+    "JAH-LEAK-B613141"
    ]
   }
  ],
