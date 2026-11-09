@@ -5,7 +5,8 @@ Checks:
   - index.html has the static crawlable count block between the markers and the
     number matches the on-disk data (bizarre.json + chunks), with an "as of"
     date and a note on what is counted.
-  - sitemap-records-1.xml lists one URL per bizarre dossier ID, contiguous, no dupes.
+  - sitemap-records-*.xml shards list one URL per bizarre dossier ID, contiguous,
+    no dupes, each shard at most 50,000 URLs (sitemap protocol limit).
   - robots.txt has no Disallow and points at the sitemap index.
   - index.html has a canonical link and site-level JSON-LD (WebSite/CreativeWork).
   - index.html has the #methodology section restating both disclaimers.
@@ -59,9 +60,19 @@ else:
     if "counted separately" not in block.lower():
         note("static count block lacks note on what is counted (spec/patent counted separately)")
 
-# 2. sitemap
-sm = open(os.path.join(REPO, "sitemap-records-1.xml"), encoding="utf-8").read()
-urls = re.findall(r"<loc>(.*?)</loc>", sm)
+# 2. sitemap shards (50,000 URLs max per file)
+import glob
+shard_files = sorted(glob.glob(os.path.join(REPO, "sitemap-records-*.xml")),
+                     key=lambda p: int(re.search(r"records-(\d+)\.xml$", p).group(1)))
+if not shard_files:
+    note("no sitemap-records-*.xml shards found")
+urls = []
+for sf in shard_files:
+    sm = open(sf, encoding="utf-8").read()
+    shard_urls = re.findall(r"<loc>(.*?)</loc>", sm)
+    if len(shard_urls) > 50000:
+        note(f"sitemap shard {os.path.basename(sf)} has {len(shard_urls)} URLs, over the 50,000 protocol limit")
+    urls += shard_urls
 expected = [f"{SITE}?dossier={d}" for d in ids]
 if sorted(urls) != sorted(expected):
     missing = set(expected) - set(urls)
@@ -110,4 +121,4 @@ if findings:
     for f in findings:
         print(" -", f)
     sys.exit(1)
-print(f"PASS: static count {total:,}, sitemap {len(urls)} urls, robots ok, JSON-LD ok, methodology ok, links ok")
+print(f"PASS: static count {total:,}, sitemap {len(urls)} urls in {len(shard_files)} shards, robots ok, JSON-LD ok, methodology ok, links ok")

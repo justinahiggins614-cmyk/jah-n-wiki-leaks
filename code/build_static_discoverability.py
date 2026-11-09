@@ -5,7 +5,8 @@ Regenerates, from the on-disk data (single source of truth):
   1. The STATIC crawlable bizarre-dossier count block in index.html
      (between <!-- STATIC-COUNT-START --> / <!-- STATIC-COUNT-END --> markers),
      with "as of YYYY-MM-DD" and a note on what it counts.
-  2. sitemap-records-1.xml — one URL per bizarre dossier (?dossier=JAH-LEAK-B######).
+  2. sitemap-records-*.xml — sharded at 50,000 URLs per file (sitemap protocol
+     limit), one URL per bizarre dossier (?dossier=JAH-LEAK-B######).
   3. api.json records_approx / records_as_of.
   4. FIX-SITE5-2: chunked incremental JSON feed of the newest 1,000 dossiers
      (data/bizarre/feed/index.json + feed-0001.json ... 250/chunk, newest first),
@@ -157,13 +158,26 @@ def main():
     open(INDEX, "w", encoding="utf-8").write(new_html)
     print(f"index.html static count: {fmt(total)} as of {today}")
 
-    sm = ['<?xml version="1.0" encoding="UTF-8"?>',
-          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    for did in ids:
-        sm.append(f"  <url><loc>{SITE}?dossier={did}</loc><changefreq>monthly</changefreq></url>")
-    sm.append("</urlset>")
-    open(SITEMAP, "w", encoding="utf-8").write("\n".join(sm) + "\n")
-    print(f"sitemap-records-1.xml: {fmt(total)} URLs")
+    # Sitemap protocol: max 50,000 URLs / 50 MB per file. Shard the record
+    # sitemap so every 2h drip regenerates valid shards (never one monolith).
+    SHARD_SIZE = 50000
+    n_shards = (total + SHARD_SIZE - 1) // SHARD_SIZE
+    for n in range(n_shards):
+        chunk = ids[n * SHARD_SIZE:(n + 1) * SHARD_SIZE]
+        sm = ['<?xml version="1.0" encoding="UTF-8"?>',
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+        sm += [f"  <url><loc>{SITE}?dossier={did}</loc><changefreq>monthly</changefreq></url>"
+               for did in chunk]
+        sm.append("</urlset>")
+        open(os.path.join(REPO, f"sitemap-records-{n + 1}.xml"), "w",
+             encoding="utf-8").write("\n".join(sm) + "\n")
+        print(f"sitemap-records-{n + 1}.xml: {fmt(len(chunk))} URLs")
+    # remove any stale higher-numbered shard from a previously larger total
+    for n in range(n_shards + 1, n_shards + 20):
+        stale = os.path.join(REPO, f"sitemap-records-{n}.xml")
+        if os.path.exists(stale):
+            os.remove(stale)
+            print(f"removed stale {stale}")
 
     # ---- FIX-SITE5-2: incremental chunked JSON feed (newest dossiers first) ----
     recs = collect_records()
@@ -205,12 +219,14 @@ def main():
         rsm.append(f"  <url><loc>{SITE}?dossier={r['id']}</loc><changefreq>daily</changefreq></url>")
     rsm.append("</urlset>")
     open(SITEMAP_RECENT, "w", encoding="utf-8").write("\n".join(rsm) + "\n")
-    sidx = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-            '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-            f'  <sitemap><loc>{SITE}sitemap.xml</loc></sitemap>\n'
-            f'  <sitemap><loc>{SITE}sitemap-records-1.xml</loc></sitemap>\n'
-            f'  <sitemap><loc>{SITE}sitemap-recent.xml</loc></sitemap>\n'
-            '</sitemapindex>\n')
+    sidx_lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+                  '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+                  f'  <sitemap><loc>{SITE}sitemap.xml</loc></sitemap>']
+    sidx_lines += [f'  <sitemap><loc>{SITE}sitemap-records-{n + 1}.xml</loc></sitemap>'
+                   for n in range(n_shards)]
+    sidx_lines += [f'  <sitemap><loc>{SITE}sitemap-recent.xml</loc></sitemap>',
+                   '</sitemapindex>']
+    sidx = "\n".join(sidx_lines) + "\n"
     open(SITEMAP_INDEX, "w", encoding="utf-8").write(sidx)
     print(f"sitemap-recent.xml: {fmt(len(recent))} URLs; sitemap-index.xml updated")
 

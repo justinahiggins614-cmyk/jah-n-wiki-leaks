@@ -21,7 +21,7 @@ zero gaps (B0001–B28140 contiguous).
 
 Verifies the static/machine-readable layer: the crawlable count block in
 index.html (number matches data, has "as of" date + what-it-counts note),
-sitemap-records-1.xml (one URL per bizarre dossier, contiguous, no dupes),
+sitemap-records-*.xml shards (50,000 URLs max each, one URL per bizarre dossier, contiguous, no dupes),
 robots.txt (no Disallow, sitemap pointers), canonical link + site JSON-LD
 (WebSite/CreativeWork), per-dossier JSON-LD injection on dossier open,
 the #methodology section (ID scheme, classification, provenance, v1.0
