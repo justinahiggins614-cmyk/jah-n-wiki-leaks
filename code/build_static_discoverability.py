@@ -64,6 +64,39 @@ JAHNET_NAV = """
 """
 
 
+def shard_index_rows():
+    """Index rows from every remote shard in data/bizarre/shards.json.
+
+    SHARD-2 (2026-11-16): the oldest chunks live in the shard repo; the
+    static count, sitemaps, feed and category pages must count them too,
+    or the move would silently cut 100k dossiers from every static artifact.
+    Raises on fetch failure: collect_ids() runs before any file is written,
+    so a failure aborts the refresh and keeps the last good artifacts (the
+    drip catches it and the next drip retries).
+    """
+    import io
+    import urllib.request
+    shards = json.load(open(os.path.join(REPO, "data", "bizarre", "shards.json"),
+                            encoding="utf-8"))["shards"]
+    rows = []
+    for sh in shards:
+        base = sh.get("base") or ""
+        if not base:
+            continue
+        url = base + sh["index"]
+        req = urllib.request.Request(url, headers={"User-Agent": "JAH-shard-sync/1.0"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            raw = r.read()
+        n0 = len(rows)
+        with gzip.open(io.BytesIO(raw), "rt", encoding="utf-8") as fh:
+            for ln in fh:
+                ln = ln.strip()
+                if ln:
+                    rows.append(json.loads(ln))
+        print(f"  shard index {url}: {len(rows) - n0} rows")
+    return rows
+
+
 def collect_ids():
     ids = []
     with open(BASE_FILE, encoding="utf-8") as fh:
@@ -75,6 +108,8 @@ def collect_ids():
         with gzip.open(os.path.join(CHUNK_DIR, fn), "rt", encoding="utf-8") as fh:
             for rec in json.load(fh):
                 ids.append(rec["id"])
+    for r in shard_index_rows():
+        ids.append(r[0])
     return ids
 
 
@@ -103,6 +138,14 @@ def collect_records():
                     "category": r.get("category", ""), "classification": r.get("classification", ""),
                     "date_filed": r.get("date_filed", ""), "chunk": fn[:-len(".json.gz")],
                 })
+    # SHARD-2: moved rows carry id/subject/category in the index; classification
+    # and date_filed are empty here (the feed/recent lists are newest-first, so
+    # the moved oldest rows never appear in them; category counts stay correct).
+    for r in shard_index_rows():
+        recs.append({
+            "id": r[0], "subject": r[1], "category": r[2],
+            "classification": "", "date_filed": "", "chunk": r[3],
+        })
     recs.sort(key=lambda r: id_num(r["id"]), reverse=True)
     return recs
 

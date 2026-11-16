@@ -216,6 +216,36 @@ def letter_of(subject):
     return ch if "A" <= ch <= "Z" else "#"
 
 
+def shard_index_rows():
+    """Index rows from every remote shard in data/bizarre/shards.json.
+
+    SHARD-2 (2026-11-16): the oldest chunks live in the shard repo; the A-Z
+    archive must include them or the moved dossiers vanish from browse.html.
+    Raises on fetch failure so a partial archive is never written.
+    """
+    import io
+    import urllib.request
+    shards = json.load(open(os.path.join(REPO, "data", "bizarre", "shards.json"),
+                            encoding="utf-8"))["shards"]
+    rows = []
+    for sh in shards:
+        base = sh.get("base") or ""
+        if not base:
+            continue
+        url = base + sh["index"]
+        req = urllib.request.Request(url, headers={"User-Agent": "JAH-shard-sync/1.0"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            raw = r.read()
+        n0 = len(rows)
+        with gzip.open(io.BytesIO(raw), "rt", encoding="utf-8") as fh:
+            for ln in fh:
+                ln = ln.strip()
+                if ln:
+                    rows.append(json.loads(ln))
+        print(f"  shard index {url}: {len(rows) - n0} rows")
+    return rows
+
+
 def collect():
     rows = []
     with open(BASE_FILE, encoding="utf-8") as fh:
@@ -228,6 +258,8 @@ def collect():
                 continue
             r = json.loads(ln)
             rows.append((r[0], r[1], r[2]))
+    for r in shard_index_rows():
+        rows.append((r[0], r[1], r[2]))
     return rows
 
 

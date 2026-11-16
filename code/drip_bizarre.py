@@ -247,8 +247,13 @@ def main():
             fh.write(ln + "\n")
         for row in idx_rows:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+    # SHARD-2 (2026-11-16): the oldest chunks live in jah-n-wiki-leaks-shard-2;
+    # the site loads both indexes. Never drop the shard entry here, or the
+    # moved dossiers vanish from the live page on the next drip.
     with open(SHARDS, "w", encoding="utf-8") as fh:
-        json.dump({"shards": [{"base": "", "index": "data/bizarre/bizarre.idx.json.gz"}]}, fh)
+        json.dump({"shards": [{"base": "", "index": "data/bizarre/bizarre.idx.json.gz"},
+                              {"base": "https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks-shard-2/",
+                               "index": "data/bizarre/bizarre.idx.json.gz"}]}, fh)
 
     st["next_id"] += made
     st["counter"] += made
